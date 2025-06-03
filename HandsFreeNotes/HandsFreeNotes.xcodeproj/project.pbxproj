@@ -1,0 +1,557 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		1E5693382DEFB11C00E3B734 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E56931F2DEFB11A00E3B734 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1E5693262DEFB11A00E3B734;
+			remoteInfo = HandsFreeNotes;
+		};
+		1E5693422DEFB11C00E3B734 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E56931F2DEFB11A00E3B734 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1E5693262DEFB11A00E3B734;
+			remoteInfo = HandsFreeNotes;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1E5693272DEFB11A00E3B734 /* HandsFreeNotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HandsFreeNotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1E5693372DEFB11C00E3B734 /* HandsFreeNotesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HandsFreeNotesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1E5693412DEFB11C00E3B734 /* HandsFreeNotesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HandsFreeNotesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		1E5693292DEFB11A00E3B734 /* HandsFreeNotes */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = HandsFreeNotes;
+			sourceTree = "<group>";
+		};
+		1E56933A2DEFB11C00E3B734 /* HandsFreeNotesTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = HandsFreeNotesTests;
+			sourceTree = "<group>";
+		};
+		1E5693442DEFB11C00E3B734 /* HandsFreeNotesUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = HandsFreeNotesUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1E5693242DEFB11A00E3B734 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1E5693342DEFB11C00E3B734 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1E56933E2DEFB11C00E3B734 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1E56931E2DEFB11A00E3B734 = {
+			isa = PBXGroup;
+			children = (
+				1E5693292DEFB11A00E3B734 /* HandsFreeNotes */,
+				1E56933A2DEFB11C00E3B734 /* HandsFreeNotesTests */,
+				1E5693442DEFB11C00E3B734 /* HandsFreeNotesUITests */,
+				1E5693282DEFB11A00E3B734 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1E5693282DEFB11A00E3B734 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1E5693272DEFB11A00E3B734 /* HandsFreeNotes.app */,
+				1E5693372DEFB11C00E3B734 /* HandsFreeNotesTests.xctest */,
+				1E5693412DEFB11C00E3B734 /* HandsFreeNotesUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1E5693262DEFB11A00E3B734 /* HandsFreeNotes */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1E56934B2DEFB11C00E3B734 /* Build configuration list for PBXNativeTarget "HandsFreeNotes" */;
+			buildPhases = (
+				1E5693232DEFB11A00E3B734 /* Sources */,
+				1E5693242DEFB11A00E3B734 /* Frameworks */,
+				1E5693252DEFB11A00E3B734 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				1E5693292DEFB11A00E3B734 /* HandsFreeNotes */,
+			);
+			name = HandsFreeNotes;
+			packageProductDependencies = (
+			);
+			productName = HandsFreeNotes;
+			productReference = 1E5693272DEFB11A00E3B734 /* HandsFreeNotes.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1E5693362DEFB11C00E3B734 /* HandsFreeNotesTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1E56934E2DEFB11C00E3B734 /* Build configuration list for PBXNativeTarget "HandsFreeNotesTests" */;
+			buildPhases = (
+				1E5693332DEFB11C00E3B734 /* Sources */,
+				1E5693342DEFB11C00E3B734 /* Frameworks */,
+				1E5693352DEFB11C00E3B734 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1E5693392DEFB11C00E3B734 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				1E56933A2DEFB11C00E3B734 /* HandsFreeNotesTests */,
+			);
+			name = HandsFreeNotesTests;
+			packageProductDependencies = (
+			);
+			productName = HandsFreeNotesTests;
+			productReference = 1E5693372DEFB11C00E3B734 /* HandsFreeNotesTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		1E5693402DEFB11C00E3B734 /* HandsFreeNotesUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1E5693512DEFB11C00E3B734 /* Build configuration list for PBXNativeTarget "HandsFreeNotesUITests" */;
+			buildPhases = (
+				1E56933D2DEFB11C00E3B734 /* Sources */,
+				1E56933E2DEFB11C00E3B734 /* Frameworks */,
+				1E56933F2DEFB11C00E3B734 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1E5693432DEFB11C00E3B734 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				1E5693442DEFB11C00E3B734 /* HandsFreeNotesUITests */,
+			);
+			name = HandsFreeNotesUITests;
+			packageProductDependencies = (
+			);
+			productName = HandsFreeNotesUITests;
+			productReference = 1E5693412DEFB11C00E3B734 /* HandsFreeNotesUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1E56931F2DEFB11A00E3B734 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					1E5693262DEFB11A00E3B734 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					1E5693362DEFB11C00E3B734 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 1E5693262DEFB11A00E3B734;
+					};
+					1E5693402DEFB11C00E3B734 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 1E5693262DEFB11A00E3B734;
+					};
+				};
+			};
+			buildConfigurationList = 1E5693222DEFB11A00E3B734 /* Build configuration list for PBXProject "HandsFreeNotes" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1E56931E2DEFB11A00E3B734;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 1E5693282DEFB11A00E3B734 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1E5693262DEFB11A00E3B734 /* HandsFreeNotes */,
+				1E5693362DEFB11C00E3B734 /* HandsFreeNotesTests */,
+				1E5693402DEFB11C00E3B734 /* HandsFreeNotesUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1E5693252DEFB11A00E3B734 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1E5693352DEFB11C00E3B734 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1E56933F2DEFB11C00E3B734 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1E5693232DEFB11A00E3B734 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1E5693332DEFB11C00E3B734 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1E56933D2DEFB11C00E3B734 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1E5693392DEFB11C00E3B734 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1E5693262DEFB11A00E3B734 /* HandsFreeNotes */;
+			targetProxy = 1E5693382DEFB11C00E3B734 /* PBXContainerItemProxy */;
+		};
+		1E5693432DEFB11C00E3B734 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1E5693262DEFB11A00E3B734 /* HandsFreeNotes */;
+			targetProxy = 1E5693422DEFB11C00E3B734 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1E5693492DEFB11C00E3B734 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		1E56934A2DEFB11C00E3B734 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1E56934C2DEFB11C00E3B734 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"HandsFreeNotes/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = personal.HandsFreeNotes;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1E56934D2DEFB11C00E3B734 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"HandsFreeNotes/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = personal.HandsFreeNotes;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		1E56934F2DEFB11C00E3B734 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = personal.HandsFreeNotesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HandsFreeNotes.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HandsFreeNotes";
+			};
+			name = Debug;
+		};
+		1E5693502DEFB11C00E3B734 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = personal.HandsFreeNotesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HandsFreeNotes.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HandsFreeNotes";
+			};
+			name = Release;
+		};
+		1E5693522DEFB11C00E3B734 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = personal.HandsFreeNotesUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = HandsFreeNotes;
+			};
+			name = Debug;
+		};
+		1E5693532DEFB11C00E3B734 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = personal.HandsFreeNotesUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = HandsFreeNotes;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1E5693222DEFB11A00E3B734 /* Build configuration list for PBXProject "HandsFreeNotes" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1E5693492DEFB11C00E3B734 /* Debug */,
+				1E56934A2DEFB11C00E3B734 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1E56934B2DEFB11C00E3B734 /* Build configuration list for PBXNativeTarget "HandsFreeNotes" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1E56934C2DEFB11C00E3B734 /* Debug */,
+				1E56934D2DEFB11C00E3B734 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1E56934E2DEFB11C00E3B734 /* Build configuration list for PBXNativeTarget "HandsFreeNotesTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1E56934F2DEFB11C00E3B734 /* Debug */,
+				1E5693502DEFB11C00E3B734 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1E5693512DEFB11C00E3B734 /* Build configuration list for PBXNativeTarget "HandsFreeNotesUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1E5693522DEFB11C00E3B734 /* Debug */,
+				1E5693532DEFB11C00E3B734 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1E56931F2DEFB11A00E3B734 /* Project object */;
+}
