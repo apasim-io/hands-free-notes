@@ -6,7 +6,7 @@ All components, other than the codebase and testing frameworks, will be located 
 
 Many final submission requirements are sections in the design doc (like unit tests, mocks, etc.).
 
-The Swift Tests for UI and unit tests are in /HandsFreeNotes next to the XCode project container. The testing framework that uses these tests is built into the Xcode project and requires it to be opened in Xcode.
+The Swift Tests for UI and unit tests are in /HandsFreeNotes next to the XCode project container. The testing framework that uses these tests is built into the Xcode project and requires it to be opened in Xcode. Once in Xcode, you can simply hit play; the project will be built and the tests will run automatically. 
 
 The Gherkins/BDD testing framework is also inside the XCode Project, and must be opened in Xcode. The Gherkins we created are under the PR/FAQ in the same doc.
 
