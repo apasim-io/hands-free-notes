@@ -195,6 +195,9 @@
 			);
 			mainGroup = 1E56931E2DEFB11A00E3B734;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				1E56937F2DF3C5B600E3B734 /* XCRemoteSwiftPackageReference "SwiftGherkin" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1E5693282DEFB11A00E3B734 /* Products */;
 			projectDirPath = "";
@@ -552,6 +555,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1E56937F2DF3C5B600E3B734 /* XCRemoteSwiftPackageReference "SwiftGherkin" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/iainsmith/SwiftGherkin.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = 1E56931F2DEFB11A00E3B734 /* Project object */;
 }

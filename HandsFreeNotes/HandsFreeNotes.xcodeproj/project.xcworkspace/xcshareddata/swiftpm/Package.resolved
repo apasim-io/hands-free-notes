@@ -1,0 +1,24 @@
+{
+  "originHash" : "cd33f6f8fcfc0e4afa42f37e8ca9213ced2f99c3847ff191799b5e323cfff2a2",
+  "pins" : [
+    {
+      "identity" : "consumer",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nicklockwood/Consumer.git",
+      "state" : {
+        "revision" : "23ef6749fe4c29d6c57572ba5e0e20ec2c2de9da",
+        "version" : "0.3.5"
+      }
+    },
+    {
+      "identity" : "swiftgherkin",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/iainsmith/SwiftGherkin.git",
+      "state" : {
+        "revision" : "61857fedfa2818986c56f56553754f7759a6e96e",
+        "version" : "0.2.0"
+      }
+    }
+  ],
+  "version" : 3
+}
