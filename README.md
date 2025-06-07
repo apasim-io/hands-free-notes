@@ -1,5 +1,8 @@
 # hands-free-notes
 
+All components, other than the codebase and testing frameworks, will be located in the FinalSubmission folder.
+
+
 Created by Noah, Andrew, Wylie, and Will.
 
 The Swift Tests for UI and unit tests are in /HandsFreeNotes next to the XCode project container. The testing framework that uses these tests is built into the Xcode project and requires it to be opened in Xcode.
