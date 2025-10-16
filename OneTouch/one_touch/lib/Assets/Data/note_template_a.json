@@ -1,0 +1,27 @@
+
+{
+    "template_name": "Template A",
+    "pages": [
+        {
+            "page_title": "Page 1",
+            "section_content": "This is the content for section 1.",
+            "notes": [
+                {
+                    "note_type": "number_scale",
+                    "question": "On a scale of 1 to 10, how would you rate your pain?",
+                    "min_value": 1,
+                    "max_value": 10
+                },
+                {
+                    "note_type": "multiple_choice",
+                    "question": "Which of the following symptoms are you experiencing?",
+                    "options": ["a", "b", "c", "d"]
+                }
+            ]
+        },
+        {
+            "page_title": "Page 2",
+            "section_content": "This is the content for section 2."
+        }
+    ]
+}

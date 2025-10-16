@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 
-/*
-  On this page the user can take notes during their session, notes should be divided into
-  subsections called "pages"
+/* This page will be used for creating note sessions */
 
- */
-
-class NoteSession extends StatelessWidget{ 
-  const NoteSession({super.key});
+class Template extends StatelessWidget{ 
+  const Template({super.key});
 
 @override
   Widget build(BuildContext context) {
   return Scaffold(
-    appBar: AppBar(title: const Text('Note Session')),
+    appBar: AppBar(title: const Text('Template Page')),
     body: Center(
       child: ElevatedButton(
         child: const Text('Back to Home Page'),
@@ -24,4 +20,3 @@ class NoteSession extends StatelessWidget{
   );
   }
 }
-
