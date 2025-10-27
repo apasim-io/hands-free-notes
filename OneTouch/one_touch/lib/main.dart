@@ -1,25 +1,13 @@
 import 'package:flutter/material.dart';
 
+// Pages
 import 'Pages/note_session.dart';
+import 'Pages/session_summary.dart';
+import 'Pages/template.dart';
 
 void main() {
   runApp(const MaterialApp(home: HomePage()));
 }
-
-/*class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
-    );
-  }
-}*/
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

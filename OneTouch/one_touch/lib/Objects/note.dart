@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 enum NoteType {
   nullType,
   numberScale,
@@ -13,12 +15,23 @@ class Note {
   Note({required this.noteType, required this.question});
 }
 
+class NoteWidget extends StatelessWidget{
+  final Note note;
+
+  const NoteWidget({super.key, required this.note});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
 class NumberScaleNote extends Note{
   int min = 0;
   int max = 10;
   int step = 1;
   String minLabel = "Low";
-  String maxLabel = "High";
+  String maxLabel = "High";  
 
   NumberScaleNote({
     required Enum noteType,
@@ -31,6 +44,20 @@ class NumberScaleNote extends Note{
   }) : super(noteType: noteType, question: question);
 
   // widget to construct and display the note in the app
+
+  // Implementation for building the number scale widget
+  buildNumberScaleWidget() {
+    return Slider(
+      value: min.toDouble(),
+      min: min.toDouble(),
+      max: max.toDouble(),
+      divisions: ((max - min) ~/ step),
+      label: minLabel,
+      onChanged: (double value) {
+        // Handle the slider value change, how to pass this along?
+      },
+    );
+  }
 }
 
 /*
@@ -49,6 +76,21 @@ class MultipleChoiceNote extends Note{
   }) : super(noteType: noteType, question: question);
 
   // widget to construct and display the note in the app
+
+  buildMultipleChoiceWidget() {
+    return Column(
+      children: options.map((option) {
+        return CheckboxListTile(
+          title: Text(option),
+          value: false, // This should be linked to the actual selection state
+          onChanged: (bool? value) {
+            // Handle the checkbox state change
+          },
+        );
+      }).toList(),
+    );
+  }
+  
 }
 
 class SingleChoiceNote extends Note{
@@ -62,3 +104,4 @@ class SingleChoiceNote extends Note{
 
   // widget to construct and display the note in the app
 }
+

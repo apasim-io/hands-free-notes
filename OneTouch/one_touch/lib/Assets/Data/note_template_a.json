@@ -7,15 +7,20 @@
             "section_content": "This is the content for section 1.",
             "notes": [
                 {
-                    "note_type": "number_scale",
+                    "note_type": "numberScale",
                     "question": "On a scale of 1 to 10, how would you rate your pain?",
                     "min_value": 1,
                     "max_value": 10
                 },
                 {
-                    "note_type": "multiple_choice",
+                    "note_type": "multipleChoice",
                     "question": "Which of the following symptoms are you experiencing?",
                     "options": ["a", "b", "c", "d"]
+                },
+                {
+                    "noteType" : "singleChoice",
+                    "question" : "What gender do you identify with?",
+                    "options" : ["Male", "Female", "Non-binary", "Prefer not to say"]
                 }
             ]
         },
