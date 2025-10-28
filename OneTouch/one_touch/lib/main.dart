@@ -19,6 +19,15 @@ void main() async {
   final jsonString = await rootBundle.loadString('Assets/Data/example_a.json');
   final sessionMap = jsonDecode(jsonString) as Map<String, dynamic>;
   Session currentSession = Session.fromJson(sessionMap);
+  /*
+    TO DO:
+    1. figure out how to store and load ALL session 
+    2. make all of the individual pages prettier
+    3. make sure all of different note types load correctly WITH different values
+    4. build out other pages: session summary ....
+  
+  
+   */
   runApp(MaterialApp(home: HomePage(session: currentSession)));
 }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:one_touch/Objects/note.dart';
 import '../Objects/session.dart';
 
 /*
@@ -51,7 +52,7 @@ class NoteSession extends StatelessWidget {
                             itemCount: page.length,
                             itemBuilder: (context, noteIndex) {
                               final note = page.getAt(noteIndex)!;
-                              return ListTile(title: Text(note.question));
+                              return NoteWidget(note: note);
                             },
                           ),
                         ),
