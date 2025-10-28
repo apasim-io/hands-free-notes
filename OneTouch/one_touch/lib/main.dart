@@ -1,16 +1,33 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 // Pages
 import 'Pages/note_session.dart';
 import 'Pages/session_summary.dart';
 import 'Pages/template.dart';
 
-void main() {
-  runApp(const MaterialApp(home: HomePage()));
+//data objects
+import 'Objects/session.dart';
+import 'Objects/note.dart';
+
+
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final jsonString = await rootBundle.loadString('Assets/Data/example_a.json');
+  final sessionMap = jsonDecode(jsonString) as Map<String, dynamic>;
+  Session currentSession = Session.fromJson(sessionMap);
+  runApp(MaterialApp(home: HomePage(session: currentSession)));
 }
 
+//
+
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final Session session;
+
+  const HomePage({super.key, required this.session});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +41,7 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const NoteSession()),
+                  MaterialPageRoute(builder: (context) => NoteSession(session: session)),
                 );
               },
               child: const Text('Go to note session'),

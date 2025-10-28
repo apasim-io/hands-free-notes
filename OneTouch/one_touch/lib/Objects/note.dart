@@ -13,18 +13,15 @@ class Note {
   String question = "What kind of note is this?";
 
   Note({required this.noteType, required this.question});
+
+  Note.fromJson(Map<String, dynamic> json)
+      : noteType = NoteType.values.firstWhere(
+          (e) => e.toString() == 'NoteType.${json['note_type']}',
+          orElse: () => NoteType.nullType,
+        ),
+        question = json['question'] ?? 'No question';
 }
 
-class NoteWidget extends StatelessWidget{
-  final Note note;
-
-  const NoteWidget({super.key, required this.note});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
 
 class NumberScaleNote extends Note{
   int min = 0;
@@ -43,21 +40,13 @@ class NumberScaleNote extends Note{
     required this.maxLabel
   }) : super(noteType: noteType, question: question);
 
-  // widget to construct and display the note in the app
-
-  // Implementation for building the number scale widget
-  buildNumberScaleWidget() {
-    return Slider(
-      value: min.toDouble(),
-      min: min.toDouble(),
-      max: max.toDouble(),
-      divisions: ((max - min) ~/ step),
-      label: minLabel,
-      onChanged: (double value) {
-        // Handle the slider value change, how to pass this along?
-      },
-    );
-  }
+  NumberScaleNote.fromJson(Map<String, dynamic> json)
+      : min = json['min_value'] ?? json['min'] ?? 0,
+        max = json['max_value'] ?? json['max'] ?? 10,
+        step = json['step'] ?? 1,
+        minLabel = json['min_label'] ?? json['minLabel'] ?? 'Low',
+        maxLabel = json['max_label'] ?? json['maxLabel'] ?? 'High',
+        super.fromJson(json);
 }
 
 /*
@@ -75,21 +64,13 @@ class MultipleChoiceNote extends Note{
     required this.maxSelections
   }) : super(noteType: noteType, question: question);
 
-  // widget to construct and display the note in the app
-
-  buildMultipleChoiceWidget() {
-    return Column(
-      children: options.map((option) {
-        return CheckboxListTile(
-          title: Text(option),
-          value: false, // This should be linked to the actual selection state
-          onChanged: (bool? value) {
-            // Handle the checkbox state change
-          },
-        );
-      }).toList(),
-    );
-  }
+  MultipleChoiceNote.fromJson(Map<String, dynamic> json)
+      : options = (json['options'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [],
+        maxSelections = json['max_selections'] ?? 3,
+        super.fromJson(json);
   
 }
 
@@ -102,6 +83,11 @@ class SingleChoiceNote extends Note{
     required this.options
   }) : super(noteType: noteType, question: question);
 
-  // widget to construct and display the note in the app
+  SingleChoiceNote.fromJson(Map<String, dynamic> json)
+      : options = (json['options'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [],
+        super.fromJson(json);
 }
 
