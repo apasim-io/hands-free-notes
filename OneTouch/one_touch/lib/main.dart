@@ -25,7 +25,8 @@ void main() async {
     2. make all of the individual pages prettier
     3. make sure all of different note types load correctly WITH different values
     4. build out other pages: session summary ....
-  
+    5. figure out local storage for sessions, we should be able to save user progress so
+      they can come back later
   
    */
   runApp(MaterialApp(home: HomePage(session: currentSession)));

@@ -7,7 +7,14 @@ import '../Objects/session.dart';
   It renders a list of pages from the session. Tapping a page shows the notes
   on that page.
 */
-
+/*
+  To do: 
+    1. make note widgets actually show different types of notes
+    2. make it so we can answer the notes, not just view them
+    3. store note answers back into the Session object
+      3a. need to modify the Session object to hold answers
+      3b. modify NoteSession to save answers
+ */
 class NoteSession extends StatelessWidget {
   final Session session;
 
@@ -51,6 +58,7 @@ class NoteSession extends StatelessWidget {
                             shrinkWrap: true,
                             itemCount: page.length,
                             itemBuilder: (context, noteIndex) {
+                              // This is where we actually get to the note widget!
                               final note = page.getAt(noteIndex)!;
                               return NoteWidget(note: note);
                             },

@@ -85,6 +85,11 @@ class SingleChoiceNote extends Note {
       super.fromJson(json);
 }
 
+/*
+  To do: 
+    1. make note widgets actually show different types of notes, switch case?
+ */
+
 class NoteWidget extends StatefulWidget {
   final Note note;
 
