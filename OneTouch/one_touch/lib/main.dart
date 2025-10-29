@@ -11,8 +11,6 @@ import 'Pages/template.dart';
 import 'Objects/session.dart';
 import 'Objects/note.dart';
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -29,7 +27,12 @@ void main() async {
       they can come back later
   
    */
-  runApp(MaterialApp(home: HomePage(session: currentSession)));
+  runApp(
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: HomePage(session: currentSession),
+    ),
+  );
 }
 
 //
@@ -42,16 +45,50 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Home Page')),
+      appBar: AppBar(
+        title: const Text('Home Page'),
+        centerTitle: true,
+        ),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Text('Recent Sessions'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {}, 
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.yellow[100],
+                    foregroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)
+                    ),
+                    textStyle: TextStyle(
+                      color: Colors.black,
+                    )
+                  ),
+                  child: Container(
+                    height: 150,
+                    width: 150,
+                    child: Align(
+                      child: Text(
+                      'Session 1',
+                      textAlign: TextAlign.center,
+                      )
+                    )
+                  ),
+                ),
+              ]
+            ),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NoteSession(session: session)),
+                  MaterialPageRoute(
+                    builder: (context) => NoteSession(session: session),
+                  ),
                 );
               },
               child: const Text('Go to note session'),
