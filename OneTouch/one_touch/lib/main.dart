@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'dart:io';
 
 // Pages
 import 'Pages/note_session.dart';
@@ -17,6 +18,13 @@ void main() async {
   final jsonString = await rootBundle.loadString('Assets/Data/example_a.json');
   final sessionMap = jsonDecode(jsonString) as Map<String, dynamic>;
   Session currentSession = Session.fromJson(sessionMap);
+
+  // for testing files and json conversion:
+  // SessionStorage s = SessionStorage();
+  // final File sessionsFile = await s.localFile();
+  // s.saveSessionData([currentSession], sessionsFile);
+  // final res = await s.readSessionData(sessionsFile);
+
   /*
     TO DO:
     1. figure out how to store and load ALL session 
@@ -54,33 +62,34 @@ class HomePage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text('Recent Sessions'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {}, 
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.yellow[100],
-                    foregroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)
-                    ),
-                    textStyle: TextStyle(
-                      color: Colors.black,
-                    )
-                  ),
-                  child: Container(
-                    height: 150,
-                    width: 150,
-                    child: Align(
-                      child: Text(
-                      'Session 1',
-                      textAlign: TextAlign.center,
+            Expanded(
+              child: ListView(
+                children: <Widget>[
+                  ElevatedButton(
+                    onPressed: () {}, 
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.yellow[100],
+                      foregroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                      ),
+                      textStyle: TextStyle(
+                        color: Colors.black,
                       )
-                    )
+                    ),
+                    child: Container(
+                      height: 150,
+                      width: 150,
+                      child: Align(
+                        child: Text(
+                        'session 1',
+                        textAlign: TextAlign.center,
+                        )
+                      )
+                    ),
                   ),
-                ),
-              ]
+                ]
+              ), 
             ),
             ElevatedButton(
               onPressed: () {

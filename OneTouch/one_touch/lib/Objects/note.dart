@@ -14,6 +14,11 @@ class Note {
         orElse: () => NoteType.nullType,
       ),
       question = json['question'] ?? 'No question';
+
+  Map<String, dynamic> toJson() => {
+    'note_type': noteType.toString(),
+    'question': question
+  };
 }
 
 class NumberScaleNote extends Note {
@@ -40,6 +45,17 @@ class NumberScaleNote extends Note {
       minLabel = json['min_label'] ?? json['minLabel'] ?? 'Low',
       maxLabel = json['max_label'] ?? json['maxLabel'] ?? 'High',
       super.fromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => {
+    'note_type': noteType.name,
+    'question': question,
+    'min_value': min,
+    'max_value': max,
+    'step': step,
+    'min_label': minLabel,
+    'max_label': maxLabel,
+  };
 }
 
 /*
@@ -65,6 +81,13 @@ class MultipleChoiceNote extends Note {
           [],
       maxSelections = json['max_selections'] ?? 3,
       super.fromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => {
+    'note_type': noteType.name,
+    'question': question,
+    'options': options
+  };
 }
 
 class SingleChoiceNote extends Note {
@@ -83,6 +106,13 @@ class SingleChoiceNote extends Note {
               .toList() ??
           [],
       super.fromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => {
+    'note_type': noteType.name,
+    'question': question,
+    'options': options
+  };
 }
 
 /*

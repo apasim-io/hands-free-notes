@@ -1,4 +1,35 @@
 import 'note.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'dart:convert';
+
+class SessionStorage {
+  Future<String> localPath() async {
+    final directory = await getApplicationDocumentsDirectory();
+    // print("The path is $directory");
+    return directory.path;
+  }
+
+  Future<File> localFile() async {
+    final path = await localPath();
+    return File('$path/sessions.json');
+  }
+
+  void saveSessionData(List sessions, File file) {
+    final jsonList = jsonEncode(sessions);
+    file.writeAsString(jsonList);
+
+    // print(jsonList);
+    // File testFile = File('/storage/emulated/0/Download/test.txt');
+    // testFile.writeAsString(jsonList);
+  }
+
+  Future<String> readSessionData(File file) async {
+    final contents = await file.readAsString();
+    return contents;
+  }
+
+}
 
 // a page of notes within a session
 class Page {
@@ -55,6 +86,12 @@ class Page {
                   return Note.fromJson({});
                 }).toList() ??
             [];
+  
+  Map<String, dynamic> toJson() => {
+    'page_title': pageTitle,
+    'section_content': pageContent,
+    'notes': notes.map((note) => note.toJson()).toList()
+  };
 }
 
 // a session containing multiple pages of notes
@@ -89,11 +126,16 @@ class Session {
   String toString() => 'Session(notes: $pages)';
 
   Session.fromJson(Map<String, dynamic> json):
-    name = json['name'] ?? 'New Session',
+    name = json['session_name'] ?? 'New Session',
     pages = (json['pages'] as List<dynamic>?)
             ?.map((e) => Page.fromJson(e as Map<String, dynamic>))
             .toList() ??
         [];
+
+  Map<String, dynamic> toJson() => {
+    'session_name': name,
+    'pages': pages.map((page) => page.toJson()).toList()
+  };
 
 }
 
