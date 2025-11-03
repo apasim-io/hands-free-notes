@@ -56,6 +56,7 @@ class NumberScaleNote extends Note {
     'min_label': minLabel,
     'max_label': maxLabel,
   };
+  // TO DO : add toGui function
 }
 
 /*
@@ -88,6 +89,7 @@ class MultipleChoiceNote extends Note {
     'question': question,
     'options': options
   };
+  // TO DO : add toGui function
 }
 
 class SingleChoiceNote extends Note {
@@ -113,25 +115,6 @@ class SingleChoiceNote extends Note {
     'question': question,
     'options': options
   };
-}
 
-/*
-  To do: 
-    1. make note widgets actually show different types of notes, switch case?
- */
-
-class NoteWidget extends StatefulWidget {
-  final Note note;
-
-  const NoteWidget({super.key, required this.note});
-
-  @override
-  State<NoteWidget> createState() => NoteWidgetState();
-}
-
-class NoteWidgetState extends State<NoteWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(child: Column(children: [Text(widget.note.question), Text(widget.note.noteType.toString())]));
-  }
+  // TO DO : add toGui function
 }

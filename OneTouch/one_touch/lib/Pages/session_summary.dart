@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../Objects/template.dart';
 
 /*
   On this page the user can see a summary of their session, including notes taken, time spent, etc.
@@ -6,8 +7,16 @@ import 'package:flutter/material.dart';
   For Jackie the option to export should go straight to her email
  */
 
+/*
+  To do:
+    1. display note question and answer(s)
+    2. add export functionality
+ */
+
 class SessionSummary extends StatelessWidget{ 
-  const SessionSummary({super.key});
+  final Template template;
+
+  const SessionSummary({super.key, required this.template});
 
 @override
   Widget build(BuildContext context) {

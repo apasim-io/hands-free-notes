@@ -5,11 +5,10 @@ import '../Objects/template.dart';
 
 /*
   To do: 
-    1. make note widgets actually show different types of notes
-    2. make it so we can answer the notes, not just view them
-    3. store note answers back into the Session object
-      3a. need to modify the Session object to hold answers
-      3b. modify NoteSession to save answers
+    1. build the two columns layout
+        1a. left column: note display (scrollable if needed)
+        1b. right column: note input area (different input types based on note type)
+    
  */
 class NoteSession extends StatelessWidget {
   final Template template;
