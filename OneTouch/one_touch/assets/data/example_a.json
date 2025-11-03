@@ -1,5 +1,5 @@
 {
-    "session_name": "Health Checkup",
+    "template_name": "Health Checkup",
     "pages": [
         {
             "page_title": "General Health",

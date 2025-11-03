@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 /* This page will be used for creating note sessions */
 
-class Template extends StatelessWidget{ 
-  const Template({super.key});
+class TemplateCreate extends StatelessWidget{ 
+  const TemplateCreate({super.key});
 
 @override
   Widget build(BuildContext context) {

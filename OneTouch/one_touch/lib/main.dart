@@ -6,18 +6,18 @@ import 'dart:io';
 // Pages
 import 'Pages/note_session.dart';
 import 'Pages/session_summary.dart';
-import 'Pages/template.dart';
+import 'Pages/template_create.dart';
 
 //data objects
-import 'Objects/session.dart';
-import 'Objects/note.dart';
+import 'Objects/template.dart';
+import 'Objects/note.dart'; // don't use yet, make sure to delete if we don't need
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final jsonString = await rootBundle.loadString('Assets/Data/example_a.json');
-  final sessionMap = jsonDecode(jsonString) as Map<String, dynamic>;
-  Session currentSession = Session.fromJson(sessionMap);
+  final jsonString = await rootBundle.loadString('assets/data/example_a.json');
+  final templateMap = jsonDecode(jsonString) as Map<String, dynamic>;
+  Template currentTemp = Template.fromJson(templateMap);
 
   // for testing files and json conversion:
   // SessionStorage s = SessionStorage();
@@ -38,17 +38,17 @@ void main() async {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(session: currentSession),
-    ),
+      home: HomePage(template: currentTemp),
+    )
   );
 }
 
 //
 
 class HomePage extends StatelessWidget {
-  final Session session;
+  final Template template;
 
-  const HomePage({super.key, required this.session});
+  const HomePage({super.key, required this.template});
 
   @override
   Widget build(BuildContext context) {
