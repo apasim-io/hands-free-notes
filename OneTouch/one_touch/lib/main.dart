@@ -96,7 +96,7 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => NoteSession(session: session),
+                    builder: (context) => NoteSession(template: template),
                   ),
                 );
               },
