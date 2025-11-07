@@ -1,7 +1,10 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'note.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
+
+part 'template.g.dart';
 
 class TemplateStorage {
   Future<String> localPath() async {
@@ -31,8 +34,8 @@ class TemplateStorage {
 
 }
 
-
 // a template containing multiple pages of notes
+@JsonSerializable()
 class Template {
   String name = "New Template";
   final List<Note> notes;
@@ -61,19 +64,9 @@ class Template {
   int get length => notes.length;
 
   @override
-  String toString() => 'Session(notes: $notes)';
+  String toString() => 'Template(notes: $notes)';
 
-  Template.fromJson(Map<String, dynamic> json):
-    name = json['template_name'] ?? 'New Template',
-    notes = (json['notes'] as List<dynamic>?)
-            ?.map((e) => Note.fromJson(e as Map<String, dynamic>))
-            .toList() ??
-        [];
-
-  Map<String, dynamic> toJson() => {
-    'template_name': name,
-    'notes': notes.map((note) => note.toJson()).toList()
-  };
-
+  factory Template.fromJson(Map<String, dynamic> json) => _$TemplateFromJson(json);
+  Map<String, dynamic> toJson() => _$TemplateToJson(this);
 }
 

@@ -1,0 +1,28 @@
+{
+    "name": "Health Checkup",
+    "notes": [
+        {
+            "noteType": "numberScale",
+            "question": "On a scale of 1 to 10, how would you rate your overall health?",
+            "minValue": 1,
+            "maxValue": 10,
+            "step": 1,
+            "minLabel": "Low",
+            "maxLabel": "High",
+            "selection": null
+        },
+        {
+            "noteType": "multipleChoice",
+            "question": "Which of the following conditions do you have?",
+            "options": ["Diabetes", "Hypertension", "Asthma", "None"],
+            "max_selections": 4,
+            "selection": []
+        },
+        {
+            "noteType": "singleChoice",
+            "question": "How often do you exercise?",
+            "options": ["Daily", "Weekly", "Monthly", "Rarely", "Never"],
+            "selection": null
+        }
+    ]
+}

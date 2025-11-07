@@ -15,15 +15,15 @@ import 'Objects/note.dart'; // don't use yet, make sure to delete if we don't ne
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final jsonString = await rootBundle.loadString('assets/data/example_a.json');
+  final jsonString = await rootBundle.loadString('assets/data/example_b.json');
   final templateMap = jsonDecode(jsonString) as Map<String, dynamic>;
   Template currentTemp = Template.fromJson(templateMap);
 
   // for testing files and json conversion:
-  // SessionStorage s = SessionStorage();
+  // TemplateStorage s = TemplateStorage();
   // final File sessionsFile = await s.localFile();
-  // s.saveSessionData([currentSession], sessionsFile);
-  // final res = await s.readSessionData(sessionsFile);
+  // s.saveTemplateData([currentTemp], sessionsFile);
+  // final res = await s.readTemplateData(sessionsFile);
 
   /*
     TO DO:
