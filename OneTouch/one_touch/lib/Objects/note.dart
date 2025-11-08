@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:flutter/material.dart';
 
 part 'note.g.dart';
 
@@ -23,6 +24,10 @@ class Note {
   // Serialization
   factory Note.fromJson(Map<String, dynamic> json) => _$NoteFromJson(json);
   Map<String, dynamic> toJson() => _$NoteToJson(this);
+
+  Widget toGui(){ 
+    return Container();
+  }
 }
 
 @JsonSerializable()
@@ -33,6 +38,8 @@ class NumberScaleNote extends Note {
   String minLabel = "Low";
   String maxLabel = "High";
   int? selection;
+
+  int value = 0;
 
   NumberScaleNote({
     required super.noteType,
@@ -48,7 +55,25 @@ class NumberScaleNote extends Note {
   factory NumberScaleNote.fromJson(Map<String, dynamic> json) => _$NumberScaleNoteFromJson(json);
   Map<String, dynamic> toJson() => _$NumberScaleNoteToJson(this);
 
-  // TO DO : add toGui function
+  Container toGui(){ 
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      child: Slider(
+        value: value.toDouble(), 
+        onChanged: onChanged,
+        min: minValue.toDouble(),
+        max: maxValue.toDouble(),
+        divisions: ((maxValue - minValue) / step).round(),
+        label: value.round().toString(),
+      )
+    );
+    
+    
+  }
+
+  void onChanged(double newValue){
+    value = newValue.toInt();
+  }
 
 }
 
@@ -60,7 +85,7 @@ class NumberScaleNote extends Note {
 class MultipleChoiceNote extends Note {
   List<String> options = [];
   int maxSelections = 3;
-  List<int> selection = [];
+  List<int>? selection; // indices of selected options (nullable to handle missing/null JSON)
 
   MultipleChoiceNote({
     required super.noteType,
@@ -73,7 +98,57 @@ class MultipleChoiceNote extends Note {
   factory MultipleChoiceNote.fromJson(Map<String, dynamic> json) => _$MultipleChoiceNoteFromJson(json);
   Map<String, dynamic> toJson() => _$MultipleChoiceNoteToJson(this);
 
-  // TO DO : add toGui function
+  // generate a square button for each option (returns a single Widget)
+  @override
+  Widget toGui() {
+    // Use StatefulBuilder so tapping an option can call setState and rebuild
+    return StatefulBuilder(
+      builder: (BuildContext context, void Function(void Function()) setState) {
+        // treat null selection as empty list for rendering
+        final List<int> sel = selection ?? <int>[];
+
+        return Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: options.asMap().entries.map((entry) {
+            final int idx = entry.key;
+            final String option = entry.value;
+            final bool isSelected = sel.contains(idx);
+
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  if (isSelected) {
+                    sel.remove(idx);
+                  } else {
+                    if (sel.length < maxSelections) {
+                      sel.add(idx);
+                    }
+                  }
+                  // write back to the nullable selection field
+                  selection = List<int>.from(sel);
+                });
+              },
+              child: Container(
+                margin: const EdgeInsets.all(4.0),
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                decoration: BoxDecoration(
+                  color: isSelected ? Colors.blue : Colors.grey[300],
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Text(
+                  option,
+                  style: TextStyle(color: isSelected ? Colors.white : Colors.black),
+                ),
+              ),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+  
+  
 
 }
 
@@ -92,6 +167,46 @@ class SingleChoiceNote extends Note {
   factory SingleChoiceNote.fromJson(Map<String, dynamic> json) => _$SingleChoiceNoteFromJson(json);
   Map<String, dynamic> toJson() => _$SingleChoiceNoteToJson(this);
 
-  // TO DO : add toGui function
+  // generates a square button for each option (single-choice)
+  @override
+  Widget toGui() {
+    return StatefulBuilder(
+      builder: (BuildContext context, void Function(void Function()) setState) {
+        return Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: options.asMap().entries.map((entry) {
+            final int idx = entry.key;
+            final String option = entry.value;
+            final bool isSelected = (selection != null && selection == idx);
 
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  if (isSelected) {
+                    // deselect if tapped again
+                    selection = null;
+                  } else {
+                    selection = idx;
+                  }
+                });
+              },
+              child: Container(
+                margin: const EdgeInsets.all(4.0),
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                decoration: BoxDecoration(
+                  color: isSelected ? Colors.blue : Colors.grey[300],
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Text(
+                  option,
+                  style: TextStyle(color: isSelected ? Colors.white : Colors.black),
+                ),
+              ),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
 }
