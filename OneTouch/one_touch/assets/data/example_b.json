@@ -10,13 +10,14 @@
             "step": 1,
             "minLabel": "Low",
             "maxLabel": "High",
-            "selection": null
+            "selection": null,
+            "value": 1
         },
         {
             "noteType": "multipleChoice",
             "question": "Which of the following conditions do you have?",
             "options": ["Diabetes", "Hypertension", "Asthma", "None"],
-            "max_selections": 4,
+            "maxSelections": 4,
             "selection": []
         },
         {
@@ -38,13 +39,14 @@
             "step": 1,
             "minLabel": "Low",
             "maxLabel": "High",
-            "selection": null
+            "selection": null,
+            "value": 1
         },
         {
             "noteType": "multipleChoice",
             "question": "Which of the following conditions do you have?",
             "options": ["Diabetes", "Hypertension", "Asthma", "None"],
-            "max_selections": 4,
+            "maxSelections": 4,
             "selection": []
         },
         {
@@ -66,13 +68,14 @@
             "step": 1,
             "minLabel": "Low",
             "maxLabel": "High",
-            "selection": null
+            "selection": null,
+            "value": 1
         },
         {
             "noteType": "multipleChoice",
             "question": "Which of the following conditions do you have?",
             "options": ["Diabetes", "Hypertension", "Asthma", "None"],
-            "max_selections": 4,
+            "maxSelections": 4,
             "selection": []
         },
         {

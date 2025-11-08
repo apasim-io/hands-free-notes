@@ -75,7 +75,27 @@ class Template {
   String toString() => 'Template(notes: $notes)';
 
   // Serialization
-  factory Template.fromJson(Map<String, dynamic> json) => _$TemplateFromJson(json);
+  // factory Template.fromJson(Map<String, dynamic> json) => _$TemplateFromJson(json);
+  Template.fromJson(Map<String, dynamic> json):
+    name = json['name'],
+    notes = (json['notes'] as List<dynamic>?)
+            ?.map((e) {
+              if (e is Map<String, dynamic>) {
+                final type = (e['noteType'] ?? '').toString();
+                switch (type) {
+                  case 'numberScale':
+                    return NumberScaleNote.fromJson(e);
+                  case 'multipleChoice':
+                    return MultipleChoiceNote.fromJson(e);
+                  case 'singleChoice':
+                    return SingleChoiceNote.fromJson(e);
+                  default:
+                    return Note.fromJson(e);
+                }
+              }
+              return Note.fromJson({});
+            }).toList() ??
+        [];
   Map<String, dynamic> toJson() => _$TemplateToJson(this);
 }
 

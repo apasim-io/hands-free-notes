@@ -26,14 +26,16 @@ const _$NoteTypeEnumMap = {
 
 NumberScaleNote _$NumberScaleNoteFromJson(Map<String, dynamic> json) =>
     NumberScaleNote(
-      noteType: $enumDecode(_$NoteTypeEnumMap, json['noteType']),
-      question: json['question'] as String,
-      minValue: (json['minValue'] as num).toInt(),
-      maxValue: (json['maxValue'] as num).toInt(),
-      step: (json['step'] as num).toInt(),
-      minLabel: json['minLabel'] as String,
-      maxLabel: json['maxLabel'] as String,
-    )..selection = (json['selection'] as num?)?.toInt();
+        noteType: $enumDecode(_$NoteTypeEnumMap, json['noteType']),
+        question: json['question'] as String,
+        minValue: (json['minValue'] as num).toInt(),
+        maxValue: (json['maxValue'] as num).toInt(),
+        step: (json['step'] as num).toInt(),
+        minLabel: json['minLabel'] as String,
+        maxLabel: json['maxLabel'] as String,
+      )
+      ..selection = (json['selection'] as num?)?.toInt()
+      ..value = (json['value'] as num).toInt();
 
 Map<String, dynamic> _$NumberScaleNoteToJson(NumberScaleNote instance) =>
     <String, dynamic>{
@@ -45,6 +47,7 @@ Map<String, dynamic> _$NumberScaleNoteToJson(NumberScaleNote instance) =>
       'minLabel': instance.minLabel,
       'maxLabel': instance.maxLabel,
       'selection': instance.selection,
+      'value': instance.value,
     };
 
 MultipleChoiceNote _$MultipleChoiceNoteFromJson(Map<String, dynamic> json) =>
@@ -56,8 +59,8 @@ MultipleChoiceNote _$MultipleChoiceNoteFromJson(Map<String, dynamic> json) =>
             .toList(),
         maxSelections: (json['maxSelections'] as num).toInt(),
       )
-      ..selection = (json['selection'] as List<dynamic>)
-          .map((e) => (e as num).toInt())
+      ..selection = (json['selection'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
           .toList();
 
 Map<String, dynamic> _$MultipleChoiceNoteToJson(MultipleChoiceNote instance) =>

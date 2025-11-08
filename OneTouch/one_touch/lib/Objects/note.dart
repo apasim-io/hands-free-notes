@@ -42,19 +42,20 @@ class NumberScaleNote extends Note {
   int value = 0;
 
   NumberScaleNote({
-    required super.noteType,
-    required super.question,
+    required NoteType noteType,
+    required String question,
     required this.minValue,
     required this.maxValue,
     required this.step,
     required this.minLabel,
     required this.maxLabel,
-  });
+  }): super(noteType: noteType, question: question);
 
   // Serialization
   factory NumberScaleNote.fromJson(Map<String, dynamic> json) => _$NumberScaleNoteFromJson(json);
-  Map<String, dynamic> toJson() => _$NumberScaleNoteToJson(this);
+  @override Map<String, dynamic> toJson() => _$NumberScaleNoteToJson(this);
 
+  @override
   Container toGui(){ 
     return Container(
       padding: const EdgeInsets.all(16.0),
@@ -88,15 +89,15 @@ class MultipleChoiceNote extends Note {
   List<int>? selection; // indices of selected options (nullable to handle missing/null JSON)
 
   MultipleChoiceNote({
-    required super.noteType,
-    required super.question,
+    required NoteType noteType,
+    required String question,
     required this.options,
     required this.maxSelections,
-  });
+  }): super(noteType: noteType, question: question);
 
   // Serialization
   factory MultipleChoiceNote.fromJson(Map<String, dynamic> json) => _$MultipleChoiceNoteFromJson(json);
-  Map<String, dynamic> toJson() => _$MultipleChoiceNoteToJson(this);
+  @override Map<String, dynamic> toJson() => _$MultipleChoiceNoteToJson(this);
 
   // generate a square button for each option (returns a single Widget)
   @override
@@ -158,17 +159,17 @@ class SingleChoiceNote extends Note {
   int? selection;
 
   SingleChoiceNote({
-    required super.noteType,
-    required super.question,
+    required NoteType noteType,
+    required String question,
     required this.options,
-  });
+  }): super(noteType: noteType, question: question);
 
   // Serialization
   factory SingleChoiceNote.fromJson(Map<String, dynamic> json) => _$SingleChoiceNoteFromJson(json);
-  Map<String, dynamic> toJson() => _$SingleChoiceNoteToJson(this);
+  @override Map<String, dynamic> toJson() => _$SingleChoiceNoteToJson(this);
 
   // generates a square button for each option (single-choice)
-  @override
+  @override 
   Widget toGui() {
     return StatefulBuilder(
       builder: (BuildContext context, void Function(void Function()) setState) {

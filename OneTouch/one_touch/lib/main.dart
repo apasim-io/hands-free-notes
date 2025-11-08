@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:provider/provider.dart';
 import 'dart:io';
+import 'dart:developer';
 
 // Pages
 import 'Pages/note_session.dart';
@@ -19,6 +20,7 @@ void main() async {
 
   TemplateStorage ts = TemplateStorage();
   List<Template> templates = await ts.getSampleTemplates('assets/data/example_b.json');
+  inspect(templates);
 
   /*
     TO DO:
