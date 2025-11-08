@@ -38,16 +38,56 @@ MultipleChoiceNote note3 = new MultipleChoiceNote(
 
 List<Note> notesList = [note1, note2, note3];
 
-class NoteSession extends StatelessWidget {
+class NoteSession extends StatefulWidget {
   final Template template;
-
   const NoteSession({super.key, required this.template});
 
   @override
+  State<NoteSession> createState() => _NoteSessionState();
+}
+
+class _NoteSessionState extends State<NoteSession> {
+  int? selected; //this is to chagne the widget showing on the right
+
+  @override
   Widget build(BuildContext context) {
+    final notes = widget.template.notes;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Note Session')),
-      body: note3.toGui()
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          //left column: one item per note in the template. 
+          SizedBox(
+            width: 200, // tweak as you like
+            child: ListView.separated( //seperated until they become there own squares
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: notes.length,
+              itemBuilder: (context, index) {
+                final note = notes[index];//use this later to
+                return ListTile( //so it can be clicked on
+                  dense: true,
+                  title: Text(note.question),//example**
+                  onTap: () => setState(() => selected = index),
+                );
+              },
+              separatorBuilder: (_, __) => const Divider(height: 1),
+            ),
+          ),
+          //divider should just be a line to seperate them
+          const VerticalDivider(width: 1),
+          //Right column expands to fill space
+          Expanded(
+            child: (selected == null)
+                ? const Center(child: Text('Select a note'))
+                : KeyedSubtree(
+                    key: ValueKey(selected), // or ObjectKey(notes[selected!])
+                    child: notes[selected!].toGui(),
+                  ),
+          )
+        ],
+      ),
     );
   }
 }
+
