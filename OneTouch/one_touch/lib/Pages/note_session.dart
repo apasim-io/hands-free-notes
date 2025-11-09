@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:one_touch/Objects/note.dart';
+import 'package:one_touch/Pages/session_summary.dart';
 import '../Objects/template.dart';
 
 
@@ -65,9 +66,13 @@ class _NoteSessionState extends State<NoteSession> {
               itemCount: notes.length,
               itemBuilder: (context, index) {
                 final note = notes[index];//use this later to
+                final isSelected = selected == index;
                 return ListTile( //so it can be clicked on
                   dense: true,
-                  title: Text(note.question),//example**
+                  title: Text(note.question),//example: could be changed to title
+                  selected: isSelected, //next 3 lines for coloring
+                  selectedTileColor: Theme.of(context).colorScheme.secondaryContainer,
+                  selectedColor: Theme.of(context).colorScheme.onSecondaryContainer,
                   onTap: () => setState(() => selected = index),
                 );
               },
@@ -78,12 +83,34 @@ class _NoteSessionState extends State<NoteSession> {
           const VerticalDivider(width: 1),
           //Right column expands to fill space
           Expanded(
-            child: (selected == null)
-                ? const Center(child: Text('Select a note'))
-                : KeyedSubtree(
-                    key: ValueKey(selected), // or ObjectKey(notes[selected!])
-                    child: notes[selected!].toGui(),
+            child: Stack(
+              children: [
+                //stack for layering the buttons
+                Positioned.fill(
+                  child: (selected == null)
+                      ? const Center(child: Text('Select a note'))
+                      : Center(
+                          child: KeyedSubtree(
+                            key: ValueKey(selected),
+                            child: notes[selected!].toGui(),
+                          ),
+                        ),
+                ),
+
+                //bottom-right next trial botton
+                Positioned(
+                  right: 16,
+                  bottom: 16,
+                  child: FloatingActionButton.extended(
+                    onPressed: () {
+                      //do session summary 
+                    },
+                    icon: const Icon(Icons.cancel),
+                    label: const Text('Exit'),
                   ),
+                ),
+              ],
+            ),
           )
         ],
       ),
