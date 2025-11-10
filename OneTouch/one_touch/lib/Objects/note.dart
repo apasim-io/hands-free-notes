@@ -56,25 +56,44 @@ class NumberScaleNote extends Note {
   @override Map<String, dynamic> toJson() => _$NumberScaleNoteToJson(this);
 
   @override
-  Container toGui(){ 
-    return Container(
+  Widget toGui() {
+    return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Slider(
-        value: value.toDouble(), 
-        onChanged: onChanged,
-        min: minValue.toDouble(),
-        max: maxValue.toDouble(),
-        divisions: ((maxValue - minValue) / step).round(),
-        label: value.round().toString(),
-      )
+      child: StatefulBuilder(
+        builder: (BuildContext context, void Function(void Function()) setState) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Slider(
+                value: value.toDouble(),
+                onChanged: (newValue) {
+                  setState(() {
+                    value = newValue.toInt();
+                  });
+                },
+                min: minValue.toDouble(),
+                max: maxValue.toDouble(),
+                divisions: ((maxValue - minValue) / step).round(),
+                label: value.round().toString(),
+              ),
+              const SizedBox(height: 8),
+              // show min/max labels under the slider, aligned left and right
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (minLabel.trim().isNotEmpty)
+                    Text(minLabel, style: Theme.of(context).textTheme.bodySmall),
+                  if (maxLabel.trim().isNotEmpty)
+                    Text(maxLabel, style: Theme.of(context).textTheme.bodySmall),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
     );
-    
-    
   }
 
-  void onChanged(double newValue){
-    value = newValue.toInt();
-  }
 
 }
 
