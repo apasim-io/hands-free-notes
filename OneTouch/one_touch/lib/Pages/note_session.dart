@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:one_touch/Objects/note.dart';
+import 'package:one_touch/Pages/home_page.dart';
 import 'package:one_touch/Pages/session_summary.dart';
 import '../Objects/template.dart';
 
@@ -106,10 +107,10 @@ class _NoteSessionState extends State<NoteSession> {
                   top: 16,
                   child: FloatingActionButton.extended(
                     onPressed: () {
-                      //do session summary 
+                      Navigator.pop(context);
                     },
                     icon: const Icon(Icons.cancel),
-                    label: const Text('Finish'),
+                    label: const Text('Cancel Session'),
                     backgroundColor: Color.fromARGB(190, 255, 0, 0),
                   ),
                 ),
@@ -125,7 +126,7 @@ class _NoteSessionState extends State<NoteSession> {
 
                           if (isLastNote) {
                             //if we are already on the last note: finish the session
-                            // TO Do
+                            // TO Do - Call the next method~!
                             return;
                           }
 
