@@ -54,6 +54,9 @@ class _NoteSessionState extends State<NoteSession> {
   Widget build(BuildContext context) {
     final notes = widget.template.notes;
 
+    //shortcut to check for last not on build
+    final bool isLastNote = selected != null && selected == notes.length - 1;
+
     return Scaffold(
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -100,14 +103,50 @@ class _NoteSessionState extends State<NoteSession> {
                 //bottom-right next trial botton
                 Positioned(
                   right: 16,
-                  bottom: 16,
+                  top: 16,
                   child: FloatingActionButton.extended(
                     onPressed: () {
                       //do session summary 
                     },
                     icon: const Icon(Icons.cancel),
-                    label: const Text('Exit'),
+                    label: const Text('Finish'),
+                    backgroundColor: Color.fromARGB(190, 255, 0, 0),
                   ),
+                ),
+                Positioned(
+                  right: 16,
+                  bottom: 16,
+                  child: SizedBox(
+                    height: 120,
+                    width: 160,
+                    child: FloatingActionButton.extended(
+                      onPressed: () {
+                        setState(() {
+
+                          if (isLastNote) {
+                            //if we are already on the last note: finish the session
+                            // TO Do
+                            return;
+                          }
+
+                          if (notes.isEmpty) return;
+
+                          //if nothing selected yet, start with the first note
+                          if (selected == null) {
+                            selected = 0;
+                            return;
+                          }
+
+                          //If not at last note, go to next one
+                          if (selected! < notes.length - 1) {
+                            selected = selected! + 1;
+                          }
+                        });
+                      },
+                      icon: Icon(Icons.arrow_forward),
+                      label: Text(isLastNote ? 'Finish' : 'Next'),
+                    ),
+                  )
                 ),
               ],
             ),
