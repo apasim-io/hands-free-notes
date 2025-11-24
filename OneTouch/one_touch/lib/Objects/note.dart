@@ -34,6 +34,10 @@ class Note {
   Widget toGui(){ 
     return Container();
   }
+
+  String? getValueString() {
+    return "No answer recorded.";
+  }
 }
 
 @JsonSerializable()
@@ -57,6 +61,10 @@ class NumberScaleNote extends Note {
     required this.maxLabel,
     DateTime? interactionTime,
   }): super(noteType: noteType, question: question, interactionTime: interactionTime);
+
+  String? getValueString() {
+    return value.toString();
+  }
 
   // Serialization
   factory NumberScaleNote.fromJson(Map<String, dynamic> json) => _$NumberScaleNoteFromJson(json);
@@ -121,6 +129,12 @@ class MultipleChoiceNote extends Note {
     required this.maxSelections,
     DateTime? interactionTime,
   }): super(noteType: noteType, question: question, interactionTime: interactionTime);
+
+  String? getValueString() {
+    return selection != null
+      ? selection!.map((index) => options[index]).join(', ')
+      : 'No selections made.';
+  }
 
   // Serialization
   factory MultipleChoiceNote.fromJson(Map<String, dynamic> json) => _$MultipleChoiceNoteFromJson(json);
@@ -192,6 +206,10 @@ class SingleChoiceNote extends Note {
     required this.options,
     DateTime? interactionTime,
   }): super(noteType: noteType, question: question, interactionTime: interactionTime);
+
+  String getValueString() {
+    return selection != null ? options[selection!] : 'No selection made.';
+  }
 
   // Serialization
   factory SingleChoiceNote.fromJson(Map<String, dynamic> json) => _$SingleChoiceNoteFromJson(json);
