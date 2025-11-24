@@ -19,7 +19,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   TemplateStorage ts = TemplateStorage();
-  List<Template> templates = await ts.getSampleTemplates('assets/data/example_b.json');
+  // retrieve and save sample template data to device
+  List<Template> sampleTemplates = await ts.getSampleTemplates('assets/data/example_b.json');
+  ts.saveTemplateData(sampleTemplates, await ts.localFile(ts.templatesFName));
+
+  // get saved templates from target device
+  List<Template> templates = await ts.getTemplateData(await ts.localFile(ts.templatesFName));
   inspect(templates);
 
   /*
@@ -35,7 +40,7 @@ void main() async {
   runApp(
       MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: HomePage(templates: templates), 
+        home: HomePage(initialTemplates: templates), 
       )
   );
 }

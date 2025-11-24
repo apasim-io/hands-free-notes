@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:one_touch/Objects/note.dart';
 import 'package:one_touch/Pages/home_page.dart';
@@ -42,7 +44,13 @@ List<Note> notesList = [note1, note2, note3];
 
 class NoteSession extends StatefulWidget {
   final Template template;
-  const NoteSession({super.key, required this.template});
+
+  final void Function(Template, String) saveTemplatesCallback;
+  const NoteSession({
+    super.key,
+    required this.template,
+    required this.saveTemplatesCallback,
+  });
 
   @override
   State<NoteSession> createState() => _NoteSessionState();
@@ -106,7 +114,10 @@ class _NoteSessionState extends State<NoteSession> {
                   right: 16,
                   top: 16,
                   child: FloatingActionButton.extended(
+                    heroTag: 'cancel',
                     onPressed: () {
+                      // cancel changes and reset templates
+                      widget.saveTemplatesCallback(widget.template, "revert");
                       Navigator.pop(context);
                     },
                     icon: const Icon(Icons.cancel),
@@ -121,12 +132,15 @@ class _NoteSessionState extends State<NoteSession> {
                     height: 120,
                     width: 160,
                     child: FloatingActionButton.extended(
+                      heroTag: 'continue',                     
                       onPressed: () {
                         setState(() {
 
                           if (isLastNote) {
                             //if we are already on the last note: finish the session
                             // TO Do - Call the next method~!
+                            // save note progress
+                            widget.saveTemplatesCallback(widget.template, "save");
                             return;
                           }
 

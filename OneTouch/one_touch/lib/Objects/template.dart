@@ -46,10 +46,17 @@ class TemplateStorage {
 @JsonSerializable()
 class Template {
   String name = "New Template";
+  String id = "";
   final List<Note> notes;
 
-  Template({List<Note>? notes, String? name}) : notes = notes ?? []{
+  Template({List<Note>? notes, String? name, String? id}) : notes = notes ?? []{
     if (name != null) this.name = name;
+    if (id != null) this.id = idGenerator();
+  }
+
+  String idGenerator() {
+    final now = DateTime.now();
+    return now.microsecondsSinceEpoch.toString();
   }
 
   void setName(String newName) {
@@ -78,6 +85,7 @@ class Template {
   // factory Template.fromJson(Map<String, dynamic> json) => _$TemplateFromJson(json);
   Template.fromJson(Map<String, dynamic> json):
     name = json['name'],
+    id = json['id'],
     notes = (json['notes'] as List<dynamic>?)
             ?.map((e) {
               if (e is Map<String, dynamic>) {

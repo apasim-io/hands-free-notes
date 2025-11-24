@@ -39,7 +39,7 @@ class NumberScaleNote extends Note {
   String maxLabel = "High";
   int? selection;
 
-  int value = 0;
+  int? value;
 
   NumberScaleNote({
     required NoteType noteType,
@@ -49,6 +49,7 @@ class NumberScaleNote extends Note {
     required this.step,
     required this.minLabel,
     required this.maxLabel,
+    this.value
   }): super(noteType: noteType, question: question);
 
   // Serialization
@@ -65,7 +66,7 @@ class NumberScaleNote extends Note {
             mainAxisSize: MainAxisSize.min,
             children: [
               Slider(
-                value: value.toDouble(),
+                value: value == null ? minValue.toDouble() : value!.toDouble(),
                 onChanged: (newValue) {
                   setState(() {
                     value = newValue.toInt();
@@ -74,7 +75,7 @@ class NumberScaleNote extends Note {
                 min: minValue.toDouble(),
                 max: maxValue.toDouble(),
                 divisions: ((maxValue - minValue) / step).round(),
-                label: value.round().toString(),
+                label: value == null ? minValue.round().toString() : value!.round().toString()
               ),
               const SizedBox(height: 8),
               // show min/max labels under the slider, aligned left and right
@@ -112,6 +113,7 @@ class MultipleChoiceNote extends Note {
     required String question,
     required this.options,
     required this.maxSelections,
+    this.selection
   }): super(noteType: noteType, question: question);
 
   // Serialization
@@ -181,6 +183,7 @@ class SingleChoiceNote extends Note {
     required NoteType noteType,
     required String question,
     required this.options,
+    this.selection
   }): super(noteType: noteType, question: question);
 
   // Serialization

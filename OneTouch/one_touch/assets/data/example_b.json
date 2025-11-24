@@ -1,6 +1,7 @@
 [
   {
     "name": "Session 1",
+    "id": "1",
     "notes": [
         {
             "noteType": "numberScale",
@@ -30,6 +31,7 @@
   },
     {
     "name": "Session 2",
+    "id": "2",
     "notes": [
         {
             "noteType": "numberScale",
@@ -59,6 +61,7 @@
   },
     {
     "name": "Session 3",
+    "id": "3",
     "notes": [
         {
             "noteType": "numberScale",
@@ -88,6 +91,7 @@
   },
     {
     "name": "Session 4",
+    "id": "4",
     "notes": [
         {
             "noteType": "numberScale",
@@ -117,6 +121,7 @@
   },
     {
     "name": "Session 5",
+    "id": "5",
     "notes": [
         {
             "noteType": "numberScale",
@@ -146,6 +151,7 @@
   },
     {
     "name": "Session 6",
+    "id": "6",
     "notes": [
         {
             "noteType": "numberScale",

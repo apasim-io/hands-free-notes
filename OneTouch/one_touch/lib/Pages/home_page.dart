@@ -1,13 +1,52 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:one_touch/Objects/note.dart';
 import '../Objects/template.dart';
 import 'note_session.dart';
 import 'template_create.dart';
+import 'dart:io';
 
-class HomePage extends StatelessWidget {
-  final List<Template> templates;
+class HomePage extends StatefulWidget {
+  final List<Template> initialTemplates;
+  HomePage({super.key, required this.initialTemplates});
 
-  HomePage({super.key, required this.templates});
+  @override
+  State<HomePage> createState() => _HomePageState();
+
+}
+
+class _HomePageState extends State<HomePage> {
+  // List<Template> templates = templates;
+
+  List<Template> _templates = [];
+
+
+  @override
+  void initState() {
+    super.initState(); // Always call super.initState() first
+
+    // Perform one-time initialization tasks here
+    _templates = widget.initialTemplates;
+  }
+
+  void saveTemplates(Template updatedTemplate, String updateType) async {
+    TemplateStorage ts = TemplateStorage();
+    File templatesFile = await ts.localFile(ts.templatesFName);
+
+    // update current template state
+
+    if (updateType == "revert") {
+      // get current saved template data and revert state
+      List<Template> revertedTemplates = await ts.getTemplateData(templatesFile);
+      setState(() {
+        _templates = revertedTemplates;
+      });
+    } else {
+      // save updated template list to local file
+      ts.saveTemplateData(_templates, templatesFile);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,29 +59,21 @@ class HomePage extends StatelessWidget {
         children: [
           TemplateList(
             name: "Recent Sessions",
-            templates: templates,
+            templates: _templates,
             color: (Colors.yellow[200])!,
             listType: "session",
+            saveTemplatesCallback: saveTemplates
           ),
           SizedBox(
             height: 50,
           ),
           TemplateList(
             name: "Start session from template",
-            templates: templates,
+            templates: _templates,
             color: (Colors.blue[300])!,
             listType: "template",
+            saveTemplatesCallback: saveTemplates
           ),
-          const SizedBox(height: 12),
-          // ElevatedButton(
-          //   child: const Text('Go to Details Page'),
-          //   onPressed: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => const DetailsPage()),
-          //     );
-          //   },
-          // ),
         ],
       )
     );
@@ -73,6 +104,7 @@ class TemplateList extends StatelessWidget {
   final String name;
   final Color color;
   final String listType;
+  final void Function(Template, String) saveTemplatesCallback;
   final _scrollController = ScrollController();
 
   TemplateList({
@@ -80,7 +112,8 @@ class TemplateList extends StatelessWidget {
     required this.templates,
     required this.name,
     required this.color,
-    required this.listType
+    required this.listType,
+    required this.saveTemplatesCallback
   });
 
   @override
@@ -118,7 +151,7 @@ class TemplateList extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) {
                           if (listType == "session") {
-                            return NoteSession(template: currTemplate);
+                            return NoteSession(template: currTemplate, saveTemplatesCallback: saveTemplatesCallback);
                           } else {
                             return const TemplateCreate();
                           }
