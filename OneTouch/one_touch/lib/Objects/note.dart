@@ -15,15 +15,21 @@ class Note {
   @JsonKey()
   NoteType noteType = NoteType.nullType;
   String question = "What kind of note is this?";
+  DateTime? interactionTime;
 
   Note({
     required this.noteType,
-    required this.question
+    required this.question,
+    this.interactionTime
   });
 
   // Serialization
   factory Note.fromJson(Map<String, dynamic> json) => _$NoteFromJson(json);
   Map<String, dynamic> toJson() => _$NoteToJson(this);
+
+  void markInteraction() {
+    interactionTime = DateTime.now();
+  }
 
   Widget toGui(){ 
     return Container();
@@ -39,7 +45,7 @@ class NumberScaleNote extends Note {
   String maxLabel = "High";
   int? selection;
 
-  int? value;
+  int value = 0;
 
   NumberScaleNote({
     required NoteType noteType,
@@ -49,8 +55,8 @@ class NumberScaleNote extends Note {
     required this.step,
     required this.minLabel,
     required this.maxLabel,
-    this.value
-  }): super(noteType: noteType, question: question);
+    DateTime? interactionTime,
+  }): super(noteType: noteType, question: question, interactionTime: interactionTime);
 
   // Serialization
   factory NumberScaleNote.fromJson(Map<String, dynamic> json) => _$NumberScaleNoteFromJson(json);
@@ -66,7 +72,7 @@ class NumberScaleNote extends Note {
             mainAxisSize: MainAxisSize.min,
             children: [
               Slider(
-                value: value == null ? minValue.toDouble() : value!.toDouble(),
+                value: value.toDouble(),
                 onChanged: (newValue) {
                   setState(() {
                     value = newValue.toInt();
@@ -75,7 +81,7 @@ class NumberScaleNote extends Note {
                 min: minValue.toDouble(),
                 max: maxValue.toDouble(),
                 divisions: ((maxValue - minValue) / step).round(),
-                label: value == null ? minValue.round().toString() : value!.round().toString()
+                label: value.round().toString(),
               ),
               const SizedBox(height: 8),
               // show min/max labels under the slider, aligned left and right
@@ -113,8 +119,8 @@ class MultipleChoiceNote extends Note {
     required String question,
     required this.options,
     required this.maxSelections,
-    this.selection
-  }): super(noteType: noteType, question: question);
+    DateTime? interactionTime,
+  }): super(noteType: noteType, question: question, interactionTime: interactionTime);
 
   // Serialization
   factory MultipleChoiceNote.fromJson(Map<String, dynamic> json) => _$MultipleChoiceNoteFromJson(json);
@@ -149,6 +155,7 @@ class MultipleChoiceNote extends Note {
                   }
                   // write back to the nullable selection field
                   selection = List<int>.from(sel);
+                  markInteraction();
                 });
               },
               child: Container(
@@ -183,8 +190,8 @@ class SingleChoiceNote extends Note {
     required NoteType noteType,
     required String question,
     required this.options,
-    this.selection
-  }): super(noteType: noteType, question: question);
+    DateTime? interactionTime,
+  }): super(noteType: noteType, question: question, interactionTime: interactionTime);
 
   // Serialization
   factory SingleChoiceNote.fromJson(Map<String, dynamic> json) => _$SingleChoiceNoteFromJson(json);
@@ -212,6 +219,7 @@ class SingleChoiceNote extends Note {
                   } else {
                     selection = idx;
                   }
+                  markInteraction();
                 });
               },
               child: Container(
