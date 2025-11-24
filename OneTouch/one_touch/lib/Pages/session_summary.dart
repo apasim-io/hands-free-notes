@@ -21,15 +21,44 @@ class SessionSummary extends StatelessWidget{
 @override
   Widget build(BuildContext context) {
   return Scaffold(
-    appBar: AppBar(title: const Text('Session Summary')),
-    body: Center(
-      child: ElevatedButton(
-        child: const Text('Back to Home Page'),
-        onPressed: (){
-          Navigator.pop(context);
-        },
-      )
-    )
+    body: SafeArea(child: Column(
+      children: [
+        Expanded(
+          child: Container(
+            color: Colors.white,
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(template.name ,style: TextStyle(fontSize:24,fontWeight: FontWeight.bold)),// change title to be session.title
+                SizedBox(height:12),
+                Expanded(child: Center(
+                  child: ListView.builder( itemCount: template.notes.length, 
+                    itemBuilder: (context, index) {
+                      final note = template.notes[index];
+                      return ListTile(
+                        title: Text(note.question),
+                        subtitle: Text((note.getValueString() ?? '')),
+                      );
+                    },
+                  ),
+                )
+                )
+              ]
+            )
+          )
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ElevatedButton(
+            onPressed: () {
+              // Export functionality to be implemented
+            },
+            child: Text('Export Notes'),
+          ),
+        ),
+      ]
+    ))
   );
   }
 }

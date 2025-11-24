@@ -127,6 +127,13 @@ class _NoteSessionState extends State<NoteSession> {
                           if (isLastNote) {
                             //if we are already on the last note: finish the session
                             // TO Do - Call the next method~!
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SessionSummary(template: widget.template),
+                              ),
+                            );
+                            // I added this feel free to change - Andrew
                             return;
                           }
 
