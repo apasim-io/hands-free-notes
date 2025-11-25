@@ -141,6 +141,17 @@ class _NoteSessionState extends State<NoteSession> {
                             // TO Do - Call the next method~!
                             // save note progress
                             widget.saveTemplatesCallback(widget.template, "save");
+
+                            //navigate to summary page
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SessionSummary(
+                                  template: widget.template,
+                                ),
+                              ),
+                            );
+
                             return;
                           }
 

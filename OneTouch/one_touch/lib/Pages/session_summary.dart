@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import '../Objects/template.dart';
 
+import 'dart:io';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+
 /*
   On this page the user can see a summary of their session, including notes taken, time spent, etc.
   There should be an option to export the notes as a text file or PDF
@@ -16,7 +20,41 @@ import '../Objects/template.dart';
 class SessionSummary extends StatelessWidget{ 
   final Template template;
 
-  const SessionSummary({super.key, required this.template});
+  final pdf = pw.Document();
+
+  SessionSummary({super.key, required this.template});
+
+  bool? generatePdf() {
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Text(template.name, style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 12),
+              ...template.notes.map((note) => pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  pw.Text(note.question, style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
+                  pw.Text(note.getValueString() ?? '', style: pw.TextStyle(fontSize: 16)),
+                  pw.SizedBox(height: 8),
+                ],
+              )),
+            ],
+          );
+        },
+      ),
+    );
+
+    return true;
+  }
+
+  Future<void> exportPdf() async {
+    // do a check that pdf generation was successful
+    final file = File(template.name + '.pdf');
+    await file.writeAsBytes(await pdf.save());
+  }
 
 @override
   Widget build(BuildContext context) {
@@ -52,7 +90,11 @@ class SessionSummary extends StatelessWidget{
           padding: const EdgeInsets.all(16.0),
           child: ElevatedButton(
             onPressed: () {
-              // Export functionality to be implemented
+              if (generatePdf() == true) {
+                exportPdf();
+                final snackBar = SnackBar(content: Text('PDF exported as ' + template.name + '.pdf'));
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
             },
             child: Text('Export Notes'),
           ),
