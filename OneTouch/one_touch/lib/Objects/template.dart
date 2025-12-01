@@ -81,6 +81,13 @@ class Template {
   @override
   String toString() => 'Template(notes: $notes)';
 
+  Template clone() {
+    // List<Note> clonedNotes = notes.map((note) => note.clone()).toList();
+    // return Template(name: name, notes: clonedNotes, id: id);
+    Map<String, dynamic> json = this.toJson();
+    return Template.fromJson(json); 
+  }
+
   // Serialization
   // factory Template.fromJson(Map<String, dynamic> json) => _$TemplateFromJson(json);
   Template.fromJson(Map<String, dynamic> json):

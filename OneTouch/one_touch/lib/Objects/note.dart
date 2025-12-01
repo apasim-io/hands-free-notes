@@ -23,6 +23,10 @@ class Note {
     this.interactionTime
   });
 
+  // Note clone() {
+  //   return Note(noteType: noteType, question: question, )
+  // }
+
   // Serialization
   factory Note.fromJson(Map<String, dynamic> json) => _$NoteFromJson(json);
   Map<String, dynamic> toJson() => _$NoteToJson(this);

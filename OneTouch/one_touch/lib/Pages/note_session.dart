@@ -111,17 +111,73 @@ class _NoteSessionState extends State<NoteSession> {
 
                 //bottom-right next trial botton
                 Positioned(
-                  right: 16,
-                  top: 16,
+                  right: 20,
+                  top: 30,
                   child: FloatingActionButton.extended(
-                    heroTag: 'cancel',
+                    heroTag: 'exit',
                     onPressed: () {
                       // cancel changes and reset templates
                       widget.saveTemplatesCallback(widget.template, "revert");
                       Navigator.pop(context);
                     },
-                    icon: const Icon(Icons.cancel),
-                    label: const Text('Cancel Session'),
+                    icon: const Icon(
+                      Icons.keyboard_return,
+                      color: Colors.black
+                    ),
+                    label: const Text(
+                      'Exit',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                    ),
+                    backgroundColor: Color.fromARGB(189, 0, 153, 255),
+                  ),
+                ),
+                Positioned(
+                  right: 20,
+                  top: 100,
+                  child: FloatingActionButton.extended(
+                    heroTag: 'save',
+                    onPressed: () {
+                      // cancel changes and reset templates
+                      widget.saveTemplatesCallback(widget.template, "save");
+                    },
+                    icon: const Icon(
+                      Icons.save,
+                      color: Colors.black
+                    ),
+                    label: const Text(
+                      'Save',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                    ),
+                    backgroundColor: Color.fromARGB(189, 0, 255, 0),
+                  ),
+                ),
+                Positioned(
+                  right: 20,
+                  top: 170,
+                  child: FloatingActionButton.extended(
+                    heroTag: 'delete',
+                    onPressed: () {
+                      // cancel changes and reset templates
+                      widget.saveTemplatesCallback(widget.template, "delete");
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      Icons.cancel,
+                      color: Colors.black
+                    ),
+                    label: const Text(
+                      'Delete',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                    ),
                     backgroundColor: Color.fromARGB(190, 255, 0, 0),
                   ),
                 ),
@@ -141,6 +197,7 @@ class _NoteSessionState extends State<NoteSession> {
                             // TO Do - Call the next method~!
                             // save note progress
                             widget.saveTemplatesCallback(widget.template, "save");
+                            Navigator.pop(context);
                             return;
                           }
 

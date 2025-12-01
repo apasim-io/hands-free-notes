@@ -22,10 +22,23 @@ void main() async {
   // retrieve and save sample template data to device
   List<Template> sampleTemplates = await ts.getSampleTemplates('assets/data/example_b.json');
   ts.saveTemplateData(sampleTemplates, await ts.localFile(ts.templatesFName));
+  ts.saveTemplateData(sampleTemplates, await ts.localFile(ts.sessionsFName));
 
   // get saved templates from target device
+  // generate ids for new objects
   List<Template> templates = await ts.getTemplateData(await ts.localFile(ts.templatesFName));
+  templates.forEach((template) {
+    template.id = template.idGenerator();
+  });
+  List<Template> sessions = await ts.getTemplateData(await ts.localFile(ts.sessionsFName));
+  sessions.forEach((session) {
+    session.id = session.idGenerator();
+  });
+  ts.saveTemplateData(sessions, await ts.localFile(ts.templatesFName));
+  ts.saveTemplateData(templates, await ts.localFile(ts.sessionsFName));
+
   inspect(templates);
+  inspect(sessions);
 
   /*
     TO DO:
@@ -40,7 +53,10 @@ void main() async {
   runApp(
       MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: HomePage(initialTemplates: templates), 
+        home: HomePage(
+          initialTemplates: templates,
+          initialSessions: sessions
+        ), 
       )
   );
 }
