@@ -67,164 +67,180 @@ class _NoteSessionState extends State<NoteSession> {
     final bool isLastNote = selected != null && selected == notes.length - 1;
 
     return Scaffold(
-      body: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          //left column: one item per note in the template. 
-          SizedBox(
-            width: 200, // tweak as you like
-            child: ListView.separated( //seperated until they become there own squares
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: notes.length,
-              itemBuilder: (context, index) {
-                final note = notes[index];//use this later to
-                final isSelected = selected == index;
-                return ListTile( //so it can be clicked on
-                  dense: true,
-                  title: Text(note.question),//example: could be changed to title
-                  selected: isSelected, //next 3 lines for coloring
-                  selectedTileColor: Theme.of(context).colorScheme.secondaryContainer,
-                  selectedColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                  onTap: () => setState(() => selected = index),
-                );
-              },
-              separatorBuilder: (_, __) => const Divider(height: 1),
+      appBar: AppBar(
+        leadingWidth: 125,
+        leading: Container(
+          margin: EdgeInsets.only(left: 20, top: 5, bottom: 5),
+          child: FloatingActionButton.extended(
+            elevation: 0,
+            heroTag: 'exit',
+            onPressed: () {
+              // cancel changes and reset templates
+              widget.saveTemplatesCallback(widget.template, "revert");
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.keyboard_return,
+              color: Colors.black
             ),
+            label: const Text(
+              'Exit',
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+              ),
+            ),
+            backgroundColor: Color.fromARGB(189, 0, 153, 255),
           ),
-          //divider should just be a line to seperate them
-          const VerticalDivider(width: 1),
-          //Right column expands to fill space
-          Expanded(
-            child: Stack(
-              children: [
-                //stack for layering the buttons
-                Positioned.fill(
-                  child: (selected == null)
-                      ? const Center(child: Text('Select a note'))
-                      : Center(
-                          child: KeyedSubtree(
-                            key: ValueKey(selected),
-                            child: notes[selected!].toGui(),
-                          ),
-                        ),
-                ),
-
-                //bottom-right next trial botton
-                Positioned(
-                  right: 20,
-                  top: 30,
-                  child: FloatingActionButton.extended(
-                    heroTag: 'exit',
-                    onPressed: () {
-                      // cancel changes and reset templates
-                      widget.saveTemplatesCallback(widget.template, "revert");
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.keyboard_return,
-                      color: Colors.black
-                    ),
-                    label: const Text(
-                      'Exit',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                      ),
-                    ),
-                    backgroundColor: Color.fromARGB(189, 0, 153, 255),
-                  ),
-                ),
-                Positioned(
-                  right: 20,
-                  top: 100,
-                  child: FloatingActionButton.extended(
-                    heroTag: 'save',
-                    onPressed: () {
-                      // cancel changes and reset templates
-                      widget.saveTemplatesCallback(widget.template, "save");
-                    },
-                    icon: const Icon(
-                      Icons.save,
-                      color: Colors.black
-                    ),
-                    label: const Text(
-                      'Save',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                      ),
-                    ),
-                    backgroundColor: Color.fromARGB(189, 0, 255, 0),
-                  ),
-                ),
-                Positioned(
-                  right: 20,
-                  top: 170,
-                  child: FloatingActionButton.extended(
-                    heroTag: 'delete',
-                    onPressed: () {
-                      // cancel changes and reset templates
-                      widget.saveTemplatesCallback(widget.template, "delete");
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.cancel,
-                      color: Colors.black
-                    ),
-                    label: const Text(
-                      'Delete',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                      ),
-                    ),
-                    backgroundColor: Color.fromARGB(190, 255, 0, 0),
-                  ),
-                ),
-                Positioned(
-                  right: 16,
-                  bottom: 16,
-                  child: SizedBox(
-                    height: 120,
-                    width: 160,
-                    child: FloatingActionButton.extended(
-                      heroTag: 'continue',                     
-                      onPressed: () {
-                        setState(() {
-
-                          if (isLastNote) {
-                            //if we are already on the last note: finish the session
-                            // TO Do - Call the next method~!
-                            // save note progress
-                            widget.saveTemplatesCallback(widget.template, "save");
-                            Navigator.pop(context);
-                            return;
-                          }
-
-                          if (notes.isEmpty) return;
-
-                          //if nothing selected yet, start with the first note
-                          if (selected == null) {
-                            selected = 0;
-                            return;
-                          }
-
-                          //If not at last note, go to next one
-                          if (selected! < notes.length - 1) {
-                            selected = selected! + 1;
-                          }
-                        });
-                      },
-                      icon: Icon(Icons.arrow_forward),
-                      label: Text(isLastNote ? 'Finish' : 'Next'),
-                    ),
-                  )
-                ),
-              ],
+        ),
+        centerTitle: true,
+        title: RichText(
+        text: TextSpan(
+            text: widget.template.name,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+              fontWeight: FontWeight.bold
             ),
           )
+        ),
+        actionsPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        actions: [
+          FloatingActionButton.extended(
+            elevation: 0,
+            heroTag: 'save',
+            onPressed: () {
+              // cancel changes and reset templates
+              widget.saveTemplatesCallback(widget.template, "save");
+            },
+            icon: const Icon(
+              Icons.save,
+              color: Colors.black
+            ),
+            label: const Text(
+              'Save',
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+              ),
+            ),
+            backgroundColor: Color.fromARGB(189, 0, 255, 0),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          FloatingActionButton.extended(
+            elevation: 0,
+            heroTag: 'delete',
+            onPressed: () {
+              // cancel changes and reset templates
+              widget.saveTemplatesCallback(widget.template, "delete");
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.cancel,
+              color: Colors.black
+            ),
+            label: const Text(
+              'Delete',
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+              ),
+            ),
+            backgroundColor: Color.fromARGB(190, 255, 0, 0),
+          ),
         ],
       ),
+      body: Container(
+        margin: EdgeInsets.only(top: 10),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            //left column: one item per note in the template.
+            SizedBox(
+              width: 200, // tweak as you like
+              child: ListView.separated( //seperated until they become there own squares
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemCount: notes.length,
+                itemBuilder: (context, index) {
+                  final note = notes[index];//use this later to
+                  final isSelected = selected == index;
+                  return ListTile( //so it can be clicked on
+                    dense: true,
+                    title: Text(note.question),//example: could be changed to title
+                    selected: isSelected, //next 3 lines for coloring
+                    selectedTileColor: Theme.of(context).colorScheme.secondaryContainer,
+                    selectedColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                    onTap: () => setState(() => selected = index),
+                  );
+                },
+                separatorBuilder: (_, __) => const Divider(height: 1),
+              ),
+            ),
+            //divider should just be a line to seperate them
+            const VerticalDivider(width: 1),
+            //Right column expands to fill space
+            Expanded(
+              child: Stack(
+                children: [
+                  //stack for layering the buttons
+                  Positioned.fill(
+                    child: (selected == null)
+                        ? const Center(child: Text('Select a note'))
+                        : Center(
+                            child: KeyedSubtree(
+                              key: ValueKey(selected),
+                              child: notes[selected!].toGui(),
+                            ),
+                          ),
+                  ),
+                  Positioned(
+                    right: 16,
+                    bottom: 16,
+                    child: SizedBox(
+                      height: 120,
+                      width: 160,
+                      child: FloatingActionButton.extended(
+                        elevation: 0,
+                        heroTag: 'continue',                     
+                        onPressed: () {
+                          setState(() {
+
+                            if (isLastNote) {
+                              //if we are already on the last note: finish the session
+                              // TO Do - Call the next method~!
+                              // save note progress
+                              widget.saveTemplatesCallback(widget.template, "save");
+                              Navigator.pop(context);
+                              return;
+                            }
+
+                            if (notes.isEmpty) return;
+
+                            //if nothing selected yet, start with the first note
+                            if (selected == null) {
+                              selected = 0;
+                              return;
+                            }
+
+                            //If not at last note, go to next one
+                            if (selected! < notes.length - 1) {
+                              selected = selected! + 1;
+                            }
+                          });
+                        },
+                        icon: Icon(Icons.arrow_forward),
+                        label: Text(isLastNote ? 'Finish' : 'Next'),
+                      ),
+                    )
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      )
     );
   }
 }

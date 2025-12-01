@@ -78,7 +78,7 @@ class _SessionCreate extends State<SessionCreate> {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return NoteSession(template: widget.template, saveTemplatesCallback: widget.saveTemplatesCallback);
+                      return NoteSession(template: newSession, saveTemplatesCallback: widget.saveTemplatesCallback);
                     }
                   ),
                 );
