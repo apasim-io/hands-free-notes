@@ -51,7 +51,7 @@ class Template {
 
   Template({List<Note>? notes, String? name, String? id}) : notes = notes ?? []{
     if (name != null) this.name = name;
-    if (id != null) this.id = idGenerator();
+    if (id == null) this.id = idGenerator();
   }
 
   String idGenerator() {

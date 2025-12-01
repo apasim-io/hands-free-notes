@@ -58,6 +58,8 @@ class _HomePageState extends State<HomePage> {
       }
     } else if (updateType == "addSession") {
       updatedSessions.add(updatedTemplate);
+    } else if (updateType == "addTemplate") {
+      updatedTemplates.add(updatedTemplate);
     }
     else if (updateType == "save") {
       // set updates to current state
@@ -104,11 +106,15 @@ class _HomePageState extends State<HomePage> {
           ElevatedButton(
             child: const Text('Create new Template'),
             onPressed: () {
+              Template defaultTemplate = Template(notes: [], name: "Template ${_templates.length + 1}");
+              saveTemplates(defaultTemplate, "addTemplate");
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return TemplateCreate();
+                    return TemplateCreate(
+                      template: defaultTemplate,
+                      saveTemplatesCallback: saveTemplates);
                   }
                 ),
               );
