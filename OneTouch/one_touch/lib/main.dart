@@ -27,15 +27,16 @@ void main() async {
   // get saved templates from target device
   // generate ids for new sample objects
   List<Template> templates = await ts.getTemplateData(await ts.localFile(ts.templatesFName));
-  templates.forEach((template) {
-    template.id = template.idGenerator();
-  });
+  for (final (index, template) in templates.indexed) {
+    templates[index].id = template.idGenerator();
+    templates[index].name = 'Template ${index + 1}';
+  }
   List<Template> sessions = await ts.getTemplateData(await ts.localFile(ts.sessionsFName));
   sessions.forEach((session) {
     session.id = session.idGenerator();
   });
-  ts.saveTemplateData(sessions, await ts.localFile(ts.templatesFName));
-  ts.saveTemplateData(templates, await ts.localFile(ts.sessionsFName));
+  ts.saveTemplateData(sessions, await ts.localFile(ts.sessionsFName));
+  ts.saveTemplateData(templates, await ts.localFile(ts.templatesFName));
 
   inspect(templates);
   inspect(sessions);

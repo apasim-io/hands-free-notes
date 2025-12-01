@@ -101,6 +101,19 @@ class _HomePageState extends State<HomePage> {
             listType: "template",
             saveTemplatesCallback: saveTemplates
           ),
+          ElevatedButton(
+            child: const Text('Create new Template'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return TemplateCreate();
+                  }
+                ),
+              );
+            },
+          ),
         ],
       )
     );
@@ -206,7 +219,7 @@ class TemplateList extends StatelessWidget {
               );
             },
           )
-        )
+        ),
       ]
     );
   }
