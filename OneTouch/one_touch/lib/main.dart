@@ -18,14 +18,14 @@ import 'Objects/note.dart'; // don't use yet, make sure to delete if we don't ne
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  TemplateStorage ts = TemplateStorage();
   // retrieve and save sample template data to device
+  TemplateStorage ts = TemplateStorage();
   List<Template> sampleTemplates = await ts.getSampleTemplates('assets/data/example_b.json');
   ts.saveTemplateData(sampleTemplates, await ts.localFile(ts.templatesFName));
   ts.saveTemplateData(sampleTemplates, await ts.localFile(ts.sessionsFName));
 
   // get saved templates from target device
-  // generate ids for new objects
+  // generate ids for new sample objects
   List<Template> templates = await ts.getTemplateData(await ts.localFile(ts.templatesFName));
   templates.forEach((template) {
     template.id = template.idGenerator();

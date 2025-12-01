@@ -84,8 +84,9 @@ class Template {
   Template clone() {
     // List<Note> clonedNotes = notes.map((note) => note.clone()).toList();
     // return Template(name: name, notes: clonedNotes, id: id);
-    Map<String, dynamic> json = this.toJson();
-    return Template.fromJson(json); 
+    String json = jsonEncode(this);
+    Map<String, dynamic> jsonMap = jsonDecode(json);
+    return Template.fromJson(jsonMap);
   }
 
   // Serialization

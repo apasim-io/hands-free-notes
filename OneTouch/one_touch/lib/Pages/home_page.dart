@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:one_touch/Objects/note.dart';
+import 'session_create.dart';
 import '../Objects/template.dart';
 import 'note_session.dart';
 import 'template_create.dart';
@@ -55,6 +56,8 @@ class _HomePageState extends State<HomePage> {
       } else {
       updatedSessions.removeAt(deletedIdx);
       }
+    } else if (updateType == "addSession") {
+      updatedSessions.add(updatedTemplate);
     }
     else if (updateType == "save") {
       // set updates to current state
@@ -177,8 +180,8 @@ class TemplateList extends StatelessWidget {
                           if (listType == "session") {
                             return NoteSession(template: currTemplate, saveTemplatesCallback: saveTemplatesCallback);
                           } else {
-                            
-                            return NoteSession(template: currTemplate, saveTemplatesCallback: saveTemplatesCallback);
+                            // listType == "template"
+                            return SessionCreate(template: currTemplate, saveTemplatesCallback: saveTemplatesCallback);
                           }
                         }
                       ),
