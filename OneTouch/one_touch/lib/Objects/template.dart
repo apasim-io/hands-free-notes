@@ -92,26 +92,31 @@ class Template {
   // Serialization
   // factory Template.fromJson(Map<String, dynamic> json) => _$TemplateFromJson(json);
   Template.fromJson(Map<String, dynamic> json):
-    name = json['name'],
-    id = json['id'],
+    name = json['name'] as String? ?? 'New Template',
+    id = json['id'] as String? ?? '',
     notes = (json['notes'] as List<dynamic>?)
             ?.map((e) {
-              if (e is Map<String, dynamic>) {
-                final type = (e['noteType'] ?? '').toString();
-                switch (type) {
-                  case 'numberScale':
-                    return NumberScaleNote.fromJson(e);
-                  case 'multipleChoice':
-                    return MultipleChoiceNote.fromJson(e);
-                  case 'singleChoice':
-                    return SingleChoiceNote.fromJson(e);
-                  default:
-                    return Note.fromJson(e);
-                }
+              final Map<String, dynamic> map = (e is Map<String, dynamic>) ? e : <String, dynamic>{};
+              final type = (map['noteType'] ?? '').toString();
+              switch (type) {
+                case 'numberScale':
+                  return NumberScaleNote.fromJson(map);
+                case 'multipleChoice':
+                  return MultipleChoiceNote.fromJson(map);
+                case 'singleChoice':
+                  return SingleChoiceNote.fromJson(map);
+                default:
+                  return Note.fromJson(map);
               }
-              return Note.fromJson({});
             }).toList() ??
         [];
-  Map<String, dynamic> toJson() => _$TemplateToJson(this);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'id': id,
+      'notes': notes.map((n) => n.toJson()).toList(),
+    };
+  }
 }
 
