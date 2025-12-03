@@ -18,14 +18,28 @@ import 'Objects/note.dart'; // don't use yet, make sure to delete if we don't ne
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  TemplateStorage ts = TemplateStorage();
   // retrieve and save sample template data to device
+  TemplateStorage ts = TemplateStorage();
   List<Template> sampleTemplates = await ts.getSampleTemplates('assets/data/example_b.json');
   ts.saveTemplateData(sampleTemplates, await ts.localFile(ts.templatesFName));
+  ts.saveTemplateData(sampleTemplates, await ts.localFile(ts.sessionsFName));
 
   // get saved templates from target device
+  // generate ids for new sample objects
   List<Template> templates = await ts.getTemplateData(await ts.localFile(ts.templatesFName));
+  for (final (index, template) in templates.indexed) {
+    templates[index].id = template.idGenerator();
+    templates[index].name = 'Template ${index + 1}';
+  }
+  List<Template> sessions = await ts.getTemplateData(await ts.localFile(ts.sessionsFName));
+  sessions.forEach((session) {
+    session.id = session.idGenerator();
+  });
+  ts.saveTemplateData(sessions, await ts.localFile(ts.sessionsFName));
+  ts.saveTemplateData(templates, await ts.localFile(ts.templatesFName));
+
   inspect(templates);
+  inspect(sessions);
 
   /*
     TO DO:
@@ -40,7 +54,10 @@ void main() async {
   runApp(
       MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: HomePage(initialTemplates: templates), 
+        home: HomePage(
+          initialTemplates: templates,
+          initialSessions: sessions
+        ), 
       )
   );
 }

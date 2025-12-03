@@ -51,7 +51,7 @@ class Template {
 
   Template({List<Note>? notes, String? name, String? id}) : notes = notes ?? []{
     if (name != null) this.name = name;
-    if (id != null) this.id = idGenerator();
+    if (id == null) this.id = idGenerator();
   }
 
   String idGenerator() {
@@ -80,6 +80,14 @@ class Template {
 
   @override
   String toString() => 'Template(notes: $notes)';
+
+  Template clone() {
+    // List<Note> clonedNotes = notes.map((note) => note.clone()).toList();
+    // return Template(name: name, notes: clonedNotes, id: id);
+    String json = jsonEncode(this);
+    Map<String, dynamic> jsonMap = jsonDecode(json);
+    return Template.fromJson(jsonMap);
+  }
 
   // Serialization
   // factory Template.fromJson(Map<String, dynamic> json) => _$TemplateFromJson(json);

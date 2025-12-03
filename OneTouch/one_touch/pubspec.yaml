@@ -26,3 +26,4 @@ flutter:
   assets:
     - assets/data/example_a.json
     - assets/data/example_b.json
+    - assets/data/jackie_trial.json

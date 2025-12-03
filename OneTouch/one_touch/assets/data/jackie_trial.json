@@ -1,0 +1,53 @@
+[ 
+    {
+        "name": "Barium Swallow",
+        "id": "1",
+        "notes": [
+            {
+                "page_title": "Trial Info",
+                "section_content": "Please provide information about your general health.",
+                "notes": [
+                    {
+                        "note_type": "singleChoice",
+                        "question": "Swallow Consistency",
+                        "options": ["TN0", "MT2", "MO3", "PU4", "MM5", "SB6", "EC7", "RG7", "Mixed", "Pill"]
+                    },
+                    {
+                        "note_type": "multipleChoice",
+                        "question": "Modifications",
+                        "options": ["Large Bolus", "Small Bolus", "Straw", "3s Prep", "Head Turn", "Head Tilt", "Chin Tuck", "Effortful Swallow", "Double Swallow", "Supraglottic Swallow", "Reclined", "Pinched Nose"],
+                        "maxSelections": 12,
+                        "selection": []
+                    },
+                    {
+                        "note_type": "numberScale",
+                        "question": "PAS",
+                        "minValue": 1,
+                        "maxValue": 8,
+                        "step": 1,
+                        "minLabel": "Low",
+                        "maxLabel": "High",
+                        "selection": null,
+                        "value": 1
+                    },
+                    {
+                        "note_type": "numberScale",
+                        "question": "DIGEST",
+                        "minValue": 1,
+                        "maxValue": 4,
+                        "step": 1,
+                        "minLabel": "Low",
+                        "maxLabel": "High",
+                        "selection": null,
+                        "value": 1
+                    },
+                    {
+                        "note_type": "singleChoice",
+                        "question": "Swallow Safety",
+                        "options": ["1", "2"]
+                    }
+                ]
+            }
+        ]
+    }
+]

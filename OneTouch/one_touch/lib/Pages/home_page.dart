@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:one_touch/Objects/note.dart';
+import 'session_create.dart';
 import '../Objects/template.dart';
 import 'note_session.dart';
 import 'template_create.dart';
@@ -9,7 +10,9 @@ import 'dart:io';
 
 class HomePage extends StatefulWidget {
   final List<Template> initialTemplates;
-  HomePage({super.key, required this.initialTemplates});
+  final List<Template> initialSessions;
+
+  HomePage({super.key, required this.initialTemplates, required this.initialSessions});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -20,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   // List<Template> templates = templates;
 
   List<Template> _templates = [];
+  List<Template> _sessions = [];
 
 
   @override
@@ -27,25 +31,50 @@ class _HomePageState extends State<HomePage> {
     super.initState(); // Always call super.initState() first
 
     // Perform one-time initialization tasks here
+    _sessions = widget.initialSessions;
     _templates = widget.initialTemplates;
   }
 
   void saveTemplates(Template updatedTemplate, String updateType) async {
     TemplateStorage ts = TemplateStorage();
     File templatesFile = await ts.localFile(ts.templatesFName);
+    File sessionsFile = await ts.localFile(ts.sessionsFName);
 
     // update current template state
+    List<Template> updatedTemplates = await ts.getTemplateData(templatesFile);
+    List<Template> updatedSessions = await ts.getTemplateData(sessionsFile);
 
     if (updateType == "revert") {
-      // get current saved template data and revert state
-      List<Template> revertedTemplates = await ts.getTemplateData(templatesFile);
-      setState(() {
-        _templates = revertedTemplates;
-      });
-    } else {
-      // save updated template list to local file
-      ts.saveTemplateData(_templates, templatesFile);
+      // do nothing (updated lists are already set to get previous save data)
+
+    } else if (updateType == "delete") {
+      // check both sessions and templates
+      int deletedIdx = _sessions.indexWhere((session) => session.id == updatedTemplate.id);
+      if (deletedIdx < 0) {
+        deletedIdx = _templates.indexWhere((template) => template.id == updatedTemplate.id);
+        updatedTemplates.removeAt(deletedIdx);
+      } else {
+      updatedSessions.removeAt(deletedIdx);
+      }
+    } else if (updateType == "addSession") {
+      updatedSessions.add(updatedTemplate);
+    } else if (updateType == "addTemplate") {
+      updatedTemplates.add(updatedTemplate);
     }
+    else if (updateType == "save") {
+      // set updates to current state
+      updatedTemplates = _templates;
+      updatedSessions = _sessions;
+    }
+
+    // save to files
+    ts.saveTemplateData(updatedSessions, sessionsFile);
+    ts.saveTemplateData(updatedTemplates, templatesFile);
+    // save states
+    setState(() {
+      _sessions = updatedSessions;
+      _templates = updatedTemplates;
+    });
   }
 
   @override
@@ -59,7 +88,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           TemplateList(
             name: "Recent Sessions",
-            templates: _templates,
+            templates: _sessions,
             color: (Colors.yellow[200])!,
             listType: "session",
             saveTemplatesCallback: saveTemplates
@@ -73,6 +102,23 @@ class _HomePageState extends State<HomePage> {
             color: (Colors.blue[300])!,
             listType: "template",
             saveTemplatesCallback: saveTemplates
+          ),
+          ElevatedButton(
+            child: const Text('Create new Template'),
+            onPressed: () {
+              Template defaultTemplate = Template(notes: [], name: "Template ${_templates.length + 1}");
+              saveTemplates(defaultTemplate, "addTemplate");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return TemplateCreate(
+                      template: defaultTemplate,
+                      saveTemplatesCallback: saveTemplates);
+                  }
+                ),
+              );
+            },
           ),
         ],
       )
@@ -153,7 +199,8 @@ class TemplateList extends StatelessWidget {
                           if (listType == "session") {
                             return NoteSession(template: currTemplate, saveTemplatesCallback: saveTemplatesCallback);
                           } else {
-                            return const TemplateCreate();
+                            // listType == "template"
+                            return SessionCreate(template: currTemplate, saveTemplatesCallback: saveTemplatesCallback);
                           }
                         }
                       ),
@@ -178,7 +225,7 @@ class TemplateList extends StatelessWidget {
               );
             },
           )
-        )
+        ),
       ]
     );
   }
