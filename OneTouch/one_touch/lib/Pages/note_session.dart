@@ -206,43 +206,29 @@ class _NoteSessionState extends State<NoteSession> {
                         heroTag: 'continue',                     
                         onPressed: () {
                           setState(() {
-
-                            if (isLastNote) {
-                              //if we are already on the last note: finish the session
-                              // TO Do - Call the next method~!
-                              // save note progress
-                              widget.saveTemplatesCallback(widget.template, "save");
-                              Navigator.pop(context);
-                              return;
-                            }
-                          if (isLastNote) {
-                            //if we are already on the last note: finish the session
-                            // TO Do - Call the next method~!
-                            // save note progress
-                            widget.saveTemplatesCallback(widget.template, "save");
-
-                            //navigate to summary page
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SessionSummary(
-                                  template: widget.template,
-                                ),
-                              ),
-                            );
-
-                            return;
-                          }
-
                             if (notes.isEmpty) return;
 
-                            //if nothing selected yet, start with the first note
+                            // if nothing selected yet, start with the first note
                             if (selected == null) {
                               selected = 0;
                               return;
                             }
 
-                            //If not at last note, go to next one
+                            // If at last note, save and navigate to the summary page
+                            if (selected == notes.length - 1) {
+                              widget.saveTemplatesCallback(widget.template, "save");
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SessionSummary(
+                                    template: widget.template,
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+
+                            // Otherwise, go to next note
                             if (selected! < notes.length - 1) {
                               selected = selected! + 1;
                             }

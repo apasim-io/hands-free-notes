@@ -4,6 +4,7 @@ import '../Objects/template.dart';
 import 'dart:io';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:path_provider/path_provider.dart';
 
 /*
   On this page the user can see a summary of their session, including notes taken, time spent, etc.
@@ -17,14 +18,13 @@ import 'package:pdf/widgets.dart' as pw;
     2. add export functionality
  */
 
-class SessionSummary extends StatelessWidget{ 
+class SessionSummary extends StatelessWidget {
   final Template template;
-
-  final pdf = pw.Document();
+  final pw.Document pdf = pw.Document();
 
   SessionSummary({super.key, required this.template});
 
-  bool? generatePdf() {
+  void generatePdf() {
     pdf.addPage(
       pw.Page(
         build: (pw.Context context) {
@@ -46,61 +46,74 @@ class SessionSummary extends StatelessWidget{
         },
       ),
     );
+  }
+
+  Future<bool> exportPdf() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final path = '${directory.path}/${template.name}.pdf';
+    final file = File(path);
+    final bytes = await pdf.save();
+    await file.writeAsBytes(bytes);
+
+    // Print the saved file path to the console for debugging
+    // (useful to locate the file on device/emulator)
+    print('PDF exported to: $path');
 
     return true;
   }
 
-  Future<void> exportPdf() async {
-    // do a check that pdf generation was successful
-    final file = File(template.name + '.pdf');
-    await file.writeAsBytes(await pdf.save());
-  }
-
-@override
+  @override
   Widget build(BuildContext context) {
-  return Scaffold(
-    body: SafeArea(child: Column(
-      children: [
-        Expanded(
-          child: Container(
-            color: Colors.white,
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(template.name ,style: TextStyle(fontSize:24,fontWeight: FontWeight.bold)),// change title to be session.title
-                SizedBox(height:12),
-                Expanded(child: Center(
-                  child: ListView.builder( itemCount: template.notes.length, 
-                    itemBuilder: (context, index) {
-                      final note = template.notes[index];
-                      return ListTile(
-                        title: Text(note.question),
-                        subtitle: Text((note.getValueString() ?? '')),
-                      );
-                    },
-                  ),
-                )
-                )
-              ]
+    return Scaffold(
+      body: SafeArea(child: Column(
+        children: [
+          Expanded(
+            child: Container(
+              color: Colors.white,
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(template.name ,style: TextStyle(fontSize:24,fontWeight: FontWeight.bold)),// change title to be session.title
+                  SizedBox(height:12),
+                  Expanded(child: Center(
+                    child: ListView.builder( itemCount: template.notes.length, 
+                      itemBuilder: (context, index) {
+                        final note = template.notes[index];
+                        return ListTile(
+                          title: Text(note.question),
+                          subtitle: Text((note.getValueString() ?? '')),
+                        );
+                      },
+                    ),
+                  )
+                  )
+                ]
+              )
             )
-          )
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ElevatedButton(
-            onPressed: () {
-              if (generatePdf() == true) {
-                exportPdf();
-                final snackBar = SnackBar(content: Text('PDF exported as ' + template.name + '.pdf'));
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              }
-            },
-            child: Text('Export Notes'),
           ),
-        ),
-      ]
-    ))
-  );
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: () async {
+                try {
+                  // Regenerate PDF each time to avoid duplicates
+                  generatePdf();
+                  await exportPdf();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('PDF exported as ${template.name}.pdf')),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to export pdf: $e')),
+                  );
+                }
+              },
+              child: Text('Export Notes'),
+            ),
+          ),
+        ]
+      ))
+    );
   }
 }
