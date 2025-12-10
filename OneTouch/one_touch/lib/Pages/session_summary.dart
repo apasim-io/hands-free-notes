@@ -24,8 +24,11 @@ class SessionSummary extends StatelessWidget {
 
   SessionSummary({super.key, required this.template});
 
-  void generatePdf() {
-    pdf.addPage(
+  // Create and return a new PDF document containing the session summary.
+  pw.Document generatePdf() {
+    final doc = pw.Document();
+
+    doc.addPage(
       pw.Page(
         build: (pw.Context context) {
           return pw.Column(
@@ -46,20 +49,43 @@ class SessionSummary extends StatelessWidget {
         },
       ),
     );
+
+    return doc;
   }
 
   Future<bool> exportPdf() async {
-    final directory = await getApplicationDocumentsDirectory();
-    final path = '${directory.path}/${template.name}.pdf';
-    final file = File(path);
-    final bytes = await pdf.save();
-    await file.writeAsBytes(bytes);
+    try {
+      // Generate a fresh document for each export to avoid duplicate pages
+      final doc = generatePdf();
 
-    // Print the saved file path to the console for debugging
-    // (useful to locate the file on device/emulator)
-    print('PDF exported to: $path');
+      String path;
 
-    return true;
+      if (Platform.isAndroid) {
+        // Try to get the shared Downloads directory on Android
+        final dirs = await getExternalStorageDirectories(type: StorageDirectory.downloads);
+        if (dirs != null && dirs.isNotEmpty) {
+          path = '${dirs.first.path}/${template.name}.pdf';
+        } else {
+          final directory = await getApplicationDocumentsDirectory();
+          path = '${directory.path}/${template.name}.pdf';
+        }
+      } else {
+        final directory = await getApplicationDocumentsDirectory();
+        path = '${directory.path}/${template.name}.pdf';
+      }
+
+      final file = File(path);
+      final bytes = await doc.save();
+      await file.writeAsBytes(bytes);
+
+      // Print the saved file path to the console for debugging
+      print('PDF exported to: $path');
+
+      return true;
+    } catch (e) {
+      print('PDF export failed: $e');
+      return false;
+    }
   }
 
   @override
@@ -97,12 +123,17 @@ class SessionSummary extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () async {
                 try {
-                  // Regenerate PDF each time to avoid duplicates
-                  generatePdf();
-                  await exportPdf();
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  // Export PDF (exportPdf generates a fresh document internally)
+                      if (await exportPdf()) {
+                    ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('PDF exported as ${template.name}.pdf')),
                   );
+                  }else{
+                    ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to export pdf: (insert error handling here)')),
+                  );
+                  }
+                  
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Failed to export pdf: $e')),
