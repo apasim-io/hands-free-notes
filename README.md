@@ -7,7 +7,7 @@ Many final submission requirements are sections in the design doc (like unit tes
 
 ## Obtaining a Working Demo
 
-Since this is a mobile application, we are unable to provide a fully workable demo in this repository, but we can provide steps to run our repository on your machine. 
+Since this is a mobile application, we are unable to provide a fully workable demo in this repository, but we can provide steps to run our repository on your machine. Alternatively, we have provided a demo video that displays the current state of our application, which can be found [here](https://youtu.be/QJu2lqnG-cM).
 
 1. Make sure Flutter is installed on your machine. Steps to do so can be found [here](https://docs.flutter.dev/get-started/quick)
 
