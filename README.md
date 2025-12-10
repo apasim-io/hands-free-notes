@@ -1,7 +1,7 @@
 # Hands Free Notes
 Created by Noah, Andrew, Wylie, and Will.
 
-All components, other than the codebase and testing frameworks, will be located in the FinalSubmission folder under separate subfolders for 491, 492, and 493.
+The updated code base, as of the end of 492, will be found in FinalSubmissions/492. The code can be run with an emulated device(Android or IOS). Supporting images can be found in the design doc.
 
 Many final submission requirements are sections in the design doc (like unit tests, mocks, etc.).
 
@@ -20,3 +20,5 @@ Since this is a mobile application, we are unable to provide a fully workable de
 4. CD to OneTouch/one_touch and run `flutter pub get` in your terminal to install dependencies.
 
 5. Run `flutter run` to start the application with the linked emulator.
+
+
