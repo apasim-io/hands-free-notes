@@ -10,6 +10,7 @@ dependencies:
   build_runner: ^2.10.1
   flutter:
     sdk: flutter
+  flutter_email_sender: ^8.0.0
   json_annotation: ^4.9.0
   path_provider: ^2.1.5
   pdf: ^3.11.3

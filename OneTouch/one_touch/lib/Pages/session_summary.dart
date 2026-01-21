@@ -4,6 +4,7 @@ import '../Objects/template.dart';
 import 'dart:io';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 /*
   On this page the user can see a summary of their session, including notes taken, time spent, etc.
@@ -13,8 +14,9 @@ import 'package:path_provider/path_provider.dart';
 
 /*
   To do:
-    1. display note question and answer(s)
-    2. add export functionality
+    1. export to email
+    2. make pdf prettier
+      2a. make the review of questions a preview of the pdf, so that what the user sees in the app is the final product
  */
 
 class SessionSummary extends StatelessWidget {
@@ -27,6 +29,8 @@ class SessionSummary extends StatelessWidget {
   pw.Document generatePdf() {
     final doc = pw.Document();
 
+  // this doc currently only makes one page
+  // how to dynamically size the pdf so that it is organized, legible, and compact?
     doc.addPage(
       pw.Page(
         build: (pw.Context context) {
