@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
   final List<Template> initialTemplates;
   final List<Template> initialSessions;
 
-  HomePage({super.key, required this.initialTemplates, required this.initialSessions});
+  const HomePage({super.key, required this.initialTemplates, required this.initialSessions});
 
   @override
   State<HomePage> createState() => _HomePageState();

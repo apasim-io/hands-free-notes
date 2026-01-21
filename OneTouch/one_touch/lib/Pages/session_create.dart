@@ -53,7 +53,7 @@ class _SessionCreate extends State<SessionCreate> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
+            SizedBox(
               width: 400,
               child: TextField(
                 controller: textController,

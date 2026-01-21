@@ -32,9 +32,9 @@ void main() async {
     templates[index].name = 'Template ${index + 1}';
   }
   List<Template> sessions = await ts.getTemplateData(await ts.localFile(ts.sessionsFName));
-  sessions.forEach((session) {
+  for (var session in sessions) {
     session.id = session.idGenerator();
-  });
+  }
   ts.saveTemplateData(sessions, await ts.localFile(ts.sessionsFName));
   ts.saveTemplateData(templates, await ts.localFile(ts.templatesFName));
 

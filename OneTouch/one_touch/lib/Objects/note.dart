@@ -56,16 +56,17 @@ class NumberScaleNote extends Note {
   int value = 0;
 
   NumberScaleNote({
-    required NoteType noteType,
-    required String question,
+    required super.noteType,
+    required super.question,
     required this.minValue,
     required this.maxValue,
     required this.step,
     required this.minLabel,
     required this.maxLabel,
-    DateTime? interactionTime,
-  }): super(noteType: noteType, question: question, interactionTime: interactionTime);
+    super.interactionTime,
+  });
 
+  @override
   String? getValueString() {
     return value.toString();
   }
@@ -127,13 +128,14 @@ class MultipleChoiceNote extends Note {
   List<int>? selection; // indices of selected options (nullable to handle missing/null JSON)
 
   MultipleChoiceNote({
-    required NoteType noteType,
-    required String question,
+    required super.noteType,
+    required super.question,
     required this.options,
     required this.maxSelections,
-    DateTime? interactionTime,
-  }): super(noteType: noteType, question: question, interactionTime: interactionTime);
+    super.interactionTime,
+  });
 
+  @override
   String? getValueString() {
     return selection != null
       ? selection!.map((index) => options[index]).join(', ')
@@ -303,12 +305,13 @@ class SingleChoiceNote extends Note {
   int? selection;
 
   SingleChoiceNote({
-    required NoteType noteType,
-    required String question,
+    required super.noteType,
+    required super.question,
     required this.options,
-    DateTime? interactionTime,
-  }): super(noteType: noteType, question: question, interactionTime: interactionTime);
+    super.interactionTime,
+  });
 
+  @override
   String getValueString() {
     return selection != null ? options[selection!] : 'No selection made.';
   }

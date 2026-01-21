@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../Objects/template.dart';
 
 import 'dart:io';
-import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
 
@@ -73,6 +72,8 @@ class SessionSummary extends StatelessWidget {
         final directory = await getApplicationDocumentsDirectory();
         path = '${directory.path}/${template.name}.pdf';
       }
+
+      debugPrint(path);
 
       final file = File(path);
       final bytes = await doc.save();

@@ -17,7 +17,7 @@ import '../Objects/template.dart';
  */
 // Andrew test note objects
 
-NumberScaleNote note1 = new NumberScaleNote(
+NumberScaleNote note1 = NumberScaleNote(
   noteType: NoteType.numberScale,
   question: "On a scale of 0-10, how are you feeling today?",
   minValue: 0,
@@ -27,13 +27,13 @@ NumberScaleNote note1 = new NumberScaleNote(
   maxLabel: "Excellent",
 );
 
-SingleChoiceNote note2 = new SingleChoiceNote(
+SingleChoiceNote note2 = SingleChoiceNote(
   noteType: NoteType.singleChoice,
   question: "What is your current mood?",
   options: ["Happy", "Sad", "Angry", "Anxious", "Excited"],
 );
 
-MultipleChoiceNote note3 = new MultipleChoiceNote(
+MultipleChoiceNote note3 = MultipleChoiceNote(
   noteType: NoteType.multipleChoice,
   question: "Which of the following symptoms are you experiencing?",
   options: ["Headache", "Nausea", "Fatigue", "Dizziness", "Cough"],
