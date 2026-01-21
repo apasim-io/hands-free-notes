@@ -3,5 +3,12 @@
          the Flutter tool needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
     -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+            <data android:scheme="mailto"/>
+            <!-- This allows us to send emails from android devices!-->
+        </intent>
+    </queries>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>
