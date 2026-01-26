@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; 
 
 part 'note.g.dart';
 
@@ -225,7 +226,26 @@ class MultipleChoiceNote extends Note {
             ),
 
             SizedBox(
-              height: 100,
+              height: 50,
+            ),
+            Container(
+              constraints: BoxConstraints(
+                maxWidth: 150,
+              ),
+              child: TextField(
+                textAlign: TextAlign.center,
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ], 
+                decoration: InputDecoration(
+                  labelText: 'Max Selections',
+                ),
+                onChanged: (newValue) => maxSelections = int.parse(newValue),
+              ), 
+            ),
+            SizedBox(
+              height: 50,
             ),
             Wrap(
               spacing: 8,
@@ -363,4 +383,104 @@ class SingleChoiceNote extends Note {
       },
     );
   }
+
+  @override
+  Widget toEditGui() {
+    final optionController = TextEditingController();
+    final questionController = TextEditingController();
+    int sel = 0;
+
+    return StatefulBuilder(
+      builder: (BuildContext context, void Function(void Function()) setState) {
+      questionController.text = question;  
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 50),
+              child: TextField(
+                maxLines: null,
+                onChanged: (value) {
+                  setState(() {
+                    question = value;
+                  });
+                },
+                textAlign: TextAlign.center,
+                controller: questionController,
+              ),
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                ...options.asMap().entries.map((entry) {
+                final int idx = entry.key;
+                final String option = entry.value;
+                final bool isSelected = (sel == idx);
+                optionController.text = options[sel];
+
+                return GestureDetector(
+                  onTap: () {
+                    options[sel] = optionController.text;
+                    setState(() {
+                      if (!isSelected) {
+                        sel = idx;
+                      } else {
+                        sel = -1;
+                      }
+                      // write back to the nullable selection field
+                      markInteraction();
+                    });
+                  },
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: 150,
+                    ),
+                    margin: const EdgeInsets.all(4.0),
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: isSelected ? TextField(
+                      controller: optionController,
+                      maxLines: null,
+                      style: TextStyle(color: Colors.black),
+                    )
+                    : Text(option),
+                  ),
+                );
+                }),
+                ElevatedButton.icon(
+                  icon: const Icon(
+                    Icons.add,
+                    color: Colors.black
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue[300]
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      sel = options.length;
+                      options.add("Option ${options.length + 1}");
+                    });
+                  },
+                  label: Text(
+                    'Add Option',
+                    style: TextStyle(
+                      color: Colors.black
+                    ),)
+                ),
+              ],
+            )
+          ]
+        );
+      },
+    );
+  }
+
 }
