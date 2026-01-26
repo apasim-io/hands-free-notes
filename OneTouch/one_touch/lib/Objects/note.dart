@@ -86,7 +86,7 @@ class NumberScaleNote extends Note {
             mainAxisSize: MainAxisSize.min,
             children: [
               Slider(
-                value: value.toDouble(),
+                value: value < minValue ? minValue.toDouble() : value.toDouble(),
                 onChanged: (newValue) {
                   setState(() {
                     value = newValue.toInt();
@@ -115,6 +115,52 @@ class NumberScaleNote extends Note {
     );
   }
 
+  @override
+  Widget toEditGui() {
+    final optionController = TextEditingController();
+    final questionController = TextEditingController();
+    int sel = 0;
+
+    return StatefulBuilder(
+      builder: (BuildContext context, void Function(void Function()) setState) {
+      questionController.text = question;  
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 50),
+              child: TextField(
+                maxLines: null,
+                onChanged: (value) {
+                  setState(() {
+                    question = value;
+                  });
+                },
+                textAlign: TextAlign.center,
+                controller: questionController,
+              ),
+            ),
+
+            SizedBox(
+              height: 50,
+            ),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                ParameterContainer(initialValue: minValue.toString(), numeric: true, labelText: "Min Value", onChanged: (newValue) { minValue = int.parse(newValue); value = int.parse(newValue); }),
+                ParameterContainer(initialValue: minLabel.toString(), numeric: false, labelText: "Min Label", onChanged: (newValue) { minLabel = newValue; }),
+                ParameterContainer(initialValue: maxValue.toString(), numeric: true, labelText: "Max Value", onChanged: (newValue) { maxValue = int.parse(newValue); }),
+                ParameterContainer(initialValue: maxLabel.toString(), numeric: false, labelText: "Max Label", onChanged: (newValue) { maxLabel = newValue; }),
+                ParameterContainer(initialValue: step.toString(), numeric: true, labelText: "Step", onChanged: (newValue) { step = int.parse(newValue); }),
+              ],
+            )
+          ]
+        );
+      },
+    );
+  }
 
 }
 
@@ -202,6 +248,8 @@ class MultipleChoiceNote extends Note {
   Widget toEditGui() {
     final optionController = TextEditingController();
     final questionController = TextEditingController();
+    final maxSelectionController = TextEditingController();
+    maxSelectionController.text = maxSelections.toString();
     int sel = 0;
 
     return StatefulBuilder(
@@ -233,6 +281,7 @@ class MultipleChoiceNote extends Note {
                 maxWidth: 150,
               ),
               child: TextField(
+                controller: maxSelectionController,
                 textAlign: TextAlign.center,
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
@@ -241,7 +290,9 @@ class MultipleChoiceNote extends Note {
                 decoration: InputDecoration(
                   labelText: 'Max Selections',
                 ),
-                onChanged: (newValue) => maxSelections = int.parse(newValue),
+                onChanged: (newValue) {
+                  maxSelections = int.parse(newValue);
+                },
               ), 
             ),
             SizedBox(
@@ -480,6 +531,60 @@ class SingleChoiceNote extends Note {
           ]
         );
       },
+    );
+  }
+
+}
+
+class ParameterContainer extends StatefulWidget {
+  final String labelText;
+  final ValueChanged<String>? onChanged; // The onChanged parameter
+  final bool numeric;
+  final String initialValue;
+
+  const ParameterContainer({
+    Key? key,
+    required this.labelText,
+    required this.onChanged, // Make it optional or required as needed
+    required this.numeric,
+    required this.initialValue,
+  }) : super(key: key);
+
+  @override
+  State<ParameterContainer> createState() => _ParameterContainerState();
+}
+
+class _ParameterContainerState extends State<ParameterContainer> {
+
+  TextEditingController controller = TextEditingController();
+  
+  @override
+  void initState() {
+    controller.text = widget.initialValue;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(
+        maxWidth: 150,
+      ),
+      child: TextField(
+        controller: controller,
+        textAlign: TextAlign.center,
+        keyboardType: widget.numeric ? TextInputType.number : TextInputType.text,
+        inputFormatters: widget.numeric ? <TextInputFormatter>[
+          FilteringTextInputFormatter.digitsOnly
+        ] : [], 
+        decoration: InputDecoration(
+          label: Center(
+            child: Text(widget.labelText)
+          ),
+          floatingLabelAlignment: FloatingLabelAlignment.center,
+        ),
+        onChanged: widget.onChanged,
+      ), 
     );
   }
 
