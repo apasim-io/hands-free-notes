@@ -3,6 +3,7 @@ import '../Objects/template.dart';
 
 import 'dart:io';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
@@ -14,7 +15,6 @@ import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 /*
   To do:
-    1. export to email
     2. make pdf prettier
       2a. make the review of questions a preview of the pdf, so that what the user sees in the app is the final product
  */
@@ -22,7 +22,7 @@ import 'package:flutter_email_sender/flutter_email_sender.dart';
 class SessionSummary extends StatelessWidget {
   final Template template;
   final pw.Document pdf = pw.Document();
-  String pdfPath = '';
+  String pdfPath = ''; // this will be updated based on the OS the device uses
   bool pdfExported = false;
 
   SessionSummary({super.key, required this.template});
@@ -177,7 +177,8 @@ class SessionSummary extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column( // Changed back to Column for vertical layout to ensure buttons are visible
+              child: Column(
+                // Changed back to Column for vertical layout to ensure buttons are visible
                 children: [
                   ElevatedButton(
                     onPressed: () async {
@@ -208,7 +209,7 @@ class SessionSummary extends StatelessWidget {
                     },
                     child: Text('Export Notes'),
                   ),
-                  SizedBox(height: 16), // Spacing between buttons
+                  SizedBox(width: 16), // Spacing between buttons6
                   ElevatedButton(
                     onPressed: () async {
                       try {
@@ -219,12 +220,72 @@ class SessionSummary extends StatelessWidget {
                     },
                     child: Text('Email Notes'),
                   ),
+                  SizedBox(width: 16),
+                  ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        // if pdf doesn't exist yet -> error and display message to export pdf
+                        if (!pdfExported)
+                          throw Exception("PDF hasn't been saved yet!");
+                        //display a popup with pdf view
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text("PDF"),
+                              content: SizedBox(
+                                width: double.maxFinite,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.7,
+                                child: PopupPDFViewer(path: pdfPath),
+                              ),
+                              actions: [
+                                TextButton(
+                                  child: const Text("Close"),
+                                  onPressed: () {
+                                    Navigator.of(
+                                      context,
+                                    ).pop(); // Closes the dialog
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } catch (e) {
+                        //print an error msg
+                      }
+                    },
+                    child: Text('View PDF'),
+                  ),
                 ],
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class PopupPDFViewer extends StatelessWidget {
+  final String path;
+  const PopupPDFViewer({Key? key, required this.path});
+
+  @override
+  Widget build(BuildContext context) {
+    return PDFView(
+      filePath: path,
+      enableSwipe: true,
+      swipeHorizontal: false,
+      autoSpacing: false,
+      pageFling: false,
+      onError: (error) {
+        print(error.toString());
+      },
+      onPageError: (page, error) {
+        print('$page: ${error.toString()}');
+      },
     );
   }
 }
