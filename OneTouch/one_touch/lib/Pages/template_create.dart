@@ -21,6 +21,7 @@ class _TemplateCreateState extends State<TemplateCreate> {
   int? selected; //this is to chagne the widget showing on the right
   final textController = TextEditingController();
   Template? _template;
+  NoteType _selectedNoteType = NoteType.multipleChoice;
 
   @override
   // clean up controller when widget is disposed
@@ -34,6 +35,22 @@ class _TemplateCreateState extends State<TemplateCreate> {
     super.initState();
     textController.text = widget.template.name;
     _template = widget.template;
+    _selectedNoteType = NoteType.multipleChoice;
+  }
+
+  Note createDefaultNote(NoteType type) {
+    switch (type) {
+      case NoteType.nullType:
+        return Note(noteType: type, question: "new question");
+      case NoteType.numberScale:
+        return NumberScaleNote(noteType: type, question: "new question", minValue: 1, maxValue: 10, step: 1, minLabel: "min", maxLabel: "max");
+      case NoteType.text:
+        return Note(noteType: type, question: "new question");
+      case NoteType.multipleChoice:
+        return MultipleChoiceNote(noteType: type, question: "new question", options: ["option 1", "option 2"], maxSelections: 2);
+      case NoteType.singleChoice:
+        return SingleChoiceNote(noteType: type, question: "new question", options: ["option 1", "option 2"]);
+    }
   }
 
   @override
@@ -150,12 +167,10 @@ class _TemplateCreateState extends State<TemplateCreate> {
                         ),
                         label: const Text("New note"),
                         onPressed: () {
-                          // create defualt note
-                          Note defaultNote = MultipleChoiceNote(noteType: NoteType.multipleChoice, question: "Question text", options: ["option 1", "option 2"], maxSelections: 1);
                           // set state with new note
                           setState(() {
                             // Template newTemplate = _template!;
-                            _template!.notes.add(defaultNote);
+                            _template!.notes.add(createDefaultNote(_selectedNoteType));
                             selected = _template!.notes.length - 1;
                             // _template = new
                           });
@@ -171,7 +186,10 @@ class _TemplateCreateState extends State<TemplateCreate> {
                     selected: isSelected, //next 3 lines for coloring
                     selectedTileColor: Theme.of(context).colorScheme.secondaryContainer,
                     selectedColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                    onTap: () => setState(() => selected = index),
+                    onTap: () => setState(() {
+                      selected = index;
+                      _selectedNoteType = _template!.notes[selected!].noteType;
+                    }),
                   );
                 },
                 separatorBuilder: (_, __) => const Divider(height: 1),
@@ -181,79 +199,101 @@ class _TemplateCreateState extends State<TemplateCreate> {
             const VerticalDivider(width: 1),
             //Right column expands to fill space
             Expanded(
-              child: Stack(
-                children: [
-                  //stack for layering the buttons
-                  Positioned.fill(
-                    child: ((selected == null) || (_template!.notes.isEmpty) )
-                        ? Center(child: 
-                          ElevatedButton.icon(
-                            label: const Text("New note"),
-                            icon: const Icon(
-                              Icons.add,
-                              color: Colors.black
-                            ),
-                            onPressed: () {
-                              // create defualt note
-                              Note defaultNote = MultipleChoiceNote(noteType: NoteType.multipleChoice, question: "Question text", options: ["option 1", "option 2"], maxSelections: 1);
-                              // set state with new note
-                              setState(() {
-                                // Template newTemplate = _template!;
-                                _template!.notes.add(defaultNote);
-                                selected = _template!.notes.length - 1;
-                                // _template = new
-                              });
-                            },
-                          )
-                        )
-                        : Center(
-                            child: KeyedSubtree(
-                              key: ValueKey(selected),
-                              child: _template!.notes[selected!].toEditGui(),
-                            ),
-                          ),
-                  ),
-                  Positioned(
-                    right: 16,
-                    bottom: 16,
-                    child: SizedBox(
-                      height: 120,
-                      width: 160,
-                      child: FloatingActionButton.extended(
-                        elevation: 0,
-                        heroTag: 'continue',                     
-                        onPressed: () {
+              child: Container(
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 40.0),
+                      child: DropdownButton<NoteType>(
+                        hint: Text("Note Type"),
+                        value: _selectedNoteType,
+                        items: NoteType.values.map((NoteType value) {
+                          return DropdownMenuItem<NoteType>(
+                            value: value,
+                            child: Text(value.name),
+                          );
+                        }).toList(),
+                        onChanged: (newNoteType) {
                           setState(() {
-
-                            if (isLastNote) {
-                              //if we are already on the last note: finish the session
-                              // TO Do - Call the next method~!
-                              // save note progress
-                              widget.saveTemplatesCallback(widget.template, "save");
-                              Navigator.pop(context);
-                              return;
-                            }
-
-                            if (_template!.notes.isEmpty) return;
-
-                            //if nothing selected yet, start with the first note
-                            if (selected == null) {
-                              selected = 0;
-                              return;
-                            }
-
-                            //If not at last note, go to next one
-                            if (selected! < _template!.notes.length - 1) {
-                              selected = selected! + 1;
+                            _selectedNoteType = newNoteType!;
+                            if (selected != null) {
+                              _template!.notes[selected!] = createDefaultNote(newNoteType);
                             }
                           });
                         },
-                        icon: Icon(Icons.arrow_forward),
-                        label: Text(isLastNote ? 'Finish' : 'Next'),
                       ),
-                    )
-                  ),
-                ],
+                    ),
+
+                    //stack for layering the buttons
+                    Positioned.fill(
+                      child: ((selected == null) || (_template!.notes.isEmpty) )
+                          ? Center(child: 
+                            ElevatedButton.icon(
+                              label: const Text("New note"),
+                              icon: const Icon(
+                                Icons.add,
+                                color: Colors.black
+                              ),
+                              onPressed: () {
+                                // set state with new note
+                                setState(() {
+                                  // Template newTemplate = _template!;
+                                  _template!.notes.add(createDefaultNote(_selectedNoteType));
+                                  selected = _template!.notes.length - 1;
+                                  // _template = new
+                                });
+                              },
+                            )
+                          )
+                          : Center(
+                              child: KeyedSubtree(
+                                key: ValueKey(selected),
+                                child: _template!.notes[selected!].toEditGui(),
+                              ),
+                            ),
+                    ),
+                    Positioned(
+                      right: 16,
+                      bottom: 16,
+                      child: SizedBox(
+                        height: 120,
+                        width: 160,
+                        child: FloatingActionButton.extended(
+                          elevation: 0,
+                          heroTag: 'continue',                     
+                          onPressed: () {
+                            setState(() {
+
+                              if (isLastNote) {
+                                //if we are already on the last note: finish the session
+                                // TO Do - Call the next method~!
+                                // save note progress
+                                widget.saveTemplatesCallback(widget.template, "save");
+                                Navigator.pop(context);
+                                return;
+                              }
+
+                              if (_template!.notes.isEmpty) return;
+
+                              //if nothing selected yet, start with the first note
+                              if (selected == null) {
+                                selected = 0;
+                                return;
+                              }
+
+                              //If not at last note, go to next one
+                              if (selected! < _template!.notes.length - 1) {
+                                selected = selected! + 1;
+                              }
+                            });
+                          },
+                          icon: Icon(Icons.arrow_forward),
+                          label: Text(isLastNote ? 'Finish' : 'Next'),
+                        ),
+                      )
+                    ),
+                  ],
+                ),
               ),
             )
           ],
