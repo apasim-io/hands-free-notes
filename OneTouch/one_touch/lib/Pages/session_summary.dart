@@ -7,6 +7,7 @@ import 'package:pdf/pdf.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'settings_page.dart';
 
 /*
   On this page the user can see a summary of their session, including notes taken, time spent, etc.
@@ -161,11 +162,15 @@ class _SessionSummaryState extends State<SessionSummary> {
         return false;
       }
 
+      final savedEmail = (await AppSettings.instance.getDefaultEmail())?.trim();
+
+      final recipient = (savedEmail != null && savedEmail.isNotEmpty)
+        ? savedEmail
+        : 'pasimia@wwu.edu';
+
       final Email email = Email(
         subject: '${widget.template.name}.pdf',
-        recipients: [
-          'pasimia@wwu.edu',
-        ], // TO DO this should be a user email that is saved
+        recipients: [recipient],
         attachmentPaths: [pdfPath],
       );
 
