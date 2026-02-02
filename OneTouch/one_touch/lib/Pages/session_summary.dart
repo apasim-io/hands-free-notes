@@ -140,10 +140,15 @@ class _SessionSummaryState extends State<SessionSummary> {
       // Print the saved file path to the console for debugging
       print('PDF exported to: $pdfPath');
 
-      pdfExported = true;
+      setState(() {
+        pdfExported = true;
+      });
       return true;
     } catch (e) {
       print('PDF export failed: $e');
+      setState(() {
+        pdfExported = false;
+      });
       return false;
     }
   }
@@ -235,7 +240,6 @@ class _SessionSummaryState extends State<SessionSummary> {
                   ElevatedButton(
                     onPressed: () async {
                       try {
-                        // Export PDF (exportPdf generates a fresh document internally)
                         if (await exportPdf()) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -259,56 +263,74 @@ class _SessionSummaryState extends State<SessionSummary> {
                         );
                       }
                     },
-                    child: Text('Export Notes'),
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.resolveWith<Color?>(
+                            (states) => pdfExported ? Colors.green : null,
+                          ),
+                      foregroundColor:
+                          MaterialStateProperty.resolveWith<Color?>(
+                            (states) => pdfExported ? Colors.white : null,
+                          ),
+                    ),
+                    child: const Text('Export Notes'),
                   ),
-                  SizedBox(width: 16), // Spacing between buttons6
+                  SizedBox(width: 16), // Spacing between buttons
                   ElevatedButton(
-                    onPressed: () async {
-                      try {
-                        await emailPdf();
-                      } catch (e) {
-                        // print an error msg
-                      }
-                    },
-                    child: Text('Email Notes'),
+                    onPressed: !pdfExported
+                        ? null
+                        : () async {
+                            try {
+                              await emailPdf();
+                            } catch (e) {
+                              // print an error msg
+                            }
+                          },
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.resolveWith<Color?>(
+                            (states) => !pdfExported ? Colors.grey : null,
+                          ),
+                    ),
+                    child: const Text('Email Notes'),
                   ),
                   SizedBox(width: 16),
                   ElevatedButton(
-                    onPressed: () async {
-                      try {
-                        // if pdf doesn't exist yet -> error and display message to export pdf
-                        if (!pdfExported)
-                          throw Exception("PDF hasn't been saved yet!");
-                        //display a popup with pdf view
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text("PDF"),
-                              content: SizedBox(
-                                width: double.maxFinite,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.7,
-                                child: PopupPDFViewer(path: pdfPath),
-                              ),
-                              actions: [
-                                TextButton(
-                                  child: const Text("Close"),
-                                  onPressed: () {
-                                    Navigator.of(
-                                      context,
-                                    ).pop(); // Closes the dialog
-                                  },
-                                ),
-                              ],
+                    onPressed: !pdfExported
+                        ? null
+                        : () async {
+                            // display a popup with pdf view
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("PDF"),
+                                  content: SizedBox(
+                                    width: double.maxFinite,
+                                    height:
+                                        MediaQuery.of(context).size.height * 0.7,
+                                    child: PopupPDFViewer(path: pdfPath),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text("Close"),
+                                      onPressed: () {
+                                        Navigator.of(
+                                          context,
+                                        ).pop(); // Closes the dialog
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
                             );
                           },
-                        );
-                      } catch (e) {
-                        //print an error msg
-                      }
-                    },
-                    child: Text('View PDF'),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                        (states) => !pdfExported ? Colors.grey : null,
+                      ),
+                    ),
+                    child: const Text('View PDF'),
                   ),
                 ],
               ),
