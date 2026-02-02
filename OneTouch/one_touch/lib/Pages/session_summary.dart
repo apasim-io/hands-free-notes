@@ -14,13 +14,27 @@ import 'package:flutter_email_sender/flutter_email_sender.dart';
   For Jackie the option to export should go straight to her email
  */
 
-class SessionSummary extends StatelessWidget {
+class SessionSummary extends StatefulWidget {
   final Template template;
+
+  const SessionSummary({super.key, required this.template});
+
+  @override
+  State<SessionSummary> createState() => _SessionSummaryState();
+}
+
+class _SessionSummaryState extends State<SessionSummary> {
   final pw.Document pdf = pw.Document();
   String pdfPath = ''; // this will be updated based on the OS the device uses
   bool pdfExported = false;
 
-  SessionSummary({super.key, required this.template});
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   // Create and return a new PDF document containing the session summary.
   pw.Document generatePdf() {
@@ -28,12 +42,12 @@ class SessionSummary extends StatelessWidget {
 
     // could introduce custom fonts / text formatting?
 
-    int questions = template.notes.length;
+    int questions = widget.template.notes.length;
     int totalPages = (questions / 10).ceil();
 
     for (int i = 0; i < questions; i += 10) {
       final endIndex = (i + 10 < questions) ? i + 10 : questions;
-      final pageNotes = template.notes.sublist(i, endIndex);
+      final pageNotes = widget.template.notes.sublist(i, endIndex);
       final currentPage = (i / 10).floor() + 1;
 
       doc.addPage(
@@ -46,7 +60,7 @@ class SessionSummary extends StatelessWidget {
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
                     pw.Text(
-                      template.name,
+                      widget.template.name,
                       style: pw.TextStyle(
                         fontSize: 24,
                         fontWeight: pw.FontWeight.bold,
@@ -94,9 +108,8 @@ class SessionSummary extends StatelessWidget {
           },
         ),
       );
-
     }
-    return doc; 
+    return doc;
   }
 
   Future<bool> exportPdf() async {
@@ -110,14 +123,14 @@ class SessionSummary extends StatelessWidget {
           type: StorageDirectory.downloads,
         );
         if (dirs != null && dirs.isNotEmpty) {
-          pdfPath = '${dirs.first.path}/${template.name}.pdf';
+          pdfPath = '${dirs.first.path}/${widget.template.name}.pdf';
         } else {
           final directory = await getApplicationDocumentsDirectory();
-          pdfPath = '${directory.path}/${template.name}.pdf';
+          pdfPath = '${directory.path}/${widget.template.name}.pdf';
         }
       } else {
         final directory = await getApplicationDocumentsDirectory();
-        pdfPath = '${directory.path}/${template.name}.pdf';
+        pdfPath = '${directory.path}/${widget.template.name}.pdf';
       }
 
       final file = File(pdfPath);
@@ -144,7 +157,7 @@ class SessionSummary extends StatelessWidget {
       }
 
       final Email email = Email(
-        subject: '${template.name}.pdf',
+        subject: '${widget.template.name}.pdf',
         recipients: [
           'pasimia@wwu.edu',
         ], // TO DO this should be a user email that is saved
@@ -163,6 +176,14 @@ class SessionSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text(widget.template.name),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -174,7 +195,7 @@ class SessionSummary extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      template.name,
+                      widget.template.name,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -183,15 +204,22 @@ class SessionSummary extends StatelessWidget {
                     SizedBox(height: 12),
                     Expanded(
                       child: Center(
-                        child: ListView.builder(
-                          itemCount: template.notes.length,
-                          itemBuilder: (context, index) {
-                            final note = template.notes[index];
-                            return ListTile(
-                              title: Text(note.question),
-                              subtitle: Text((note.getValueString() ?? '')),
-                            );
-                          },
+                        child: Scrollbar(
+                          controller: _scrollController,
+                          thumbVisibility: true,
+                          thickness: 6.0,
+                          radius: Radius.circular(3),
+                          child: ListView.builder(
+                            controller: _scrollController,
+                            itemCount: widget.template.notes.length,
+                            itemBuilder: (context, index) {
+                              final note = widget.template.notes[index];
+                              return ListTile(
+                                title: Text(note.question),
+                                subtitle: Text((note.getValueString() ?? '')),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),
@@ -201,7 +229,7 @@ class SessionSummary extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
+              child: Row(
                 // Changed back to Column for vertical layout to ensure buttons are visible
                 children: [
                   ElevatedButton(
@@ -212,7 +240,7 @@ class SessionSummary extends StatelessWidget {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                'PDF exported as ${template.name}.pdf',
+                                'PDF exported as ${widget.template.name}.pdf',
                               ),
                             ),
                           );

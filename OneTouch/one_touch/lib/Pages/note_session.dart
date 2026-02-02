@@ -7,41 +7,6 @@ import 'package:one_touch/Pages/session_summary.dart';
 import '../Objects/template.dart';
 
 
-
-/*
-  To do: 
-    1. build the two columns layout
-        1a. left column: note display (scrollable if needed)
-        1b. right column: note input area (different input types based on note type)
-    
- */
-// Andrew test note objects
-
-NumberScaleNote note1 = NumberScaleNote(
-  noteType: NoteType.numberScale,
-  question: "On a scale of 0-10, how are you feeling today?",
-  minValue: 0,
-  maxValue: 10,
-  step: 1,
-  minLabel: "Very Bad",
-  maxLabel: "Excellent",
-);
-
-SingleChoiceNote note2 = SingleChoiceNote(
-  noteType: NoteType.singleChoice,
-  question: "What is your current mood?",
-  options: ["Happy", "Sad", "Angry", "Anxious", "Excited"],
-);
-
-MultipleChoiceNote note3 = MultipleChoiceNote(
-  noteType: NoteType.multipleChoice,
-  question: "Which of the following symptoms are you experiencing?",
-  options: ["Headache", "Nausea", "Fatigue", "Dizziness", "Cough"],
-  maxSelections: 3,
-);
-
-List<Note> notesList = [note1, note2, note3];
-
 class NoteSession extends StatefulWidget {
   final Template template;
 
@@ -58,6 +23,13 @@ class NoteSession extends StatefulWidget {
 
 class _NoteSessionState extends State<NoteSession> {
   int? selected; //this is to chagne the widget showing on the right
+  final ScrollController _leftScrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _leftScrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -160,22 +132,29 @@ class _NoteSessionState extends State<NoteSession> {
             //left column: one item per note in the template.
             SizedBox(
               width: 200, // tweak as you like
-              child: ListView.separated( //seperated until they become there own squares
-                physics: const AlwaysScrollableScrollPhysics(),
-                itemCount: notes.length,
-                itemBuilder: (context, index) {
-                  final note = notes[index];//use this later to
-                  final isSelected = selected == index;
-                  return ListTile( //so it can be clicked on
-                    dense: true,
-                    title: Text(note.question),//example: could be changed to title
-                    selected: isSelected, //next 3 lines for coloring
-                    selectedTileColor: Theme.of(context).colorScheme.secondaryContainer,
-                    selectedColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                    onTap: () => setState(() => selected = index),
-                  );
-                },
-                separatorBuilder: (_, __) => const Divider(height: 1),
+              child: Scrollbar(
+                controller: _leftScrollController,
+                thumbVisibility: true,
+                thickness: 6.0,
+                radius: Radius.circular(3),
+                child: ListView.separated( //seperated until they become there own squares
+                  controller: _leftScrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemCount: notes.length,
+                  itemBuilder: (context, index) {
+                    final note = notes[index];//use this later to
+                    final isSelected = selected == index;
+                    return ListTile( //so it can be clicked on
+                      dense: true,
+                      title: Text(note.question),//example: could be changed to title
+                      selected: isSelected, //next 3 lines for coloring
+                      selectedTileColor: Theme.of(context).colorScheme.secondaryContainer,
+                      selectedColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                      onTap: () => setState(() => selected = index),
+                    );
+                  },
+                  separatorBuilder: (_, __) => const Divider(height: 1),
+                ),
               ),
             ),
             //divider should just be a line to seperate them
