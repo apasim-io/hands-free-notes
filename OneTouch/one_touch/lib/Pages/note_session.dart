@@ -193,6 +193,7 @@ class _NoteSessionState extends State<NoteSession> {
                               return;
                             }
 
+
                             // If at last note, save and navigate to the summary page
                             if (selected == notes.length - 1) {
                               widget.saveTemplatesCallback(widget.template, "save");

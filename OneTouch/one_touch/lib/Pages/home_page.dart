@@ -7,6 +7,7 @@ import '../Objects/template.dart';
 import 'note_session.dart';
 import 'template_create.dart';
 import 'dart:io';
+import 'settings_page.dart';
 
 class HomePage extends StatefulWidget {
   final List<Template> initialTemplates;
@@ -81,11 +82,24 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('OneTouch'),
-          centerTitle: true,
+      title: const Text('OneTouch'),
+      centerTitle: true,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.settings),
+          tooltip: 'Settings',
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SettingsPage(),
+              ),
+            );
+          },
         ),
-      body: SingleChildScrollView(
-        child: Column(
+      ],
+    ),
+      body: Column(
         children: [
           TemplateList(
             name: "Recent Sessions",
@@ -123,7 +137,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
         ),
-      )
     );
   }
 }
