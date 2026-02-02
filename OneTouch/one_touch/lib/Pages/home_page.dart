@@ -84,7 +84,8 @@ class _HomePageState extends State<HomePage> {
         title: const Text('OneTouch'),
           centerTitle: true,
         ),
-      body: Column(
+      body: SingleChildScrollView(
+        child: Column(
         children: [
           TemplateList(
             name: "Recent Sessions",
@@ -121,6 +122,7 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         ],
+        ),
       )
     );
   }
