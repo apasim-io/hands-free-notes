@@ -308,7 +308,8 @@ class _SessionSummaryState extends State<SessionSummary> {
                                   content: SizedBox(
                                     width: double.maxFinite,
                                     height:
-                                        MediaQuery.of(context).size.height * 0.7,
+                                        MediaQuery.of(context).size.height *
+                                        0.7,
                                     child: PopupPDFViewer(path: pdfPath),
                                   ),
                                   actions: [
@@ -326,9 +327,10 @@ class _SessionSummaryState extends State<SessionSummary> {
                             );
                           },
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                        (states) => !pdfExported ? Colors.grey : null,
-                      ),
+                      backgroundColor:
+                          MaterialStateProperty.resolveWith<Color?>(
+                            (states) => !pdfExported ? Colors.grey : null,
+                          ),
                     ),
                     child: const Text('View PDF'),
                   ),
