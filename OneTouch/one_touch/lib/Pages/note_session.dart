@@ -10,7 +10,7 @@ import '../Objects/template.dart';
 class NoteSession extends StatefulWidget {
   final Template template;
 
-  final void Function(Template, String) saveTemplatesCallback;
+  final void Function(List<Template>, String) saveTemplatesCallback;
   const NoteSession({
     super.key,
     required this.template,
@@ -48,7 +48,7 @@ class _NoteSessionState extends State<NoteSession> {
             heroTag: 'exit',
             onPressed: () {
               // cancel changes and reset templates
-              widget.saveTemplatesCallback(widget.template, "revert");
+              widget.saveTemplatesCallback([widget.template], "revert");
               Navigator.pop(context);
             },
             icon: const Icon(
@@ -83,7 +83,7 @@ class _NoteSessionState extends State<NoteSession> {
             heroTag: 'save',
             onPressed: () {
               // cancel changes and reset templates
-              widget.saveTemplatesCallback(widget.template, "save");
+              widget.saveTemplatesCallback([widget.template], "save");
             },
             icon: const Icon(
               Icons.save,
@@ -106,7 +106,7 @@ class _NoteSessionState extends State<NoteSession> {
             heroTag: 'delete',
             onPressed: () {
               // cancel changes and reset templates
-              widget.saveTemplatesCallback(widget.template, "delete");
+              widget.saveTemplatesCallback([widget.template], "delete");
               Navigator.pop(context);
             },
             icon: const Icon(
@@ -196,7 +196,7 @@ class _NoteSessionState extends State<NoteSession> {
 
                             // If at last note, save and navigate to the summary page
                             if (selected == notes.length - 1) {
-                              widget.saveTemplatesCallback(widget.template, "save");
+                              widget.saveTemplatesCallback([widget.template], "save");
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

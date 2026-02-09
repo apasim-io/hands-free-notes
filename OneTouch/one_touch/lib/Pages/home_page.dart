@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
     _templates = widget.initialTemplates;
   }
 
-  void saveTemplates(Template updatedTemplate, String updateType) async {
+  void saveTemplates(List<Template> updatedTemplate, String updateType) async {
     TemplateStorage ts = TemplateStorage();
     File templatesFile = await ts.localFile(ts.templatesFName);
     File sessionsFile = await ts.localFile(ts.sessionsFName);
@@ -50,22 +50,34 @@ class _HomePageState extends State<HomePage> {
 
     } else if (updateType == "delete") {
       // check both sessions and templates
-      int deletedIdx = _sessions.indexWhere((session) => session.id == updatedTemplate.id);
+      int deletedIdx = _sessions.indexWhere((session) => session.id == updatedTemplate[0].id);
       if (deletedIdx < 0) {
-        deletedIdx = _templates.indexWhere((template) => template.id == updatedTemplate.id);
+        deletedIdx = _templates.indexWhere((template) => template.id == updatedTemplate[0].id);
         updatedTemplates.removeAt(deletedIdx);
       } else {
       updatedSessions.removeAt(deletedIdx);
       }
     } else if (updateType == "addSession") {
-      updatedSessions.add(updatedTemplate);
+      updatedSessions.add(updatedTemplate[0]);
     } else if (updateType == "addTemplate") {
-      updatedTemplates.add(updatedTemplate);
+      updatedTemplates.add(updatedTemplate[0]);
     }
     else if (updateType == "save") {
       // set updates to current state
       updatedTemplates = _templates;
       updatedSessions = _sessions;
+    } else if (updateType == "massDelete") {
+      for (int i = 0; i < updatedTemplate.length; i++) {
+        int deletedIdx = updatedSessions.indexWhere((session) => session.id == updatedTemplate[i].id);
+        if (deletedIdx < 0) {
+          deletedIdx = updatedTemplates.indexWhere((template) => template.id == updatedTemplate[i].id);
+          print("deleted template: ${deletedIdx}");
+          updatedTemplates.removeAt(deletedIdx);
+        } else {
+        print("deleted session: ${deletedIdx}");
+        updatedSessions.removeAt(deletedIdx);
+        }
+      }
     }
 
     // save to files
@@ -122,7 +134,7 @@ class _HomePageState extends State<HomePage> {
             child: const Text('Create new Template'),
             onPressed: () {
               Template defaultTemplate = Template(notes: [], name: "Template ${_templates.length + 1}");
-              saveTemplates(defaultTemplate, "addTemplate");
+              saveTemplates([defaultTemplate], "addTemplate");
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -160,15 +172,14 @@ class DetailsPage extends StatelessWidget {
   }
 }
 
-class TemplateList extends StatelessWidget {
+class TemplateList extends StatefulWidget {
   final List<Template> templates;
   final String name;
   final Color color;
   final String listType;
-  final void Function(Template, String) saveTemplatesCallback;
-  final _scrollController = ScrollController();
+  final void Function(List<Template>, String) saveTemplatesCallback;
 
-  TemplateList({
+  const TemplateList({
     super.key,
     required this.templates,
     required this.name,
@@ -178,19 +189,61 @@ class TemplateList extends StatelessWidget {
   });
 
   @override
+  State<TemplateList> createState() => _TemplateListState();
+}
+
+class _TemplateListState extends State<TemplateList> {
+  final _scrollController = ScrollController();
+  List<String> selectedIds = [];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 30),
-          child: Text(
-            name,
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              fontSize: 25
+        Row(
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 30),
+              child: ElevatedButton(
+                onPressed:() {
+                  List<Template> toDelete = [];
+                  for (int i = 0; i < widget.templates.length; i++) {
+                    Template curr = widget.templates[i];
+                    if (selectedIds.contains(curr.id)) {
+                      toDelete.add(curr);
+                    }
+                  }
+                  widget.saveTemplatesCallback(toDelete, "massDelete");
+                  setState(() {
+                    selectedIds = [];
+                  });
+                },
+                child: Text(
+                  "Delete Selected",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 15
+                  ),
+                )
+              )
             ),
-          )
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 30),
+              child: Text(
+                widget.name,
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 25
+                ),
+              )
+            )
+          ],
         ),
         Container(
           height: 175,
@@ -199,10 +252,10 @@ class TemplateList extends StatelessWidget {
             controller: _scrollController,
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             scrollDirection: Axis.horizontal,
-            itemCount: templates.length,
+            itemCount: widget.templates.length,
             separatorBuilder: (context, index) => SizedBox(width: 50),
             itemBuilder: (context, index) {
-              Template currTemplate = templates[index];
+              Template currTemplate = widget.templates[index];
               return SizedBox(
                 width: 175,
                 child: ElevatedButton(
@@ -211,32 +264,56 @@ class TemplateList extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          if (listType == "session") {
-                            return NoteSession(template: currTemplate, saveTemplatesCallback: saveTemplatesCallback);
+                          if (widget.listType == "session") {
+                            return NoteSession(template: currTemplate, saveTemplatesCallback: widget.saveTemplatesCallback);
                           } else {
                             // listType == "template"
-                            return SessionCreate(template: currTemplate, saveTemplatesCallback: saveTemplatesCallback);
+                            return SessionCreate(template: currTemplate, saveTemplatesCallback: widget.saveTemplatesCallback);
                           }
                         }
                       ),
                     );
                   }, 
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: color,
+                    backgroundColor: widget.color,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)
                     ),
                   ),
-                  child: Align(
-                      child: Text(
-                        currTemplate.name,
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.black,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsetsGeometry.all(0),
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: Checkbox(
+                            value: selectedIds.contains(currTemplate.id), // Assign the state variable
+                            onChanged: (bool? newValue) {
+                              setState(() {
+                                if (newValue == true) {
+                                  selectedIds.add(currTemplate.id); // Update the state
+                                } else {
+                                  selectedIds.remove(currTemplate.id);
+                                }
+                              });
+                            },
+                            activeColor: Colors.blue, // Customize the color when checked
+                          ),
+                          )
                         ),
-                      )
-                    )
-                  ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          currTemplate.name,
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.black,
+                            ),
+                          )
+                      ),
+                    ],
+                  )
+                )
               );
             },
           )

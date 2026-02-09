@@ -6,7 +6,7 @@ import 'note_session.dart';
 
 class SessionCreate extends StatefulWidget{ 
   final Template template;
-  final void Function(Template, String) saveTemplatesCallback;
+  final void Function(List<Template>, String) saveTemplatesCallback;
 
   const SessionCreate({
     super.key,
@@ -73,7 +73,7 @@ class _SessionCreate extends State<SessionCreate> {
                 Template newSession = widget.template.clone();
                 newSession.name = textController.text;
                 newSession.id = newSession.idGenerator();
-                widget.saveTemplatesCallback(newSession, "addSession");
+                widget.saveTemplatesCallback([newSession], "addSession");
                 Navigator.push(
                   context,
                   MaterialPageRoute(

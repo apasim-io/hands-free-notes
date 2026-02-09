@@ -6,7 +6,7 @@ import '../Objects/note.dart';
 
 class TemplateCreate extends StatefulWidget{ 
   final Template template;
-  final void Function(Template, String) saveTemplatesCallback;
+  final void Function(List<Template>, String) saveTemplatesCallback;
   const TemplateCreate({
     super.key,
     required this.template,
@@ -68,7 +68,7 @@ class _TemplateCreateState extends State<TemplateCreate> {
             heroTag: 'exit',
             onPressed: () {
               // cancel changes and reset templates
-              widget.saveTemplatesCallback(widget.template, "revert");
+              widget.saveTemplatesCallback([widget.template], "revert");
               Navigator.pop(context);
             },
             icon: const Icon(
@@ -104,7 +104,7 @@ class _TemplateCreateState extends State<TemplateCreate> {
               setState(() {
                 _template?.name = textController.text;
               });
-              widget.saveTemplatesCallback(_template!, "save");
+              widget.saveTemplatesCallback([_template!], "save");
             },
             icon: const Icon(
               Icons.save,
@@ -127,7 +127,7 @@ class _TemplateCreateState extends State<TemplateCreate> {
             heroTag: 'delete',
             onPressed: () {
               // cancel changes and reset templates
-              widget.saveTemplatesCallback(widget.template, "delete");
+              widget.saveTemplatesCallback([widget.template], "delete");
               Navigator.pop(context);
             },
             icon: const Icon(
@@ -268,7 +268,7 @@ class _TemplateCreateState extends State<TemplateCreate> {
                                 //if we are already on the last note: finish the session
                                 // TO Do - Call the next method~!
                                 // save note progress
-                                widget.saveTemplatesCallback(widget.template, "save");
+                                widget.saveTemplatesCallback([widget.template], "save");
                                 Navigator.pop(context);
                                 return;
                               }

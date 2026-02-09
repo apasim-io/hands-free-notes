@@ -85,6 +85,8 @@ class NumberScaleNote extends Note {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Text(question),
+              SizedBox(height: 30),
               Slider(
                 value: value < minValue ? minValue.toDouble() : value.toDouble(),
                 onChanged: (newValue) {
@@ -202,44 +204,54 @@ class MultipleChoiceNote extends Note {
         // treat null selection as empty list for rendering
         final List<int> sel = selection ?? <int>[];
 
-        return Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: options.asMap().entries.map((entry) {
-            final int idx = entry.key;
-            final String option = entry.value;
-            final bool isSelected = sel.contains(idx);
+        return 
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(question),
+            SizedBox(height: 30),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: 
+              options.asMap().entries.map((entry) {
+                final int idx = entry.key;
+                final String option = entry.value;
+                final bool isSelected = sel.contains(idx);
 
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  if (isSelected) {
-                    sel.remove(idx);
-                  } else {
-                    if (sel.length < maxSelections) {
-                      sel.add(idx);
-                    }
-                  }
-                  // write back to the nullable selection field
-                  selection = List<int>.from(sel);
-                  markInteraction();
-                });
-              },
-              child: Container(
-                margin: const EdgeInsets.all(4.0),
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                decoration: BoxDecoration(
-                  color: isSelected ? Colors.blue : Colors.grey[300],
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Text(
-                  option,
-                  style: TextStyle(color: isSelected ? Colors.white : Colors.black),
-                ),
-              ),
-            );
-          }).toList(),
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (isSelected) {
+                        sel.remove(idx);
+                      } else {
+                        if (sel.length < maxSelections) {
+                          sel.add(idx);
+                        }
+                      }
+                      // write back to the nullable selection field
+                      selection = List<int>.from(sel);
+                      markInteraction();
+                    });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.all(4.0),
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: isSelected ? Colors.blue : Colors.grey[300],
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Text(
+                      option,
+                      style: TextStyle(color: isSelected ? Colors.white : Colors.black),
+                    ),
+                  ),
+                );
+              }).toList(),
+            )
+          ],
         );
+
       },
     );
   }
@@ -396,41 +408,50 @@ class SingleChoiceNote extends Note {
   Widget toGui() {
     return StatefulBuilder(
       builder: (BuildContext context, void Function(void Function()) setState) {
-        return Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: options.asMap().entries.map((entry) {
-            final int idx = entry.key;
-            final String option = entry.value;
-            final bool isSelected = (selection != null && selection == idx);
+        return 
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(question),
+            SizedBox(height: 30),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: options.asMap().entries.map((entry) {
+                final int idx = entry.key;
+                final String option = entry.value;
+                final bool isSelected = (selection != null && selection == idx);
 
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  if (isSelected) {
-                    // deselect if tapped again
-                    selection = null;
-                  } else {
-                    selection = idx;
-                  }
-                  markInteraction();
-                });
-              },
-              child: Container(
-                margin: const EdgeInsets.all(4.0),
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                decoration: BoxDecoration(
-                  color: isSelected ? Colors.blue : Colors.grey[300],
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Text(
-                  option,
-                  style: TextStyle(color: isSelected ? Colors.white : Colors.black),
-                ),
-              ),
-            );
-          }).toList(),
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (isSelected) {
+                        // deselect if tapped again
+                        selection = null;
+                      } else {
+                        selection = idx;
+                      }
+                      markInteraction();
+                    });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.all(4.0),
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: isSelected ? Colors.blue : Colors.grey[300],
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Text(
+                      option,
+                      style: TextStyle(color: isSelected ? Colors.white : Colors.black),
+                    ),
+                  ),
+                );
+              }).toList(),
+            )
+          ],
         );
+
       },
     );
   }
