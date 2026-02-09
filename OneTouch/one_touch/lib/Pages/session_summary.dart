@@ -141,14 +141,20 @@ class _SessionSummaryState extends State<SessionSummary> {
       await file.writeAsBytes(bytes);
 
       // Print the saved file path to the console for debugging
-      print('PDF exported to: $pdfPath');
+      //print('PDF exported to: $pdfPath');
 
       setState(() {
         pdfExported = true;
       });
       return true;
     } catch (e) {
-      print('PDF export failed: $e');
+      //print('PDF export failed: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('PDF export failed'),
+          backgroundColor: Colors.red,
+        ),
+      );
       setState(() {
         pdfExported = false;
       });
@@ -160,15 +166,20 @@ class _SessionSummaryState extends State<SessionSummary> {
     try {
       // attempt to email pdf
       if (!pdfExported) {
-        print('PDF must be exported first!');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('PDF must be exported first!'),
+            backgroundColor: Colors.red,
+          ),
+        );
         return false;
       }
 
       final savedEmail = (await AppSettings.instance.getDefaultEmail())?.trim();
 
       final recipient = (savedEmail != null && savedEmail.isNotEmpty)
-        ? savedEmail
-        : '';
+          ? savedEmail
+          : '';
 
       final Email email = Email(
         subject: '${widget.template.name}.pdf',
@@ -180,7 +191,12 @@ class _SessionSummaryState extends State<SessionSummary> {
 
       return true;
     } catch (e) {
-      print('PDF email failed: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('PDF email failed'),
+          backgroundColor: Colors.red,
+        ),
+      );
       return false;
     }
   }
@@ -271,14 +287,12 @@ class _SessionSummaryState extends State<SessionSummary> {
                       }
                     },
                     style: ButtonStyle(
-                      backgroundColor:
-                          WidgetStateProperty.resolveWith<Color?>(
-                            (states) => pdfExported ? Colors.green : null,
-                          ),
-                      foregroundColor:
-                          WidgetStateProperty.resolveWith<Color?>(
-                            (states) => pdfExported ? Colors.white : null,
-                          ),
+                      backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                        (states) => pdfExported ? Colors.green : null,
+                      ),
+                      foregroundColor: WidgetStateProperty.resolveWith<Color?>(
+                        (states) => pdfExported ? Colors.white : null,
+                      ),
                     ),
                     child: const Text('Export Notes'),
                   ),
@@ -291,13 +305,18 @@ class _SessionSummaryState extends State<SessionSummary> {
                               await emailPdf();
                             } catch (e) {
                               // print an error msg
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('PDF email failed'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
                             }
                           },
                     style: ButtonStyle(
-                      backgroundColor:
-                          WidgetStateProperty.resolveWith<Color?>(
-                            (states) => !pdfExported ? Colors.grey : null,
-                          ),
+                      backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                        (states) => !pdfExported ? Colors.grey : null,
+                      ),
                     ),
                     child: const Text('Email Notes'),
                   ),
@@ -315,7 +334,8 @@ class _SessionSummaryState extends State<SessionSummary> {
                                   content: SizedBox(
                                     width: double.maxFinite,
                                     height:
-                                        MediaQuery.of(context).size.height * 0.7,
+                                        MediaQuery.of(context).size.height *
+                                        0.7,
                                     child: PopupPDFViewer(path: pdfPath),
                                   ),
                                   actions: [
@@ -333,10 +353,9 @@ class _SessionSummaryState extends State<SessionSummary> {
                             );
                           },
                     style: ButtonStyle(
-                      backgroundColor:
-                          WidgetStateProperty.resolveWith<Color?>(
-                            (states) => !pdfExported ? Colors.grey : null,
-                          ),
+                      backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                        (states) => !pdfExported ? Colors.grey : null,
+                      ),
                     ),
                     child: const Text('View PDF'),
                   ),
@@ -390,10 +409,21 @@ class _PopupPDFViewerState extends State<PopupPDFViewer> {
               });
             },
             onError: (error) {
-              print(error.toString());
+              //print(error.toString());
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(error.toString()),
+                  backgroundColor: Colors.red,
+                ),
+              );
             },
             onPageError: (page, error) {
-              print('$page: ${error.toString()}');
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Page: ${error.toString()}'),
+                  backgroundColor: Colors.red,
+                ),
+              );
             },
           ),
         ),
