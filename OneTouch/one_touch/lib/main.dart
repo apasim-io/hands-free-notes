@@ -1,19 +1,12 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:provider/provider.dart';
-import 'dart:io';
 import 'dart:developer';
 
 // Pages
-import 'Pages/note_session.dart';
-import 'Pages/session_summary.dart';
-import 'Pages/template_create.dart';
 import 'Pages/home_page.dart';
 
 //data objects
 import 'Objects/template.dart';
-import 'Objects/note.dart'; // don't use yet, make sure to delete if we don't need
+// don't use yet, make sure to delete if we don't need
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

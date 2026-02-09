@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../Objects/template.dart';
 
+import 'settings_page.dart';
+
 import 'dart:io';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
@@ -166,7 +168,7 @@ class _SessionSummaryState extends State<SessionSummary> {
 
       final recipient = (savedEmail != null && savedEmail.isNotEmpty)
         ? savedEmail
-        : 'pasimia@wwu.edu';
+        : '';
 
       final Email email = Email(
         subject: '${widget.template.name}.pdf',
@@ -270,11 +272,11 @@ class _SessionSummaryState extends State<SessionSummary> {
                     },
                     style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.resolveWith<Color?>(
+                          WidgetStateProperty.resolveWith<Color?>(
                             (states) => pdfExported ? Colors.green : null,
                           ),
                       foregroundColor:
-                          MaterialStateProperty.resolveWith<Color?>(
+                          WidgetStateProperty.resolveWith<Color?>(
                             (states) => pdfExported ? Colors.white : null,
                           ),
                     ),
@@ -293,7 +295,7 @@ class _SessionSummaryState extends State<SessionSummary> {
                           },
                     style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.resolveWith<Color?>(
+                          WidgetStateProperty.resolveWith<Color?>(
                             (states) => !pdfExported ? Colors.grey : null,
                           ),
                     ),
@@ -333,7 +335,7 @@ class _SessionSummaryState extends State<SessionSummary> {
                           },
                     style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.resolveWith<Color?>(
+                          WidgetStateProperty.resolveWith<Color?>(
                             (states) => !pdfExported ? Colors.grey : null,
                           ),
                     ),
@@ -351,7 +353,7 @@ class _SessionSummaryState extends State<SessionSummary> {
 
 class PopupPDFViewer extends StatefulWidget {
   final String path;
-  const PopupPDFViewer({Key? key, required this.path}) : super(key: key);
+  const PopupPDFViewer({super.key, required this.path});
 
   @override
   State<PopupPDFViewer> createState() => _PopupPDFViewerState();

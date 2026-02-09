@@ -1,7 +1,5 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:one_touch/Objects/note.dart';
 import 'session_create.dart';
 import '../Objects/template.dart';
 import 'note_session.dart';

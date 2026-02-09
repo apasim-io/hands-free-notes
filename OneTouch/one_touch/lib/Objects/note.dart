@@ -543,12 +543,12 @@ class ParameterContainer extends StatefulWidget {
   final String initialValue;
 
   const ParameterContainer({
-    Key? key,
+    super.key,
     required this.labelText,
     required this.onChanged, // Make it optional or required as needed
     required this.numeric,
     required this.initialValue,
-  }) : super(key: key);
+  });
 
   @override
   State<ParameterContainer> createState() => _ParameterContainerState();

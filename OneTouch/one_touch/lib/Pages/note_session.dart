@@ -1,8 +1,5 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:one_touch/Objects/note.dart';
-import 'package:one_touch/Pages/home_page.dart';
 import 'package:one_touch/Pages/session_summary.dart';
 import '../Objects/template.dart';
 
