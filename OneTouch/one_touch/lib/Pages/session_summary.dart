@@ -213,14 +213,14 @@ class _SessionSummaryState extends State<SessionSummary> {
                         fontWeight: FontWeight.bold,
                       ),
                     ), // change title to be session.title
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     Expanded(
                       child: Center(
                         child: Scrollbar(
                           controller: _scrollController,
                           thumbVisibility: true,
                           thickness: 6.0,
-                          radius: Radius.circular(3),
+                          radius: const Radius.circular(3),
                           child: ListView.builder(
                             controller: _scrollController,
                             itemCount: widget.template.notes.length,
@@ -301,7 +301,7 @@ class _SessionSummaryState extends State<SessionSummary> {
                     ),
                     child: const Text('Email Notes'),
                   ),
-                  SizedBox(width: 16),
+                  const SizedBox(width: 16),
                   ElevatedButton(
                     onPressed: !pdfExported
                         ? null
@@ -315,8 +315,7 @@ class _SessionSummaryState extends State<SessionSummary> {
                                   content: SizedBox(
                                     width: double.maxFinite,
                                     height:
-                                        MediaQuery.of(context).size.height *
-                                        0.7,
+                                        MediaQuery.of(context).size.height * 0.7,
                                     child: PopupPDFViewer(path: pdfPath),
                                   ),
                                   actions: [
