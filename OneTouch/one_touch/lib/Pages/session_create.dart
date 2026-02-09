@@ -29,7 +29,7 @@ class _SessionCreate extends State<SessionCreate> {
   }
 
   @override 
-  Widget build(BuildContext BuildContext) {
+  Widget build(BuildContext buildContext) {
     return Scaffold(
       appBar: AppBar(title: RichText(
         text: TextSpan(

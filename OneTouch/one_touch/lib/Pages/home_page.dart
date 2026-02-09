@@ -69,14 +69,16 @@ class _HomePageState extends State<HomePage> {
         int deletedIdx = updatedSessions.indexWhere((session) => session.id == updatedTemplate[i].id);
         if (deletedIdx < 0) {
           deletedIdx = updatedTemplates.indexWhere((template) => template.id == updatedTemplate[i].id);
-          print("deleted template: ${deletedIdx}");
+          //print("deleted template: ${deletedIdx}"); /*Commented out for production */
           updatedTemplates.removeAt(deletedIdx);
         } else {
-        print("deleted session: ${deletedIdx}");
+        //print("deleted session: ${deletedIdx}"); /*Commented out for production */
         updatedSessions.removeAt(deletedIdx);
         }
       }
     }
+
+   
 
     // save to files
     ts.saveTemplateData(updatedSessions, sessionsFile);
@@ -118,7 +120,7 @@ class _HomePageState extends State<HomePage> {
             listType: "session",
             saveTemplatesCallback: saveTemplates
           ),
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           TemplateList(
@@ -151,24 +153,6 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class DetailsPage extends StatelessWidget {
-  const DetailsPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Details Page')),
-      body: Center(
-        child: ElevatedButton(
-          child: const Text('Go Back'),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-    );
-  }
-}
 
 class TemplateList extends StatefulWidget {
   final List<Template> templates;

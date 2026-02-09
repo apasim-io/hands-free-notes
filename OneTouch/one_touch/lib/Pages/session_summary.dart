@@ -9,7 +9,6 @@ import 'package:pdf/pdf.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'settings_page.dart';
 
 /*
   On this page the user can see a summary of their session, including notes taken, time spent, etc.
@@ -148,13 +147,13 @@ class _SessionSummaryState extends State<SessionSummary> {
       });
       return true;
     } catch (e) {
-      //print('PDF export failed: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('PDF export failed'),
           backgroundColor: Colors.red,
         ),
       );
+
       setState(() {
         pdfExported = false;
       });
@@ -166,12 +165,14 @@ class _SessionSummaryState extends State<SessionSummary> {
     try {
       // attempt to email pdf
       if (!pdfExported) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('PDF must be exported first!'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('PDF must be exported first!'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
         return false;
       }
 
@@ -197,6 +198,7 @@ class _SessionSummaryState extends State<SessionSummary> {
           backgroundColor: Colors.red,
         ),
       );
+
       return false;
     }
   }
@@ -264,26 +266,32 @@ class _SessionSummaryState extends State<SessionSummary> {
                     onPressed: () async {
                       try {
                         if (await exportPdf()) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'PDF exported as ${widget.template.name}.pdf',
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'PDF exported as ${widget.template.name}.pdf',
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          }
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Failed to export pdf: (insert error handling here)',
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Failed to export pdf: (insert error handling here)',
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          }
                         }
                       } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Failed to export pdf: $e')),
-                        );
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Failed to export pdf: $e')),
+                          );
+                        }
                       }
                     },
                     style: ButtonStyle(
@@ -305,12 +313,14 @@ class _SessionSummaryState extends State<SessionSummary> {
                               await emailPdf();
                             } catch (e) {
                               // print an error msg
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('PDF email failed'),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('PDF email failed'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
                             }
                           },
                     style: ButtonStyle(
@@ -410,20 +420,24 @@ class _PopupPDFViewerState extends State<PopupPDFViewer> {
             },
             onError: (error) {
               //print(error.toString());
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(error.toString()),
-                  backgroundColor: Colors.red,
-                ),
-              );
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(error.toString()),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
             },
             onPageError: (page, error) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Page: ${error.toString()}'),
-                  backgroundColor: Colors.red,
-                ),
-              );
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Page: ${error.toString()}'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
             },
           ),
         ),
