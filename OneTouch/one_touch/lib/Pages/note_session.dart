@@ -19,22 +19,24 @@ class NoteSession extends StatefulWidget {
 }
 
 class _NoteSessionState extends State<NoteSession> {
-  int? selected; //this is to chagne the widget showing on the right
+  late ValueNotifier<int?> selectedNotifier;
   final ScrollController _leftScrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    selectedNotifier = ValueNotifier<int?>(null);
+  }
 
   @override
   void dispose() {
     _leftScrollController.dispose();
+    selectedNotifier.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final notes = widget.template.notes;
-
-    //shortcut to check for last not on build
-    final bool isLastNote = selected != null && selected == notes.length - 1;
-
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 125,
@@ -63,15 +65,13 @@ class _NoteSessionState extends State<NoteSession> {
           ),
         ),
         centerTitle: true,
-        title: RichText(
-        text: TextSpan(
-            text: widget.template.name,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.bold
-            ),
-          )
+        title: Text(
+          widget.template.name,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         actionsPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         actions: [
@@ -95,9 +95,7 @@ class _NoteSessionState extends State<NoteSession> {
             ),
             backgroundColor: Color.fromARGB(189, 0, 255, 0),
           ),
-          SizedBox(
-            width: 20,
-          ),
+          SizedBox(width: 20),
           FloatingActionButton.extended(
             elevation: 0,
             heroTag: 'delete',
@@ -122,103 +120,22 @@ class _NoteSessionState extends State<NoteSession> {
         ],
       ),
       body: Container(
-        margin: EdgeInsets.only(top: 10),
+        margin: const EdgeInsets.only(top: 10),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            //left column: one item per note in the template.
-            SizedBox(
-              width: 200, // tweak as you like
-              child: Scrollbar(
-                controller: _leftScrollController,
-                thumbVisibility: true,
-                thickness: 6.0,
-                radius: Radius.circular(3),
-                child: ListView.separated( //seperated until they become there own squares
-                  controller: _leftScrollController,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: notes.length,
-                  itemBuilder: (context, index) {
-                    final note = notes[index];//use this later to
-                    final isSelected = selected == index;
-                    return ListTile( //so it can be clicked on
-                      dense: true,
-                      title: Text(note.question),//example: could be changed to title
-                      selected: isSelected, //next 3 lines for coloring
-                      selectedTileColor: Theme.of(context).colorScheme.secondaryContainer,
-                      selectedColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                      onTap: () => setState(() => selected = index),
-                    );
-                  },
-                  separatorBuilder: (_, __) => const Divider(height: 1),
-                ),
-              ),
+            // Left panel - extracted to prevent full rebuild
+            _NoteListPanel(
+              notes: widget.template.notes,
+              selectedNotifier: selectedNotifier,
+              scrollController: _leftScrollController,
             ),
-            //divider should just be a line to seperate them
-            const VerticalDivider(width: 1),
-            //Right column expands to fill space
-            Expanded(
-              child: Stack(
-                children: [
-                  //stack for layering the buttons
-                  Positioned.fill(
-                    child: (selected == null)
-                        ? const Center(child: Text('Select a note'))
-                        : Center(
-                            child: KeyedSubtree(
-                              key: ValueKey(selected),
-                              child: notes[selected!].toGui(),
-                            ),
-                          ),
-                  ),
-                  Positioned(
-                    right: 16,
-                    bottom: 16,
-                    child: SizedBox(
-                      height: 120,
-                      width: 160,
-                      child: FloatingActionButton.extended(
-                        elevation: 0,
-                        heroTag: 'continue',                     
-                        onPressed: () {
-                          setState(() {
-                            if (notes.isEmpty) return;
-
-                            // if nothing selected yet, start with the first note
-                            if (selected == null) {
-                              selected = 0;
-                              return;
-                            }
-
-
-                            // If at last note, save and navigate to the summary page
-                            if (selected == notes.length - 1) {
-                              widget.saveTemplatesCallback([widget.template], "save");
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SessionSummary(
-                                    template: widget.template,
-                                  ),
-                                ),
-                              );
-                              return;
-                            }
-
-                            // Otherwise, go to next note
-                            if (selected! < notes.length - 1) {
-                              selected = selected! + 1;
-                            }
-                          });
-                        },
-                        icon: Icon(Icons.arrow_forward),
-                        label: Text(isLastNote ? 'Finish' : 'Next'),
-                      ),
-                    )
-                  ),
-                ],
-              ),
-            )
+            // Right panel - only rebuilds when selected note changes
+            _NoteDisplayPanel(
+              template: widget.template,
+              selectedNotifier: selectedNotifier,
+              onSave: () => widget.saveTemplatesCallback([widget.template], "save"),
+            ),
           ],
         ),
       )
@@ -226,3 +143,191 @@ class _NoteSessionState extends State<NoteSession> {
   }
 }
 
+/// Left panel showing the list of notes - isolated to prevent rebuilds
+class _NoteListPanel extends StatelessWidget {
+  final List notes;
+  final ValueNotifier<int?> selectedNotifier;
+  final ScrollController scrollController;
+
+  const _NoteListPanel({
+    required this.notes,
+    required this.selectedNotifier,
+    required this.scrollController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 200,
+      child: Scrollbar(
+        controller: scrollController,
+        thumbVisibility: true,
+        thickness: 6.0,
+        radius: const Radius.circular(3),
+        child: ListView.separated(
+          controller: scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          itemCount: notes.length,
+          itemBuilder: (context, index) {
+            final note = notes[index];
+            return _NoteTile(
+              note: note,
+              index: index,
+              selectedNotifier: selectedNotifier,
+            );
+          },
+          separatorBuilder: (_, __) => const Divider(height: 1),
+        ),
+      ),
+    );
+  }
+}
+
+/// Right panel showing the selected note - only rebuilds when selected changes
+class _NoteDisplayPanel extends StatelessWidget {
+  final Template template;
+  final ValueNotifier<int?> selectedNotifier;
+  final VoidCallback onSave;
+
+  const _NoteDisplayPanel({
+    required this.template,
+    required this.selectedNotifier,
+    required this.onSave,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ValueListenableBuilder<int?>(
+        valueListenable: selectedNotifier,
+        builder: (context, selected, _) {
+          final notes = template.notes;
+          final isLastNote = selected != null && selected == notes.length - 1;
+
+          return Stack(
+            children: [
+              (selected == null)
+                  ? const Center(child: Text('Select a note'))
+                  : RepaintBoundary(
+                      child: KeyedSubtree(
+                        key: ValueKey(selected),
+                        child: notes[selected!].toGui(),
+                      ),
+                    ),
+              const Positioned(left: 0, right: 0, bottom: 0, child: VerticalDivider(width: 1)),
+              Positioned(
+                right: 16,
+                bottom: 16,
+                child: _ContinueButton(
+                  isLastNote: isLastNote,
+                  selected: selected,
+                  notes: notes,
+                  onSelectNext: (i) => selectedNotifier.value = i,
+                  onFinish: () {
+                    onSave();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SessionSummary(
+                          template: template,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+/// Individual note tile with RepaintBoundary to isolate repaints
+class _NoteTile extends StatelessWidget {
+  final dynamic note;
+  final int index;
+  final ValueNotifier<int?> selectedNotifier;
+
+  const _NoteTile({
+    required this.note,
+    required this.index,
+    required this.selectedNotifier,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return RepaintBoundary(
+      child: ValueListenableBuilder<int?>(
+        valueListenable: selectedNotifier,
+        builder: (context, selected, _) {
+          final isSelected = selected == index;
+          final secondaryContainer = Theme.of(context).colorScheme.secondaryContainer;
+          final onSecondaryContainer = Theme.of(context).colorScheme.onSecondaryContainer;
+          
+          return ListTile(
+            dense: true,
+            title: Text(note.question),
+            selected: isSelected,
+            selectedTileColor: secondaryContainer,
+            selectedColor: onSecondaryContainer,
+            onTap: () => selectedNotifier.value = index,
+          );
+        },
+      ),
+    );
+  }
+}
+
+/// Extracted continue button to isolate repaints from label changes
+class _ContinueButton extends StatelessWidget {
+  final bool isLastNote;
+  final int? selected;
+  final List notes;
+  final Function(int) onSelectNext;
+  final VoidCallback onFinish;
+
+  const _ContinueButton({
+    required this.isLastNote,
+    required this.selected,
+    required this.notes,
+    required this.onSelectNext,
+    required this.onFinish,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return RepaintBoundary(
+      child: SizedBox(
+        height: 120,
+        width: 160,
+        child: FloatingActionButton.extended(
+          elevation: 0,
+          heroTag: 'continue',
+          onPressed: () {
+            if (notes.isEmpty) return;
+
+            // if nothing selected yet, start with the first note
+            if (selected == null) {
+              onSelectNext(0);
+              return;
+            }
+
+            // If at last note, finish
+            if (isLastNote) {
+              onFinish();
+              return;
+            }
+
+            // Otherwise, go to next note
+            if (selected! < notes.length - 1) {
+              onSelectNext(selected! + 1);
+            }
+          },
+          icon: const Icon(Icons.arrow_forward),
+          label: Text(isLastNote ? 'Finish' : 'Next'),
+        ),
+      ),
+    );
+  }
+}
