@@ -99,26 +99,34 @@ class _NoteSessionState extends State<NoteSession> {
           ),
         ],
       ),
-      body: Container(
-        margin: const EdgeInsets.only(top: 10),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Left panel - extracted to prevent full rebuild
-            _NoteListPanel(
-              notes: widget.template.notes,
-              selectedNotifier: selectedNotifier,
-              scrollController: _leftScrollController,
+      body: Column(
+        children: [
+          const Divider(height: 1),
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.only(top: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Left panel - extracted to prevent full rebuild
+                  _NoteListPanel(
+                    notes: widget.template.notes,
+                    selectedNotifier: selectedNotifier,
+                    scrollController: _leftScrollController,
+                  ),
+                  // Right panel - only rebuilds when selected note changes
+                  _NoteDisplayPanel(
+                    template: widget.template,
+                    selectedNotifier: selectedNotifier,
+                    scrollController: _leftScrollController,
+                    onSave: () =>
+                        widget.saveTemplatesCallback([widget.template], "save"),
+                  ),
+                ],
+              ),
             ),
-            // Right panel - only rebuilds when selected note changes
-            _NoteDisplayPanel(
-              template: widget.template,
-              selectedNotifier: selectedNotifier,
-              onSave: () =>
-                  widget.saveTemplatesCallback([widget.template], "save"),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -140,24 +148,30 @@ class _NoteListPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 200,
-      child: Scrollbar(
-        controller: scrollController,
-        thumbVisibility: true,
-        thickness: 6.0,
-        radius: const Radius.circular(3),
-        child: ListView.separated(
+      child: Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scrollbar(
           controller: scrollController,
-          physics: const AlwaysScrollableScrollPhysics(),
-          itemCount: notes.length,
-          itemBuilder: (context, index) {
-            final note = notes[index];
-            return _NoteTile(
-              note: note,
-              index: index,
-              selectedNotifier: selectedNotifier,
-            );
-          },
-          separatorBuilder: (_, __) => const Divider(height: 1),
+          thumbVisibility: false,
+          thickness: 6.0,
+          radius: const Radius.circular(3),
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: ListView.separated(
+              controller: scrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: notes.length,
+              itemBuilder: (context, index) {
+                final note = notes[index];
+                return _NoteTile(
+                  note: note,
+                  index: index,
+                  selectedNotifier: selectedNotifier,
+                );
+              },
+              separatorBuilder: (_, __) => const Divider(height: 1),
+            ),
+          ),
         ),
       ),
     );
@@ -168,11 +182,13 @@ class _NoteListPanel extends StatelessWidget {
 class _NoteDisplayPanel extends StatelessWidget {
   final Template template;
   final ValueNotifier<int?> selectedNotifier;
+  final ScrollController scrollController;
   final VoidCallback onSave;
 
   const _NoteDisplayPanel({
     required this.template,
     required this.selectedNotifier,
+    required this.scrollController,
     required this.onSave,
   });
 
@@ -204,7 +220,7 @@ class _NoteDisplayPanel extends StatelessWidget {
                     ),
               const Positioned(
                 left: 0,
-                right: 0,
+                top: 0,
                 bottom: 0,
                 child: VerticalDivider(width: 1),
               ),
@@ -215,7 +231,10 @@ class _NoteDisplayPanel extends StatelessWidget {
                   isLastNote: isLastNote,
                   selected: selected,
                   notes: notes,
-                  onSelectNext: (i) => selectedNotifier.value = i,
+                  onSelectNext: (i) {
+                    selectedNotifier.value = i;
+                    _scrollToNote(i);
+                  },
                   onFinish: () {
                     onSave();
                     Navigator.push(
@@ -232,6 +251,17 @@ class _NoteDisplayPanel extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+
+  void _scrollToNote(int index) {
+    final itemHeight = 48.0; // Approximate height of each list item
+    final padding = 30.0; // Extra padding for spacing
+    final offset = (index * itemHeight) + padding;
+    scrollController.animateTo(
+      offset,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
     );
   }
 }
