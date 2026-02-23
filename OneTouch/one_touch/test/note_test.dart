@@ -224,14 +224,18 @@ void main() {
       expect(restored.interactionTime, isNotNull);
     });
 
-    testWidgets('full round-trip: create, interact, serialize, restore', (tester) async {
+    testWidgets('full round-trip: create, interact, serialize, restore', (
+      tester,
+    ) async {
       final original = SingleChoiceNote(
         noteType: NoteType.singleChoice,
         question: 'Yes or No?',
         options: ['Yes', 'No'],
       );
 
-      await tester.pumpWidget(MaterialApp(home: Scaffold(body: original.toGui())));
+      await tester.pumpWidget(
+        MaterialApp(home: Scaffold(body: original.toGui())),
+      );
       await tester.tap(find.text('Yes'));
       await tester.pump();
 

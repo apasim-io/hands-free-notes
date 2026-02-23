@@ -100,7 +100,9 @@ class _TemplateCreateState extends State<TemplateCreate> {
         ),
         centerTitle: true,
         title: Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
           child: TextField(
             textAlign: TextAlign.center,
             controller: textController,
@@ -176,51 +178,53 @@ class _TemplateCreateState extends State<TemplateCreate> {
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0)
-                          )
+                            borderRadius: BorderRadius.circular(0),
+                          ),
                         ),
                       ),
                     );
                   }
                   final note = _template!.notes[index]; //use this later to
                   final isSelected = selected == index;
-                  return Row(children: [
-                    Flexible(
-                      child: ListTile(
-                        //so it can be clicked on
-                        dense: true,
-                        title: Text(
-                          note.question,
-                        ), //example: could be changed to title
-                        selected: isSelected, //next 3 lines for coloring
-                        selectedTileColor: Color.fromARGB(255, 102, 153, 204),
-                        selectedColor: Colors.white,
-                        onTap: () => setState(() {
-                          selected = index;
-                          _selectedNoteType = _template!.notes[selected!].noteType;
-                        }),
-                      ) 
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      tooltip: 'Delete',
-                      color: Colors.white,
-                      onPressed: () {
-                        setState(() {
-                          _template!.notes.removeAt(index);
-                          if (selected == index) {
-                            selected =  max(index - 1, 0);        
-                          }
-                        });
-                      },
-                      style: IconButton.styleFrom(
-                        backgroundColor: Color.fromARGB(200, 11, 53, 99),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0)
-                        )
+                  return Row(
+                    children: [
+                      Flexible(
+                        child: ListTile(
+                          //so it can be clicked on
+                          dense: true,
+                          title: Text(
+                            note.question,
+                          ), //example: could be changed to title
+                          selected: isSelected, //next 3 lines for coloring
+                          selectedTileColor: Color.fromARGB(255, 102, 153, 204),
+                          selectedColor: Colors.white,
+                          onTap: () => setState(() {
+                            selected = index;
+                            _selectedNoteType =
+                                _template!.notes[selected!].noteType;
+                          }),
+                        ),
                       ),
-                    ),
-                  ]
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        tooltip: 'Delete',
+                        color: Colors.white,
+                        onPressed: () {
+                          setState(() {
+                            _template!.notes.removeAt(index);
+                            if (selected == index) {
+                              selected = max(index - 1, 0);
+                            }
+                          });
+                        },
+                        style: IconButton.styleFrom(
+                          backgroundColor: Color.fromARGB(200, 11, 53, 99),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                    ],
                   );
                 },
                 separatorBuilder: (_, __) => const Divider(height: 1),
@@ -237,7 +241,7 @@ class _TemplateCreateState extends State<TemplateCreate> {
                     child: DropdownButton<NoteType>(
                       hint: Text("Note Type"),
                       value: _selectedNoteType,
-                      
+
                       items: noteTypeNames.keys.map((String noteName) {
                         return DropdownMenuItem<NoteType>(
                           value: noteTypeNames[noteName],
@@ -326,7 +330,7 @@ class _TemplateCreateState extends State<TemplateCreate> {
                         ),
                         label: Text(
                           isLastNote ? 'Finish' : 'Next',
-                          style: TextStyle(color: Colors.white)  
+                          style: TextStyle(color: Colors.white),
                         ),
                         backgroundColor: Color.fromARGB(200, 11, 53, 99),
                       ),

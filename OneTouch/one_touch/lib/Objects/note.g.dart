@@ -7,12 +7,12 @@ part of 'note.dart';
 // **************************************************************************
 
 Note _$NoteFromJson(Map<String, dynamic> json) => Note(
-      noteType: $enumDecode(_$NoteTypeEnumMap, json['noteType']),
-      question: json['question'] as String,
-      interactionTime: json['interactionTime'] == null
-          ? null
-          : DateTime.parse(json['interactionTime'] as String),
-    );
+  noteType: $enumDecode(_$NoteTypeEnumMap, json['noteType']),
+  question: json['question'] as String,
+  interactionTime: json['interactionTime'] == null
+      ? null
+      : DateTime.parse(json['interactionTime'] as String),
+);
 
 Map<String, dynamic> _$NoteToJson(Note instance) => <String, dynamic>{
   'noteType': _$NoteTypeEnumMap[instance.noteType]!,

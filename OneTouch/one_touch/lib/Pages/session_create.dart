@@ -4,14 +4,14 @@ import 'note_session.dart';
 
 /* This page will be used for creating note sessions */
 
-class SessionCreate extends StatefulWidget{ 
+class SessionCreate extends StatefulWidget {
   final Template template;
   final void Function(List<Template>, String) saveTemplatesCallback;
 
   const SessionCreate({
     super.key,
     required this.template,
-    required this.saveTemplatesCallback
+    required this.saveTemplatesCallback,
   });
 
   @override
@@ -28,25 +28,21 @@ class _SessionCreate extends State<SessionCreate> {
     super.dispose();
   }
 
-  @override 
+  @override
   Widget build(BuildContext buildContext) {
     return Scaffold(
-      appBar: AppBar(title: RichText(
-        text: TextSpan(
+      appBar: AppBar(
+        title: RichText(
+          text: TextSpan(
             text: 'Create session from template: ',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20
-            ),
+            style: TextStyle(color: Colors.black, fontSize: 20),
             children: <TextSpan>[
               TextSpan(
                 text: widget.template.name,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold
-                ),
-              )
-            ]
-          )
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
         ),
       ),
       body: Center(
@@ -57,17 +53,13 @@ class _SessionCreate extends State<SessionCreate> {
               width: 400,
               child: TextField(
                 controller: textController,
-                decoration: InputDecoration(
-                  labelText: "Session Title",
-                ),
+                decoration: InputDecoration(labelText: "Session Title"),
               ),
             ),
-            SizedBox(
-              height: 50,
-            ),
+            SizedBox(height: 50),
             ElevatedButton(
               child: const Text('Create new session'),
-              onPressed: (){
+              onPressed: () {
                 Navigator.pop(context);
                 // create a cloned version of the template with new id
                 Template newSession = widget.template.clone();
@@ -78,16 +70,18 @@ class _SessionCreate extends State<SessionCreate> {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return NoteSession(template: newSession, saveTemplatesCallback: widget.saveTemplatesCallback);
-                    }
+                      return NoteSession(
+                        template: newSession,
+                        saveTemplatesCallback: widget.saveTemplatesCallback,
+                      );
+                    },
                   ),
                 );
               },
             ),
-          ]
-        )
-
-      )
+          ],
+        ),
+      ),
     );
   }
 }

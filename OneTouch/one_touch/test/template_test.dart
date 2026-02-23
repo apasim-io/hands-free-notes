@@ -70,10 +70,12 @@ void main() {
     });
 
     test('clear removes all notes', () {
-      final template = Template(notes: [
-        Note(noteType: NoteType.text, question: 'Q1'),
-        Note(noteType: NoteType.text, question: 'Q2'),
-      ]);
+      final template = Template(
+        notes: [
+          Note(noteType: NoteType.text, question: 'Q1'),
+          Note(noteType: NoteType.text, question: 'Q2'),
+        ],
+      );
 
       template.clear();
 
@@ -92,11 +94,7 @@ void main() {
     });
 
     test('fromJson restores Template correctly', () {
-      final json = {
-        'name': 'Restored',
-        'id': '12345',
-        'notes': [],
-      };
+      final json = {'name': 'Restored', 'id': '12345', 'notes': []};
 
       final template = Template.fromJson(json);
 
@@ -124,14 +122,18 @@ void main() {
             'question': 'Pick some',
             'options': ['A', 'B', 'C'],
             'maxSelections': 2,
-          }
+          },
         ],
       };
 
       final template = Template.fromJson(json);
 
       expect(template.notes.first, isA<MultipleChoiceNote>());
-      expect((template.notes.first as MultipleChoiceNote).options, ['A', 'B', 'C']);
+      expect((template.notes.first as MultipleChoiceNote).options, [
+        'A',
+        'B',
+        'C',
+      ]);
     });
 
     test('fromJson deserializes SingleChoiceNote correctly', () {
@@ -143,7 +145,7 @@ void main() {
             'noteType': 'singleChoice',
             'question': 'Pick one',
             'options': ['Yes', 'No'],
-          }
+          },
         ],
       };
 
@@ -235,11 +237,13 @@ void main() {
     test('full save and load cycle preserves templates', () async {
       final storage = TemplateStorage();
       final original = Template(name: 'Full Cycle');
-      original.add(SingleChoiceNote(
-        noteType: NoteType.singleChoice,
-        question: 'Yes?',
-        options: ['Yes', 'No'],
-      ));
+      original.add(
+        SingleChoiceNote(
+          noteType: NoteType.singleChoice,
+          question: 'Yes?',
+          options: ['Yes', 'No'],
+        ),
+      );
 
       storage.saveTemplateData([original.toJson()], tempFile);
       await Future.delayed(Duration(milliseconds: 100));

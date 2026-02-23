@@ -1,8 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:one_touch/Pages/session_summary.dart';
 import '../Objects/template.dart';
-
 
 class NoteSession extends StatefulWidget {
   final Template template;
@@ -50,16 +48,10 @@ class _NoteSessionState extends State<NoteSession> {
               widget.saveTemplatesCallback([widget.template], "revert");
               Navigator.pop(context);
             },
-            icon: const Icon(
-              Icons.keyboard_return,
-              color: Colors.white
-            ),
+            icon: const Icon(Icons.keyboard_return, color: Colors.white),
             label: const Text(
               'Exit',
-              style: TextStyle(
-                fontSize: 15,
-                color: Colors.white,
-              ),
+              style: TextStyle(fontSize: 15, color: Colors.white),
             ),
             backgroundColor: Color.fromARGB(200, 11, 53, 99),
           ),
@@ -82,16 +74,10 @@ class _NoteSessionState extends State<NoteSession> {
               // cancel changes and reset templates
               widget.saveTemplatesCallback([widget.template], "save");
             },
-            icon: const Icon(
-              Icons.save,
-              color: Colors.white
-            ),
+            icon: const Icon(Icons.save, color: Colors.white),
             label: const Text(
               'Save',
-              style: TextStyle(
-                fontSize: 15,
-                color: Colors.white,
-              ),
+              style: TextStyle(fontSize: 15, color: Colors.white),
             ),
             backgroundColor: Color.fromARGB(255, 102, 153, 204),
           ),
@@ -104,16 +90,10 @@ class _NoteSessionState extends State<NoteSession> {
               widget.saveTemplatesCallback([widget.template], "delete");
               Navigator.pop(context);
             },
-            icon: const Icon(
-              Icons.cancel,
-              color: Colors.white
-            ),
+            icon: const Icon(Icons.cancel, color: Colors.white),
             label: const Text(
               'Delete',
-              style: TextStyle(
-                fontSize: 15,
-                color: Colors.white,
-              ),
+              style: TextStyle(fontSize: 15, color: Colors.white),
             ),
             backgroundColor: Color.fromARGB(200, 11, 53, 99),
           ),
@@ -134,11 +114,12 @@ class _NoteSessionState extends State<NoteSession> {
             _NoteDisplayPanel(
               template: widget.template,
               selectedNotifier: selectedNotifier,
-              onSave: () => widget.saveTemplatesCallback([widget.template], "save"),
+              onSave: () =>
+                  widget.saveTemplatesCallback([widget.template], "save"),
             ),
           ],
         ),
-      )
+      ),
     );
   }
 }
@@ -216,7 +197,12 @@ class _NoteDisplayPanel extends StatelessWidget {
                         ),
                       ),
                     ),
-              const Positioned(left: 0, right: 0, bottom: 0, child: VerticalDivider(width: 1)),
+              const Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: VerticalDivider(width: 1),
+              ),
               Positioned(
                 right: 16,
                 bottom: 16,
@@ -230,9 +216,8 @@ class _NoteDisplayPanel extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SessionSummary(
-                          template: template,
-                        ),
+                        builder: (context) =>
+                            SessionSummary(template: template),
                       ),
                     );
                   },
@@ -245,6 +230,7 @@ class _NoteDisplayPanel extends StatelessWidget {
     );
   }
 }
+
 /// Individual note tile with RepaintBoundary to isolate repaints
 class _NoteTile extends StatelessWidget {
   final dynamic note;
@@ -266,9 +252,8 @@ class _NoteTile extends StatelessWidget {
           final isSelected = selected == index;
           final secondaryContainer = Color.fromARGB(255, 102, 153, 204);
           final onSecondaryContainer = Colors.white;
-          
+
           return ListTile(
-            
             dense: true,
             title: Text(note.question),
             selected: isSelected,
@@ -327,13 +312,10 @@ class _ContinueButton extends StatelessWidget {
               onSelectNext(selected! + 1);
             }
           },
-          icon: const Icon(
-            Icons.arrow_forward,
-            color: Colors.white,
-          ),
+          icon: const Icon(Icons.arrow_forward, color: Colors.white),
           label: Text(
             isLastNote ? 'Finish' : 'Next',
-            style: TextStyle(color: Colors.white)  
+            style: TextStyle(color: Colors.white),
           ),
           backgroundColor: Color.fromARGB(200, 11, 53, 99),
         ),

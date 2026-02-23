@@ -5,9 +5,7 @@ class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
   static Route<void> route() {
-    return MaterialPageRoute<void>(
-      builder: (_) => const SettingsPage(),
-    );
+    return MaterialPageRoute<void>(builder: (_) => const SettingsPage());
   }
 
   @override
@@ -95,9 +93,9 @@ class _SectionHeader extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
       child: Text(
         text,
-        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+        style: Theme.of(
+          context,
+        ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
       ),
     );
   }

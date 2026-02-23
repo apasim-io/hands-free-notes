@@ -30,14 +30,18 @@ class TemplateStorage {
   Future<List<Template>> getTemplateData(File file) async {
     final jsonString = await file.readAsString();
     List<dynamic> templateMap = jsonDecode(jsonString);
-    List<Template> templates = templateMap.map((template) => Template.fromJson(template)).toList();
+    List<Template> templates = templateMap
+        .map((template) => Template.fromJson(template))
+        .toList();
     return templates;
   }
 
   Future<List<Template>> getSampleTemplates(String filePath) async {
     final jsonString = await rootBundle.loadString(filePath);
     List<dynamic> templateMap = jsonDecode(jsonString);
-    List<Template> templates = templateMap.map((template) => Template.fromJson(template)).toList();
+    List<Template> templates = templateMap
+        .map((template) => Template.fromJson(template))
+        .toList();
     return templates;
   }
 }
@@ -49,7 +53,8 @@ class Template {
   String id = "";
   final List<Note> notes;
 
-  Template({List<Note>? notes, String? name, String? id}) : notes = notes ?? []{
+  Template({List<Note>? notes, String? name, String? id})
+    : notes = notes ?? [] {
     if (name != null) this.name = name;
     if (id == null) this.id = idGenerator();
   }
@@ -70,7 +75,8 @@ class Template {
   bool remove(Note note) => notes.remove(note);
 
   // Return the note at [index], or null if index is out of range.
-  Note? getAt(int index) => (index >= 0 && index < notes.length) ? notes[index] : null;
+  Note? getAt(int index) =>
+      (index >= 0 && index < notes.length) ? notes[index] : null;
 
   // Remove all notes.
   void clear() => notes.clear();
@@ -91,25 +97,27 @@ class Template {
 
   // Serialization
   // factory Template.fromJson(Map<String, dynamic> json) => _$TemplateFromJson(json);
-  Template.fromJson(Map<String, dynamic> json):
-    name = json['name'] as String? ?? 'New Template',
-    id = json['id'] as String? ?? '',
-    notes = (json['notes'] as List<dynamic>?)
-            ?.map((e) {
-              final Map<String, dynamic> map = (e is Map<String, dynamic>) ? e : <String, dynamic>{};
-              final type = (map['noteType'] ?? '').toString();
-              switch (type) {
-                case 'numberScale':
-                  return NumberScaleNote.fromJson(map);
-                case 'multipleChoice':
-                  return MultipleChoiceNote.fromJson(map);
-                case 'singleChoice':
-                  return SingleChoiceNote.fromJson(map);
-                default:
-                  return Note.fromJson(map);
-              }
-            }).toList() ??
-        [];
+  Template.fromJson(Map<String, dynamic> json)
+    : name = json['name'] as String? ?? 'New Template',
+      id = json['id'] as String? ?? '',
+      notes =
+          (json['notes'] as List<dynamic>?)?.map((e) {
+            final Map<String, dynamic> map = (e is Map<String, dynamic>)
+                ? e
+                : <String, dynamic>{};
+            final type = (map['noteType'] ?? '').toString();
+            switch (type) {
+              case 'numberScale':
+                return NumberScaleNote.fromJson(map);
+              case 'multipleChoice':
+                return MultipleChoiceNote.fromJson(map);
+              case 'singleChoice':
+                return SingleChoiceNote.fromJson(map);
+              default:
+                return Note.fromJson(map);
+            }
+          }).toList() ??
+          [];
 
   Map<String, dynamic> toJson() {
     return {
@@ -119,4 +127,3 @@ class Template {
     };
   }
 }
-
