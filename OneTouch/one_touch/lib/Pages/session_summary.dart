@@ -336,31 +336,41 @@ class _SessionSummaryState extends State<SessionSummary> {
                         ? null
                         : () async {
                             // display a popup with pdf view
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text("PDF"),
-                                  content: SizedBox(
-                                    width: double.maxFinite,
-                                    height:
-                                        MediaQuery.of(context).size.height *
-                                        0.7,
-                                    child: PopupPDFViewer(path: pdfPath),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      child: const Text("Close"),
-                                      onPressed: () {
-                                        Navigator.of(
-                                          context,
-                                        ).pop(); // Closes the dialog
-                                      },
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  final mq = MediaQuery.of(context);
+                                  final bool isLandscape =
+                                      mq.orientation == Orientation.landscape;
+                                  // In landscape on small devices, base height on width to make PDF larger
+                                  final double viewerHeight = isLandscape
+                                      ? mq.size.width * 0.9
+                                      : mq.size.height * 0.9;
+
+                                  return AlertDialog(
+                                    insetPadding: const EdgeInsets.all(16),
+                                    content: SizedBox(
+                                      width: double.maxFinite,
+                                      height: viewerHeight,
+                                      child: Stack(
+                                        children: [
+                                          PopupPDFViewer(path: pdfPath),
+                                          Positioned(
+                                            top: 0,
+                                            right: 0,
+                                            child: IconButton(
+                                              icon: const Icon(Icons.close, color: Colors.red),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ],
-                                );
-                              },
-                            );
+                                  );
+                                },
+                              );
                           },
                     style: ButtonStyle(
                       backgroundColor: WidgetStateProperty.resolveWith<Color?>(
@@ -394,16 +404,17 @@ class _PopupPDFViewerState extends State<PopupPDFViewer> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
         Expanded(
           child: PDFView(
             filePath: widget.path,
             enableSwipe: true,
             swipeHorizontal: false,
-            autoSpacing: false,
-            pageFling: false,
-            backgroundColor: Colors.blue,
+            autoSpacing: true,
+            pageFling: true,
+            fitPolicy: FitPolicy.WIDTH,
+            backgroundColor: Colors.white,
             onViewCreated: (PDFViewController controller) {
               _pdfController = controller;
             },
@@ -441,34 +452,45 @@ class _PopupPDFViewerState extends State<PopupPDFViewer> {
             },
           ),
         ),
-        if (pages > 1)
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Row(
-              children: [
-                const SizedBox(width: 8),
-                Text('Page ${currentPage + 1} of $pages'),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Slider(
-                    value: (pages == 0) ? 0 : currentPage.toDouble(),
-                    min: 0,
-                    max: (pages - 1).toDouble(),
-                    divisions: pages > 0 ? pages - 1 : null,
-                    onChanged: pages > 0
-                        ? (v) async {
-                            final p = v.toInt();
-                            await _pdfController?.setPage(p);
-                            setState(() {
-                              currentPage = p;
-                            });
-                          }
-                        : null,
-                  ),
+        SizedBox(
+          height: 60,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                iconSize: 32,
+                icon: const Icon(Icons.arrow_upward),
+                onPressed: (pages > 0 && currentPage > 0)
+                    ? () async {
+                        final p = currentPage - 1;
+                        await _pdfController?.setPage(p);
+                        setState(() => currentPage = p);
+                      }
+                    : null,
+              ),
+              SizedBox(width: 16),
+              Center(
+                child: Text(
+                  '${currentPage + 1}/$pages',
+                  style: const TextStyle(fontSize: 12),
+                  textAlign: TextAlign.center,
                 ),
-              ],
-            ),
+              ),
+              SizedBox(width: 16),
+              IconButton(
+                iconSize: 32,
+                icon: const Icon(Icons.arrow_downward),
+                onPressed: (pages > 0 && currentPage < pages - 1)
+                    ? () async {
+                        final p = currentPage + 1;
+                        await _pdfController?.setPage(p);
+                        setState(() => currentPage = p);
+                      }
+                    : null,
+              ),
+            ],
           ),
+        ),
       ],
     );
   }
