@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../Objects/template.dart';
 import '../Objects/note.dart';
+import 'dart:math';
 
 /* This page will be used for creating note sessions */
 
@@ -89,19 +90,22 @@ class _TemplateCreateState extends State<TemplateCreate> {
               widget.saveTemplatesCallback([widget.template], "revert");
               Navigator.pop(context);
             },
-            icon: const Icon(Icons.keyboard_return, color: Colors.black),
+            icon: const Icon(Icons.keyboard_return, color: Colors.white),
             label: const Text(
               'Exit',
-              style: TextStyle(fontSize: 15, color: Colors.black),
+              style: TextStyle(fontSize: 15, color: Colors.white),
             ),
-            backgroundColor: Color.fromARGB(189, 0, 153, 255),
+            backgroundColor: Color.fromARGB(200, 11, 53, 99),
           ),
         ),
         centerTitle: true,
-        title: TextField(
-          textAlign: TextAlign.center,
-          controller: textController,
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        title: Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: TextField(
+            textAlign: TextAlign.center,
+            controller: textController,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
         ),
         actionsPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         actions: [
@@ -115,12 +119,12 @@ class _TemplateCreateState extends State<TemplateCreate> {
               });
               widget.saveTemplatesCallback([_template!], "save");
             },
-            icon: const Icon(Icons.save, color: Colors.black),
+            icon: const Icon(Icons.save, color: Colors.white),
             label: const Text(
               'Save',
-              style: TextStyle(fontSize: 15, color: Colors.black),
+              style: TextStyle(fontSize: 15, color: Colors.white),
             ),
-            backgroundColor: Color.fromARGB(189, 0, 255, 0),
+            backgroundColor: Color.fromARGB(255, 102, 153, 204),
           ),
           SizedBox(width: 20),
           FloatingActionButton.extended(
@@ -131,12 +135,12 @@ class _TemplateCreateState extends State<TemplateCreate> {
               widget.saveTemplatesCallback([widget.template], "delete");
               Navigator.pop(context);
             },
-            icon: const Icon(Icons.cancel, color: Colors.black),
+            icon: const Icon(Icons.cancel, color: Colors.white),
             label: const Text(
               'Delete',
-              style: TextStyle(fontSize: 15, color: Colors.black),
+              style: TextStyle(fontSize: 15, color: Colors.white),
             ),
-            backgroundColor: Color.fromARGB(190, 255, 0, 0),
+            backgroundColor: Color.fromARGB(200, 11, 53, 99),
           ),
         ],
       ),
@@ -157,7 +161,7 @@ class _TemplateCreateState extends State<TemplateCreate> {
                     return Container(
                       margin: EdgeInsets.only(top: 20),
                       child: ElevatedButton.icon(
-                        icon: const Icon(Icons.add, color: Colors.black),
+                        icon: const Icon(Icons.add, color: Colors.white),
                         label: const Text("New note"),
                         onPressed: () {
                           // set state with new note
@@ -170,28 +174,53 @@ class _TemplateCreateState extends State<TemplateCreate> {
                             // _template = new
                           });
                         },
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0)
+                          )
+                        ),
                       ),
                     );
                   }
                   final note = _template!.notes[index]; //use this later to
                   final isSelected = selected == index;
-                  return ListTile(
-                    //so it can be clicked on
-                    dense: true,
-                    title: Text(
-                      note.question,
-                    ), //example: could be changed to title
-                    selected: isSelected, //next 3 lines for coloring
-                    selectedTileColor: Theme.of(
-                      context,
-                    ).colorScheme.secondaryContainer,
-                    selectedColor: Theme.of(
-                      context,
-                    ).colorScheme.onSecondaryContainer,
-                    onTap: () => setState(() {
-                      selected = index;
-                      _selectedNoteType = _template!.notes[selected!].noteType;
-                    }),
+                  return Row(children: [
+                    Flexible(
+                      child: ListTile(
+                        //so it can be clicked on
+                        dense: true,
+                        title: Text(
+                          note.question,
+                        ), //example: could be changed to title
+                        selected: isSelected, //next 3 lines for coloring
+                        selectedTileColor: Color.fromARGB(255, 102, 153, 204),
+                        selectedColor: Colors.white,
+                        onTap: () => setState(() {
+                          selected = index;
+                          _selectedNoteType = _template!.notes[selected!].noteType;
+                        }),
+                      ) 
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      tooltip: 'Delete',
+                      color: Colors.white,
+                      onPressed: () {
+                        setState(() {
+                          _template!.notes.removeAt(index);
+                          if (selected == index) {
+                            selected =  max(index - 1, 0);        
+                          }
+                        });
+                      },
+                      style: IconButton.styleFrom(
+                        backgroundColor: Color.fromARGB(200, 11, 53, 99),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0)
+                        )
+                      ),
+                    ),
+                  ]
                   );
                 },
                 separatorBuilder: (_, __) => const Divider(height: 1),
@@ -208,10 +237,11 @@ class _TemplateCreateState extends State<TemplateCreate> {
                     child: DropdownButton<NoteType>(
                       hint: Text("Note Type"),
                       value: _selectedNoteType,
-                      items: NoteType.values.map((NoteType value) {
+                      
+                      items: noteTypeNames.keys.map((String noteName) {
                         return DropdownMenuItem<NoteType>(
-                          value: value,
-                          child: Text(value.name),
+                          value: noteTypeNames[noteName],
+                          child: Text(noteName),
                         );
                       }).toList(),
                       onChanged: (newNoteType) {
@@ -233,7 +263,7 @@ class _TemplateCreateState extends State<TemplateCreate> {
                         ? Center(
                             child: ElevatedButton.icon(
                               label: const Text("New note"),
-                              icon: const Icon(Icons.add, color: Colors.black),
+                              icon: const Icon(Icons.add, color: Colors.white),
                               onPressed: () {
                                 // set state with new note
                                 setState(() {
@@ -290,8 +320,15 @@ class _TemplateCreateState extends State<TemplateCreate> {
                             }
                           });
                         },
-                        icon: Icon(Icons.arrow_forward),
-                        label: Text(isLastNote ? 'Finish' : 'Next'),
+                        icon: const Icon(
+                          Icons.arrow_forward,
+                          color: Colors.white,
+                        ),
+                        label: Text(
+                          isLastNote ? 'Finish' : 'Next',
+                          style: TextStyle(color: Colors.white)  
+                        ),
+                        backgroundColor: Color.fromARGB(200, 11, 53, 99),
                       ),
                     ),
                   ),

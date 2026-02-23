@@ -44,9 +44,52 @@ void main() async {
       they can come back later
   
    */
+
+  ElevatedButtonThemeData elevatedButtonTheme = ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: Color.fromARGB(200, 11, 53, 99), // Background color
+      foregroundColor: Colors.white, // Text and icon color
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8), // Rounded corners
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Button padding
+      textStyle: TextStyle(fontSize: 18), // Text style
+    ),
+  );
+
+
+
   runApp(
       MaterialApp(
         debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+        // ... other theme properties
+          elevatedButtonTheme: elevatedButtonTheme,
+          textSelectionTheme: TextSelectionThemeData(
+            cursorColor: Color.fromARGB(255, 11, 53, 99),
+            selectionHandleColor: Color.fromARGB(255, 11, 53, 99),
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+            // Default border style
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Colors.grey),
+            ),
+            // Focused border style
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Color.fromARGB(255, 102, 153, 204), width: 2),
+            ),      
+            // Color for hint text
+            hintStyle: TextStyle(color: Colors.grey),
+            // Color for label text when not focused
+            labelStyle: TextStyle(color: Colors.black54),
+            focusColor: Color.fromARGB(255, 102, 153, 204),
+            // Color for floating label when focused
+            floatingLabelStyle: TextStyle(color: Color.fromARGB(255, 11, 53, 99)),
+          ),
+          fontFamily: "Noto-Sans",
+        ),
         home: HomePage(
           initialTemplates: templates,
           initialSessions: sessions

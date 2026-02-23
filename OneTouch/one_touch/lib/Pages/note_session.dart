@@ -52,16 +52,16 @@ class _NoteSessionState extends State<NoteSession> {
             },
             icon: const Icon(
               Icons.keyboard_return,
-              color: Colors.black
+              color: Colors.white
             ),
             label: const Text(
               'Exit',
               style: TextStyle(
                 fontSize: 15,
-                color: Colors.black,
+                color: Colors.white,
               ),
             ),
-            backgroundColor: Color.fromARGB(189, 0, 153, 255),
+            backgroundColor: Color.fromARGB(200, 11, 53, 99),
           ),
         ),
         centerTitle: true,
@@ -84,16 +84,16 @@ class _NoteSessionState extends State<NoteSession> {
             },
             icon: const Icon(
               Icons.save,
-              color: Colors.black
+              color: Colors.white
             ),
             label: const Text(
               'Save',
               style: TextStyle(
                 fontSize: 15,
-                color: Colors.black,
+                color: Colors.white,
               ),
             ),
-            backgroundColor: Color.fromARGB(189, 0, 255, 0),
+            backgroundColor: Color.fromARGB(255, 102, 153, 204),
           ),
           SizedBox(width: 20),
           FloatingActionButton.extended(
@@ -106,16 +106,16 @@ class _NoteSessionState extends State<NoteSession> {
             },
             icon: const Icon(
               Icons.cancel,
-              color: Colors.black
+              color: Colors.white
             ),
             label: const Text(
               'Delete',
               style: TextStyle(
                 fontSize: 15,
-                color: Colors.black,
+                color: Colors.white,
               ),
             ),
-            backgroundColor: Color.fromARGB(190, 255, 0, 0),
+            backgroundColor: Color.fromARGB(200, 11, 53, 99),
           ),
         ],
       ),
@@ -208,10 +208,12 @@ class _NoteDisplayPanel extends StatelessWidget {
             children: [
               (selected == null)
                   ? const Center(child: Text('Select a note'))
-                  : RepaintBoundary(
-                      child: KeyedSubtree(
-                        key: ValueKey(selected),
-                        child: notes[selected!].toGui(),
+                  : Center(
+                      child: RepaintBoundary(
+                        child: KeyedSubtree(
+                          key: ValueKey(selected),
+                          child: notes[selected!].toGui(),
+                        ),
                       ),
                     ),
               const Positioned(left: 0, right: 0, bottom: 0, child: VerticalDivider(width: 1)),
@@ -262,10 +264,11 @@ class _NoteTile extends StatelessWidget {
         valueListenable: selectedNotifier,
         builder: (context, selected, _) {
           final isSelected = selected == index;
-          final secondaryContainer = Theme.of(context).colorScheme.secondaryContainer;
-          final onSecondaryContainer = Theme.of(context).colorScheme.onSecondaryContainer;
+          final secondaryContainer = Color.fromARGB(255, 102, 153, 204);
+          final onSecondaryContainer = Colors.white;
           
           return ListTile(
+            
             dense: true,
             title: Text(note.question),
             selected: isSelected,
@@ -324,8 +327,15 @@ class _ContinueButton extends StatelessWidget {
               onSelectNext(selected! + 1);
             }
           },
-          icon: const Icon(Icons.arrow_forward),
-          label: Text(isLastNote ? 'Finish' : 'Next'),
+          icon: const Icon(
+            Icons.arrow_forward,
+            color: Colors.white,
+          ),
+          label: Text(
+            isLastNote ? 'Finish' : 'Next',
+            style: TextStyle(color: Colors.white)  
+          ),
+          backgroundColor: Color.fromARGB(200, 11, 53, 99),
         ),
       ),
     );

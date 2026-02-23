@@ -94,7 +94,14 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-      title: const Text('OneTouch'),
+      title: const Text(
+        'OneTouch',
+        style: TextStyle(
+        fontSize: 25,
+        fontWeight: FontWeight.bold,
+        color: Color.fromARGB(255, 13, 27, 42),
+        ),
+      ),
       centerTitle: true,
       actions: [
         IconButton(
@@ -116,7 +123,8 @@ class _HomePageState extends State<HomePage> {
           TemplateList(
             name: "Recent Sessions",
             templates: _sessions,
-            color: (Colors.yellow[200])!,
+            color: (Color.fromARGB(255, 84, 122, 165))!,
+            textColor: Colors.white,
             listType: "session",
             saveTemplatesCallback: saveTemplates
           ),
@@ -126,7 +134,8 @@ class _HomePageState extends State<HomePage> {
           TemplateList(
             name: "Start session from template",
             templates: _templates,
-            color: (Colors.blue[300])!,
+            color: (Color.fromARGB(255, 224, 225, 221))!,
+            textColor: Color.fromARGB(255, 13, 27, 42),
             listType: "template",
             saveTemplatesCallback: saveTemplates
           ),
@@ -158,6 +167,7 @@ class TemplateList extends StatefulWidget {
   final List<Template> templates;
   final String name;
   final Color color;
+  final Color textColor;
   final String listType;
   final void Function(List<Template>, String) saveTemplatesCallback;
 
@@ -166,6 +176,7 @@ class TemplateList extends StatefulWidget {
     required this.templates,
     required this.name,
     required this.color,
+    required this.textColor,
     required this.listType,
     required this.saveTemplatesCallback
   });
@@ -221,7 +232,9 @@ class _TemplateListState extends State<TemplateList> {
                 widget.name,
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                  fontSize: 25
+                  color: Color.fromARGB(255, 13, 27, 42),
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold
                 ),
               )
             )
@@ -232,7 +245,7 @@ class _TemplateListState extends State<TemplateList> {
           margin: const EdgeInsets.symmetric(horizontal: 30),
           child: ListView.separated(
             controller: _scrollController,
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
             scrollDirection: Axis.horizontal,
             itemCount: widget.templates.length,
             separatorBuilder: (context, index) => SizedBox(width: 50),
@@ -257,6 +270,7 @@ class _TemplateListState extends State<TemplateList> {
                     );
                   }, 
                   style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.all(0),
                     backgroundColor: widget.color,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)
@@ -265,7 +279,7 @@ class _TemplateListState extends State<TemplateList> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: EdgeInsetsGeometry.all(0),
+                        padding: EdgeInsetsGeometry.directional(bottom: 5),
                         child: Align(
                           alignment: Alignment.topRight,
                           child: Checkbox(
@@ -279,17 +293,21 @@ class _TemplateListState extends State<TemplateList> {
                                 }
                               });
                             },
-                            activeColor: Colors.blue, // Customize the color when checked
+                            shape: CircleBorder(),
+                            checkColor: Color.fromARGB(255, 13, 27, 42),
+                            activeColor: Color.fromARGB(255, 244, 208, 111), // Customize the color when checked
                           ),
                           )
                         ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
+                        // alignment: Alignment.center,
+                        Padding(
+                          padding: EdgeInsetsGeometry.symmetric(horizontal: 15),
+                          child: Text(
                           currTemplate.name,
                             style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.black,
+                                fontSize: 17,
+                                color: widget.textColor,
+                                fontWeight: FontWeight.w400
                             ),
                           )
                       ),

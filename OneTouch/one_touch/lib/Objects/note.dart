@@ -11,10 +11,17 @@ enum NoteType {
   @JsonValue("multipleChoice") multipleChoice,
   @JsonValue("singleChoice") singleChoice }
 
+Map<String, NoteType> noteTypeNames = {
+  "Number Scale": NoteType.numberScale,
+  "Text": NoteType.text,
+  "Multiple Choice": NoteType.multipleChoice,
+  "Single Choice": NoteType.singleChoice,
+};
+
 @JsonSerializable()
 class Note {
   @JsonKey()
-  NoteType noteType = NoteType.nullType;
+  NoteType noteType = NoteType.text;
   String question = "What kind of note is this?";
   DateTime? interactionTime;
 
@@ -85,9 +92,17 @@ class NumberScaleNote extends Note {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(question),
+              Text(
+                question,
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 13, 27, 42),
+                ),
+              ),
               SizedBox(height: 30),
               Slider(
+                activeColor: Color.fromARGB(255, 102, 153, 204),
                 value: value < minValue ? minValue.toDouble() : value.toDouble(),
                 onChanged: (newValue) {
                   setState(() {
@@ -132,15 +147,18 @@ class NumberScaleNote extends Note {
           children: [
             Container(
               margin: EdgeInsets.symmetric(horizontal: 50),
-              child: TextField(
-                maxLines: null,
-                onChanged: (value) {
-                  setState(() {
-                    question = value;
-                  });
-                },
-                textAlign: TextAlign.center,
-                controller: questionController,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: TextField(
+                  maxLines: null,
+                  onChanged: (value) {
+                    setState(() {
+                      question = value;
+                    });
+                  },
+                  textAlign: TextAlign.center,
+                  controller: questionController,
+                )
               ),
             ),
 
@@ -208,7 +226,14 @@ class MultipleChoiceNote extends Note {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(question),
+            Text(
+              question,
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 13, 27, 42),
+              ),
+            ),
             SizedBox(height: 30),
             Wrap(
               spacing: 8,
@@ -238,7 +263,7 @@ class MultipleChoiceNote extends Note {
                     margin: const EdgeInsets.all(4.0),
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                     decoration: BoxDecoration(
-                      color: isSelected ? Colors.blue : Colors.grey[300],
+                      color: isSelected ? Color.fromARGB(255, 102, 153, 204) : Color.fromARGB(255, 224, 225, 221),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Text(
@@ -273,15 +298,18 @@ class MultipleChoiceNote extends Note {
           children: [
             Container(
               margin: EdgeInsets.symmetric(horizontal: 50),
-              child: TextField(
-                maxLines: null,
-                onChanged: (value) {
-                  setState(() {
-                    question = value;
-                  });
-                },
-                textAlign: TextAlign.center,
-                controller: questionController,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: TextField(
+                  maxLines: null,
+                  onChanged: (value) {
+                    setState(() {
+                      question = value;
+                    });
+                  },
+                  textAlign: TextAlign.center,
+                  controller: questionController,
+                )
               ),
             ),
 
@@ -292,19 +320,24 @@ class MultipleChoiceNote extends Note {
               constraints: BoxConstraints(
                 maxWidth: 150,
               ),
-              child: TextField(
-                controller: maxSelectionController,
-                textAlign: TextAlign.center,
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly
-                ], 
-                decoration: InputDecoration(
-                  labelText: 'Max Selections',
-                ),
-                onChanged: (newValue) {
-                  maxSelections = int.parse(newValue);
-                },
+              child: Padding(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: TextField(
+                  controller: maxSelectionController,
+                  textAlign: TextAlign.center,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ], 
+                  decoration: InputDecoration(
+                    label: Center(
+                      child: Text('Max Selections')
+                    ),
+                  ),
+                  onChanged: (newValue) {
+                    maxSelections = int.parse(newValue);
+                  },
+                )
               ), 
             ),
             SizedBox(
@@ -335,18 +368,20 @@ class MultipleChoiceNote extends Note {
                   },
                   child: Container(
                     constraints: BoxConstraints(
-                      maxWidth: 150,
+                      maxWidth: 250,
                     ),
                     margin: const EdgeInsets.all(4.0),
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: isSelected ? TextField(
-                      controller: optionController,
-                      maxLines: null,
-                      style: TextStyle(color: Colors.black),
+                    child: isSelected ? Padding(
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: TextField(
+                        controller: optionController,
+                        maxLines: null,
+                        style: TextStyle(color: Colors.black),
+                      )
                     )
                     : Text(option),
                   ),
@@ -355,10 +390,10 @@ class MultipleChoiceNote extends Note {
                 ElevatedButton.icon(
                   icon: const Icon(
                     Icons.add,
-                    color: Colors.black
+                    color: Colors.white
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue[300]
+                    backgroundColor: Color.fromARGB(200, 11, 53, 99)
                   ),
                   onPressed: () {
                     setState(() {
@@ -369,7 +404,7 @@ class MultipleChoiceNote extends Note {
                   label: Text(
                     'Add Option',
                     style: TextStyle(
-                      color: Colors.black
+                      color: Colors.white
                     ),)
                 ),
               ],
@@ -412,7 +447,14 @@ class SingleChoiceNote extends Note {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(question),
+            Text(
+              question,
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 13, 27, 42),
+              ),
+            ),
             SizedBox(height: 30),
             Wrap(
               spacing: 8,
@@ -438,7 +480,7 @@ class SingleChoiceNote extends Note {
                     margin: const EdgeInsets.all(4.0),
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                     decoration: BoxDecoration(
-                      color: isSelected ? Colors.blue : Colors.grey[300],
+                      color: isSelected ? Color.fromARGB(255, 102, 153, 204) : Colors.grey[300],
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Text(
@@ -471,15 +513,18 @@ class SingleChoiceNote extends Note {
           children: [
             Container(
               margin: EdgeInsets.symmetric(horizontal: 50),
-              child: TextField(
-                maxLines: null,
-                onChanged: (value) {
-                  setState(() {
-                    question = value;
-                  });
-                },
-                textAlign: TextAlign.center,
-                controller: questionController,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: TextField(
+                  maxLines: null,
+                  onChanged: (value) {
+                    setState(() {
+                      question = value;
+                    });
+                  },
+                  textAlign: TextAlign.center,
+                  controller: questionController,
+                ),
               ),
             ),
             SizedBox(
@@ -515,13 +560,15 @@ class SingleChoiceNote extends Note {
                     margin: const EdgeInsets.all(4.0),
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: isSelected ? TextField(
-                      controller: optionController,
-                      maxLines: null,
-                      style: TextStyle(color: Colors.black),
+                    child: isSelected ? Padding(
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child:TextField(
+                        controller: optionController,
+                        maxLines: null,
+                        style: TextStyle(color: Colors.black),
+                      )
                     )
                     : Text(option),
                   ),
@@ -530,10 +577,10 @@ class SingleChoiceNote extends Note {
                 ElevatedButton.icon(
                   icon: const Icon(
                     Icons.add,
-                    color: Colors.black
+                    color: Colors.white
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue[300]
+                    backgroundColor: Color.fromARGB(200, 11, 53, 99)
                   ),
                   onPressed: () {
                     setState(() {
@@ -544,7 +591,7 @@ class SingleChoiceNote extends Note {
                   label: Text(
                     'Add Option',
                     style: TextStyle(
-                      color: Colors.black
+                      color: Colors.white
                     ),)
                 ),
               ],
@@ -591,21 +638,24 @@ class _ParameterContainerState extends State<ParameterContainer> {
       constraints: BoxConstraints(
         maxWidth: 150,
       ),
-      child: TextField(
-        controller: controller,
-        textAlign: TextAlign.center,
-        keyboardType: widget.numeric ? TextInputType.number : TextInputType.text,
-        inputFormatters: widget.numeric ? <TextInputFormatter>[
-          FilteringTextInputFormatter.digitsOnly
-        ] : [], 
-        decoration: InputDecoration(
-          label: Center(
-            child: Text(widget.labelText)
+      child: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: TextField(
+          controller: controller,
+          textAlign: TextAlign.center,
+          keyboardType: widget.numeric ? TextInputType.number : TextInputType.text,
+          inputFormatters: widget.numeric ? <TextInputFormatter>[
+            FilteringTextInputFormatter.digitsOnly
+          ] : [], 
+          decoration: InputDecoration(
+            label: Center(
+              child: Text(widget.labelText)
+            ),
+            floatingLabelAlignment: FloatingLabelAlignment.center,
           ),
-          floatingLabelAlignment: FloatingLabelAlignment.center,
-        ),
-        onChanged: widget.onChanged,
-      ), 
+          onChanged: widget.onChanged,
+        ) 
+      ),
     );
   }
 
