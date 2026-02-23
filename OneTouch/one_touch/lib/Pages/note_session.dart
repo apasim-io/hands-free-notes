@@ -190,10 +190,15 @@ class _NoteDisplayPanel extends StatelessWidget {
               (selected == null)
                   ? const Center(child: Text('Select a note'))
                   : Center(
-                      child: RepaintBoundary(
-                        child: KeyedSubtree(
-                          key: ValueKey(selected),
-                          child: notes[selected!].toGui(),
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 150),
+                          child: RepaintBoundary(
+                            child: KeyedSubtree(
+                              key: ValueKey(selected),
+                              child: notes[selected!].toGui(),
+                            ),
+                          ),
                         ),
                       ),
                     ),
