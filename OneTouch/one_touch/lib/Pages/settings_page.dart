@@ -14,17 +14,27 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   final _emailController = TextEditingController();
+
+  // these are defaults used when no preference has been set
+  bool _autoScrollEnabled = false;
+  int _autoScrollDelayMs = 2000;
   bool _loaded = false;
 
   @override
   void initState() {
     super.initState();
-    _loadEmail();
+    _loadSettings();
   }
 
-  Future<void> _loadEmail() async {
-    final saved = await AppSettings.instance.getDefaultEmail();
-    _emailController.text = saved ?? '';
+  Future<void> _loadSettings() async {
+    final savedEmail = await AppSettings.instance.getDefaultEmail();
+    final savedAutoScroll = await AppSettings.instance.getAutoScrollEnabled();
+    final savedDelay =
+        await AppSettings.instance.getAutoScrollDelayMs(defaultValue: 2000);
+
+    _emailController.text = savedEmail ?? '';
+    _autoScrollEnabled = savedAutoScroll;
+    _autoScrollDelayMs = savedDelay;
     setState(() => _loaded = true);
   }
 
@@ -46,6 +56,38 @@ class _SettingsPageState extends State<SettingsPage> {
             title: const Text('Dark Theme'),
             subtitle: const Text('Placeholder'),
             onTap: () {},
+          ),
+          SwitchListTile(
+            title: const Text('Auto scroll notes'),
+            subtitle: Text(
+              'Automatically continue to next section after completing the current section',
+            ),
+            value: _autoScrollEnabled,
+            onChanged: _loaded
+                ? (value) async {
+                    setState(() => _autoScrollEnabled = value);
+                    await AppSettings.instance.setAutoScrollEnabled(value);
+                  }
+                : null,
+          ),
+          ListTile(
+            enabled: _loaded,
+            leading: const Icon(Icons.timer),
+            title: const Text('Auto scroll delay (ms)'),
+            subtitle: Slider(
+              value: _autoScrollDelayMs.toDouble(),
+              min: 500,
+              max: 5000,
+              divisions: 9,
+              label: '${_autoScrollDelayMs}ms',
+              onChanged: (value) {
+                setState(() => _autoScrollDelayMs = value.round());
+              },
+              onChangeEnd: (value) async {
+                await AppSettings.instance
+                    .setAutoScrollDelayMs(value.round());
+              },
+            ),
           ),
 
           const Divider(height: 24),
@@ -106,6 +148,8 @@ class AppSettings {
   static final AppSettings instance = AppSettings._();
 
   static const _keyDefaultEmail = 'default_email';
+  static const _keyAutoScrollEnabled = 'auto_scroll_enabled';
+  static const _keyAutoScrollDelayMs = 'auto_scroll_delay_ms';
 
   Future<String?> getDefaultEmail() async {
     final prefs = await SharedPreferences.getInstance();
@@ -115,5 +159,25 @@ class AppSettings {
   Future<void> setDefaultEmail(String email) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyDefaultEmail, email);
+  }
+
+  Future<bool> getAutoScrollEnabled() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_keyAutoScrollEnabled) ?? false;
+  }
+
+  Future<void> setAutoScrollEnabled(bool enabled) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyAutoScrollEnabled, enabled);
+  }
+
+  Future<int> getAutoScrollDelayMs({int defaultValue = 2000}) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_keyAutoScrollDelayMs) ?? defaultValue;
+  }
+
+  Future<void> setAutoScrollDelayMs(int milliseconds) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_keyAutoScrollDelayMs, milliseconds);
   }
 }

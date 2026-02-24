@@ -1,5 +1,8 @@
+import 'dart:async'; // Timer
+
 import 'package:flutter/material.dart';
 import 'package:one_touch/Pages/session_summary.dart';
+import 'package:one_touch/Pages/settings_page.dart';
 import '../Objects/template.dart';
 
 class NoteSession extends StatefulWidget {
@@ -19,18 +22,79 @@ class NoteSession extends StatefulWidget {
 class _NoteSessionState extends State<NoteSession> {
   late ValueNotifier<int?> selectedNotifier;
   final ScrollController _leftScrollController = ScrollController();
+  Timer? _autoScrollTimer;
+  bool _autoScrollEnabled = false;
+  int _autoScrollDelayMs = 2000;
 
   @override
   void initState() {
     super.initState();
-    selectedNotifier = ValueNotifier<int?>(null);
+    // Preselect the first note (if any) so the UI shows content immediately.
+    selectedNotifier =
+        ValueNotifier<int?>(widget.template.notes.isNotEmpty ? 0 : null);
+    _loadAutoScrollSettings();
+  }
+
+  Future<void> _loadAutoScrollSettings() async {
+    _autoScrollEnabled =
+        await AppSettings.instance.getAutoScrollEnabled(); // prefs flag
+    _autoScrollDelayMs =
+        await AppSettings.instance.getAutoScrollDelayMs(defaultValue: 2000);
+    if (!mounted) return;
+    setState(() {});
   }
 
   @override
   void dispose() {
+    _autoScrollTimer?.cancel();
     _leftScrollController.dispose();
     selectedNotifier.dispose();
     super.dispose();
+  }
+
+  void _startAutoScrollTimer() {
+    if (!_autoScrollEnabled) return;
+    _autoScrollTimer?.cancel();
+    _autoScrollTimer = Timer(
+      Duration(milliseconds: _autoScrollDelayMs),
+      _advanceAfterDelay,
+    );
+  }
+
+  void _advanceAfterDelay() {
+    if (!mounted) return;
+    final notes = widget.template.notes;
+    if (notes.isEmpty) return;
+
+    final current = selectedNotifier.value ?? 0;
+    if (current < notes.length - 1) {
+      selectedNotifier.value = current + 1;
+      _scrollToNote(current + 1);
+    } else {
+      _finishSession();
+    }
+  }
+
+  void _finishSession() {
+    widget.saveTemplatesCallback([widget.template], "save");
+    if (!mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SessionSummary(template: widget.template),
+      ),
+    );
+  }
+
+  void _scrollToNote(int index) {
+    final itemHeight = 48.0; // Approximate height of each list item
+    final padding = 30.0; // Extra padding for spacing
+    final offset = (index * itemHeight) + padding;
+    _leftScrollController.animateTo(
+      offset,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
@@ -121,6 +185,8 @@ class _NoteSessionState extends State<NoteSession> {
                     scrollController: _leftScrollController,
                     onSave: () =>
                         widget.saveTemplatesCallback([widget.template], "save"),
+                    onInteract: _startAutoScrollTimer,
+                    scrollToNote: _scrollToNote,
                   ),
                 ],
               ),
@@ -184,12 +250,16 @@ class _NoteDisplayPanel extends StatelessWidget {
   final ValueNotifier<int?> selectedNotifier;
   final ScrollController scrollController;
   final VoidCallback onSave;
+  final VoidCallback onInteract;
+  final void Function(int) scrollToNote;
 
   const _NoteDisplayPanel({
     required this.template,
     required this.selectedNotifier,
     required this.scrollController,
     required this.onSave,
+    required this.onInteract,
+    required this.scrollToNote,
   });
 
   @override
@@ -212,12 +282,14 @@ class _NoteDisplayPanel extends StatelessWidget {
                           child: RepaintBoundary(
                             child: KeyedSubtree(
                               key: ValueKey(selected),
-                              child: notes[selected!].toGui(),
+                              child: notes[selected!].toGui(
+                                onInteract: onInteract,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
+                ),
               const Positioned(
                 left: 0,
                 top: 0,
@@ -233,7 +305,7 @@ class _NoteDisplayPanel extends StatelessWidget {
                   notes: notes,
                   onSelectNext: (i) {
                     selectedNotifier.value = i;
-                    _scrollToNote(i);
+                    scrollToNote(i);
                   },
                   onFinish: () {
                     onSave();
@@ -254,16 +326,6 @@ class _NoteDisplayPanel extends StatelessWidget {
     );
   }
 
-  void _scrollToNote(int index) {
-    final itemHeight = 48.0; // Approximate height of each list item
-    final padding = 30.0; // Extra padding for spacing
-    final offset = (index * itemHeight) + padding;
-    scrollController.animateTo(
-      offset,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
-  }
 }
 
 /// Individual note tile with RepaintBoundary to isolate repaints

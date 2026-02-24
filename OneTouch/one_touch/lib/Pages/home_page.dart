@@ -198,6 +198,7 @@ class TemplateList extends StatefulWidget {
 class _TemplateListState extends State<TemplateList> {
   final _scrollController = ScrollController();
   List<String> selectedIds = [];
+  bool _selectionMode = false;
 
   @override
   void initState() {
@@ -228,6 +229,16 @@ class _TemplateListState extends State<TemplateList> {
           margin: EdgeInsets.only(left: headerMargin, bottom: 8.0),
           child: ElevatedButton(
             onPressed: () {
+              // First click: enter selection mode and show checkboxes
+              if (!_selectionMode) {
+                setState(() {
+                  _selectionMode = true;
+                  selectedIds = [];
+                });
+                return;
+              }
+
+              // Second click: perform deletion
               List<Template> toDelete = [];
               for (int i = 0; i < widget.templates.length; i++) {
                 Template curr = widget.templates[i];
@@ -238,10 +249,11 @@ class _TemplateListState extends State<TemplateList> {
               widget.saveTemplatesCallback(toDelete, "massDelete");
               setState(() {
                 selectedIds = [];
+                _selectionMode = false;
               });
             },
             child: Text(
-              "Delete Selected",
+              _selectionMode ? "Delete Selected" : "Select Items",
               textAlign: TextAlign.left,
               style: TextStyle(fontSize: 15),
             ),
@@ -309,34 +321,37 @@ class _TemplateListState extends State<TemplateList> {
                         children: [
                           Padding(
                             padding: EdgeInsetsGeometry.directional(bottom: 5),
-                            child: Align(
-                              alignment: Alignment.topRight,
-                              child: Checkbox(
-                                value: selectedIds.contains(
-                                  currTemplate.id,
-                                ), // Assign the state variable
-                                onChanged: (bool? newValue) {
-                                  setState(() {
-                                    if (newValue == true) {
-                                      selectedIds.add(
-                                        currTemplate.id,
-                                      ); // Update the state
-                                    } else {
-                                      selectedIds.remove(currTemplate.id);
-                                    }
-                                  });
-                                },
-                                shape: CircleBorder(),
-                                checkColor: Color.fromARGB(255, 13, 27, 42),
-                                activeColor: Color.fromARGB(
-                                  255,
-                                  244,
-                                  208,
-                                  111,
-                                ), // Customize the color when checked
-                              ),
-                            ),
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: _selectionMode
+                                ? Checkbox(
+                                    value: selectedIds.contains(
+                                      currTemplate.id,
+                                    ), // Assign the state variable
+                                    onChanged: (bool? newValue) {
+                                      setState(() {
+                                        if (newValue == true) {
+                                          selectedIds.add(
+                                            currTemplate.id,
+                                          ); // Update the state
+                                        } else {
+                                          selectedIds.remove(currTemplate.id);
+                                        }
+                                      });
+                                    },
+                                    shape: CircleBorder(),
+                                    checkColor:
+                                        Color.fromARGB(255, 13, 27, 42),
+                                    activeColor: Color.fromARGB(
+                                      255,
+                                      244,
+                                      208,
+                                      111,
+                                    ), // Customize the color when checked
+                                  )
+                                : const SizedBox.shrink(),
                           ),
+                        ),
                           // alignment: Alignment.center,
                           Padding(
                             padding: EdgeInsetsGeometry.symmetric(

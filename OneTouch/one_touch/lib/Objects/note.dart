@@ -41,7 +41,7 @@ class Note {
     interactionTime = DateTime.now();
   }
 
-  Widget toGui() {
+  Widget toGui({VoidCallback? onInteract}) {
     return Container();
   }
 
@@ -88,7 +88,7 @@ class NumberScaleNote extends Note {
   Map<String, dynamic> toJson() => _$NumberScaleNoteToJson(this);
 
   @override
-  Widget toGui() {
+  Widget toGui({VoidCallback? onInteract}) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: StatefulBuilder(
@@ -112,6 +112,7 @@ class NumberScaleNote extends Note {
                         ? minValue.toDouble()
                         : value.toDouble(),
                     onChanged: (newValue) {
+                      onInteract?.call();
                       setState(() {
                         value = newValue.toInt();
                       });
@@ -266,7 +267,7 @@ class MultipleChoiceNote extends Note {
 
   // generate a square button for each option (returns a single Widget)
   @override
-  Widget toGui() {
+  Widget toGui({VoidCallback? onInteract}) {
     // Use StatefulBuilder so tapping an option can call setState and rebuild
     return StatefulBuilder(
       builder: (BuildContext context, void Function(void Function()) setState) {
@@ -295,6 +296,7 @@ class MultipleChoiceNote extends Note {
 
                 return GestureDetector(
                   onTap: () {
+                    onInteract?.call();
                     setState(() {
                       if (isSelected) {
                         sel.remove(idx);
@@ -494,7 +496,7 @@ class SingleChoiceNote extends Note {
 
   // generates a square button for each option (single-choice)
   @override
-  Widget toGui() {
+  Widget toGui({VoidCallback? onInteract}) {
     return StatefulBuilder(
       builder: (BuildContext context, void Function(void Function()) setState) {
         return Column(
@@ -519,6 +521,7 @@ class SingleChoiceNote extends Note {
 
                 return GestureDetector(
                   onTap: () {
+                    onInteract?.call();
                     setState(() {
                       if (isSelected) {
                         // deselect if tapped again
