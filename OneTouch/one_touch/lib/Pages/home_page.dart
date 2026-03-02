@@ -324,7 +324,11 @@ class _TemplateListState extends State<TemplateList> {
                           child: Align(
                             alignment: Alignment.topRight,
                             child: _selectionMode
-                                ? Checkbox(
+                                ? SizedBox(
+                                  height: 75,
+                                  child: Container(
+                                    margin: EdgeInsetsGeometry.directional(bottom: 25),
+                                    child: Checkbox(
                                     value: selectedIds.contains(
                                       currTemplate.id,
                                     ), // Assign the state variable
@@ -349,7 +353,11 @@ class _TemplateListState extends State<TemplateList> {
                                       111,
                                     ), // Customize the color when checked
                                   )
-                                : const SizedBox.shrink(),
+                                  )
+                                )
+                                : const SizedBox(
+                                  height: 75,
+                                ),
                           ),
                         ),
                           // alignment: Alignment.center,
@@ -357,12 +365,14 @@ class _TemplateListState extends State<TemplateList> {
                             padding: EdgeInsetsGeometry.symmetric(
                               horizontal: 15,
                             ),
-                            child: Text(
-                              currTemplate.name,
-                              style: TextStyle(
-                                fontSize: 17,
-                                color: widget.textColor,
-                                fontWeight: FontWeight.w400,
+                              child: Center(
+                                child: Text(
+                                currTemplate.name,
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  color: widget.textColor,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                             ),
                           ),
