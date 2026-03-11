@@ -51,12 +51,6 @@ class _SettingsPageState extends State<SettingsPage> {
       body: ListView(
         children: [
           const _SectionHeader('General'),
-          ListTile(
-            leading: const Icon(Icons.tune),
-            title: const Text('Dark Theme'),
-            subtitle: const Text('Placeholder'),
-            onTap: () {},
-          ),
           SwitchListTile(
             title: const Text('Auto scroll notes'),
             subtitle: Text(
